@@ -1,0 +1,45 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Full Stack",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "env": {
+        "HOST": "127.0.0.1",
+        "PORT": "5000"
+      },
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "Debug in Firefox",
+      "url": "http://127.0.0.1:5000",
+      "webRoot": "${workspaceFolder}",
+      "pathMappings": [
+        {
+          "url": "http://127.0.0.1:5000",
+          "path": "${workspaceFolder}"
+        }
+      ]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack + Firefox",
+      "configurations": ["Full Stack", "Debug in Firefox"]
+    }
+  ]
+}

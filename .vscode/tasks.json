@@ -1,0 +1,10 @@
+{
+  "tasks": [
+    {
+      "type": "typescript",
+      "label": "tsc: build - tsconfig.json",
+      "tsconfig": "tsconfig.json",
+      "problemMatcher": ["$tsc"]
+    }
+  ]
+}
