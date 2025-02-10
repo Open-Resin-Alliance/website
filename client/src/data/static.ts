@@ -70,7 +70,7 @@ export const teamMembers: TeamMember[] = [
     role: "Artist",
     bio: "General artist and designer",
     imageUrl: "https://cdn.discordapp.com/avatars/175292904380563457/652b9e45b3b5d4fbab102f80072b224e?size=1024",
-    email: null,
+    email: "contact@openresin.org",
     isAdmin: false,
     isBoardMember: false
   },
@@ -80,7 +80,7 @@ export const teamMembers: TeamMember[] = [
     role: "Artist",
     bio: "Artist behind our logo and branding.",
     imageUrl: "https://cdn.discordapp.com/avatars/618436550161858560/20380b03b6da1c7b104355e0e681b67f?size=1024",
-    email: null,
+    email: "contact@openresin.org",
     isAdmin: false,
     isBoardMember: false
   },
@@ -88,9 +88,19 @@ export const teamMembers: TeamMember[] = [
     id: 6,
     name: "Goran Mahovlic",
     role: "Technician",
-    bio: "General technician and developer.",
+    bio: "General technician and developer and cool guy. Reverse Engineer.",
     imageUrl: "https://avatars.githubusercontent.com/u/4248736?v=4",
-    email: null,
+    email: "goran.mahovlic@openresin.org",
+    isAdmin: false,
+    isBoardMember: false
+  },
+  {
+    id: 7,
+    name: "Kommi",
+    role: "Quality Assurance",
+    bio: "Ensures the quality of our software and hardware. Professionally Incompetent.",
+    imageUrl: "/media/derp.png",
+    email: "kommi@openresin.org",
     isAdmin: false,
     isBoardMember: false
   }
