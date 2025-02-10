@@ -12,7 +12,7 @@ export const projects: Project[] = [
       "Customizable print settings",
     ],
     status: "Beta - In Development",
-    imageUrl: "/website/projects/orion.png",
+    imageUrl: "/projects/orion.png",
     technicalDiagramUrl: "https://images.unsplash.com/photo-1620860279731-3f193cffe80f",
     githubRepo: "Open-Resin-Alliance/orion"
   },
@@ -27,7 +27,7 @@ export const projects: Project[] = [
       "High performance & reliability",
     ],
     status: "Beta - In Development",
-    imageUrl: "/website/projects/odyssey.png",
+    imageUrl: "/projects/odyssey.png",
     technicalDiagramUrl: "https://images.unsplash.com/photo-1653566031536-4d1b6a9da15e",
     githubRepo: "Open-Resin-Alliance/odyssey"
   }

@@ -41,7 +41,7 @@ export default function OdysseyProject() {
             <Card className="overflow-hidden border-border/40">
               <CardContent className="p-0">
                 <img
-                  src="/website/projects/odyssey.png"
+                  src="/projects/odyssey.png"
                   alt="Odyssey Architecture"
                   className="w-full rounded-lg"
                 />
