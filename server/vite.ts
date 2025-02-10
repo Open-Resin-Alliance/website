@@ -77,24 +77,40 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(__dirname, "public");
+  const clientDistPath = path.resolve(process.cwd(), "dist", "public");
 
-  if (!fs.existsSync(distPath)) {
+  if (!fs.existsSync(clientDistPath)) {
     throw new Error(
-      `Could not find the build directory: ${distPath}, make sure to build the client first`,
+      `Could not find the client build directory: ${clientDistPath}, make sure to build the client first`,
     );
   }
 
-  app.use(express.static(distPath));
+  // Serve static files with cache headers
+  app.use(express.static(clientDistPath, {
+    maxAge: '30d',
+    setHeaders: (res, path) => {
+      if (path.endsWith('.html')) {
+        // Don't cache HTML files
+        res.setHeader('Cache-Control', 'no-cache');
+      } else {
+        res.setHeader('Cache-Control', 'public, max-age=2592000'); // 30 days
+      }
+    }
+  }));
 
-  // fall through to index.html if the file doesn't exist
-  app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+  // SPA fallback - must come after API routes
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(clientDistPath, "index.html"));
   });
 }
 
-export function registerRoutes(app: express.Application) {
+export function registerRoutes(app: Express) {
+  // Register API routes first
   app.use(router);
+  
+  // Then serve static files and SPA fallback
+  serveStatic(app);
+  
   return app;
 }
 
