@@ -1,6 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
 import router from "./routes.js";
-import { log } from "./vite.js";
 
 const app = express();
 const HOST = process.env.HOST || "127.0.0.1";
@@ -11,6 +10,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Logging middleware
+function log(message: string, source = "express") {
+  const formattedTime = new Date().toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+
+  console.log(`${formattedTime} [${source}] ${message}`);
+}
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -85,7 +95,7 @@ process.on("uncaughtException", (err) => {
     const { setupVite } = await import("./vite.js");
     await setupVite(app, server);
   } else {
-    const { serveStatic } = await import("./vite.js");
+    const { serveStatic } = await import("./static.js");
     serveStatic(app);
     app.listen(PORT, HOST, () => {
       log(`Production server running on http://${HOST}:${PORT}`);
