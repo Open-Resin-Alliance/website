@@ -1,7 +1,7 @@
 # Open Resin Alliance
 
 <div align="center">
-  <img src="client/public/media/3dprintopia_2024.PNG" alt="Open Resin Alliance Logo" width="200"/>
+  <img src="/website/media/3dprintopia_2024.PNG" alt="Open Resin Alliance Logo" width="200"/>
   <p><em>Advancing open-source resin 3D printing technology</em></p>
 </div>
 
@@ -32,10 +32,10 @@ We welcome contributions from the community! If you're interested in contributin
 
 <div align="center">
   <a href="https://atlas3dss.com">
-    <img src="client/public/sponsors/atlas3dss.png" alt="Atlas 3D Solutions" height="60"/>
+    <img src="/website/sponsors/atlas3dss.png" alt="Atlas 3D Solutions" height="60"/>
   </a>
-  <a href="https://github.com/thecontrappostoshop">
-    <img src="client/public/sponsors/thecontrappostoshop.svg" alt="The Contrapposto Shop" height="60"/>
+  <a href="https://thecontrappostoshop.com">
+    <img src="/website/sponsors/thecontrappostoshop.svg" alt="The Contrapposto Shop" height="60"/>
   </a>
 </div>
 

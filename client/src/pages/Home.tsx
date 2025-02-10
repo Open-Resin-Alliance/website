@@ -9,13 +9,13 @@ export default function Home() {
     {
       name: "Atlas3DSS",
       url: "https://atlas3dss.com",
-      imageUrl: "/sponsors/atlas3dss.png",
+      imageUrl: "/website/sponsors/atlas3dss.png",
       description: "Innovative support solutions for resin 3D printing, helping makers achieve better print success rates and quality.",
     },
     {
       name: "The Contrapposto Shop",
       url: "https://contrapposto.shop",
-      imageUrl: "/sponsors/thecontrappostoshop.svg",
+      imageUrl: "/website/sponsors/thecontrappostoshop.svg",
       isSvg: true,
       description: "Creators of the Prometheus mSLA printer, the open-source 3D printer that sparked the formation of the Open Resin Alliance.",
     },
@@ -58,7 +58,7 @@ export default function Home() {
               <div className="relative group perspective-1000">
                 <div className="transform-gpu transition-transform duration-500 group-hover:rotate-y-12 group-hover:rotate-x-12 group-hover:translate-z-8">
                   <img
-                    src="/media/3dprintopia_2024.PNG"
+                    src="/website/media/3dprintopia_2024.PNG"
                     alt="3D Printing Process"
                     className="rounded-lg shadow-2xl"
                   />

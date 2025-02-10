@@ -41,7 +41,7 @@ export default function OrionProject() {
             <Card className="overflow-hidden border-border/40">
               <CardContent className="p-0">
                 <img
-                  src="/projects/orion_no_border.png"
+                  src="/website/projects/orion_no_border.png"
                   alt="Orion Interface"
                   className="w-full rounded-lg"
                 />
