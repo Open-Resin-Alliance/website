@@ -42,3 +42,7 @@ We welcome contributions from the community! If you're interested in contributin
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Media
+
+All media assets including logos and images are Copyright © 2025 Open Resin Alliance. All rights reserved, unless otherwise stated. Sponsor logos are property of their respective owners and used with permission.
