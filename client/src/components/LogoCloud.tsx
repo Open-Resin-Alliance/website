@@ -38,6 +38,7 @@ export default function LogoCloud({ logos, className }: LogoCloudProps) {
                           src={logo.imageUrl}
                           alt={`${logo.name} logo`}
                           className="h-24 sm:h-32 object-contain"
+                          fetchPriority="auto"
                         />
                       </object>
                     </div>
@@ -46,6 +47,7 @@ export default function LogoCloud({ logos, className }: LogoCloudProps) {
                       src={logo.imageUrl}
                       alt={`${logo.name} logo`}
                       className="h-24 sm:h-32 w-auto object-contain drop-shadow-lg"
+                      fetchPriority="auto"
                     />
                   )}
                 </a>

@@ -14,6 +14,8 @@ import { ThemeProvider } from "@/components/theme-provider.js";
 import { AnimatePresence } from "framer-motion";
 import { PageTransition } from "@/components/layout/PageTransition.js";
 import { Router as WouterRouter } from "wouter";
+import { useScrollTop } from "@/hooks/use-scroll-top.js";
+import Contact from "@/pages/Contact.js";
 
 // Get the base path from Vite's configuration at build time
 const base = import.meta.env.BASE_URL;
@@ -27,6 +29,7 @@ const BaseRouter = () => (
 
 function RouterContent() {
   const [location] = useLocation();
+  useScrollTop();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -57,6 +60,11 @@ function RouterContent() {
             <Route path="/about">
               <PageTransition>
                 <About />
+              </PageTransition>
+            </Route>
+            <Route path="/contact">
+              <PageTransition>
+                <Contact />
               </PageTransition>
             </Route>
             <Route>

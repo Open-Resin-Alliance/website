@@ -1,6 +1,6 @@
 import ProjectCard from "@/components/projects/ProjectCard.js";
 import { type Project } from "@shared/schema.js";
-import { projects } from "@/data/static.js";
+import { useProjects } from "@/hooks/use-projects.js";
 
 function BalancedGrid({ projects }: { projects: Project[] }) {
   // For 1-2 projects, center them in the layout
@@ -28,7 +28,7 @@ function BalancedGrid({ projects }: { projects: Project[] }) {
   // For 4 projects, use 2x2 grid
   if (projects.length === 4) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
@@ -65,15 +65,30 @@ function BalancedGrid({ projects }: { projects: Project[] }) {
 }
 
 export default function Projects() {
+  const { data: projects = [], isLoading } = useProjects();
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div className="text-center mb-16">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">Our Projects</h1>
-        <p className="mt-6 text-lg text-muted-foreground">
-          Explore our ongoing research and development initiatives in open source resin 3D printing.
-        </p>
-      </div>
-      <BalancedGrid projects={projects} />
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Projects Section */}
+      <section className="py-16">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
+            Projects
+          </h1>
+          <p className="mt-6 text-lg text-muted-foreground/90 leading-relaxed">
+            Our mission is to improve the accessibility and reliability of resin printer control software with a focus on the open-source community.
+          </p>
+        </div>
+
+        {isLoading ? (
+          <div className="animate-pulse space-y-8">
+            <div className="h-96 bg-muted rounded-lg" />
+            <div className="h-96 bg-muted rounded-lg" />
+          </div>
+        ) : (
+          <BalancedGrid projects={projects} />
+        )}
+      </section>
     </div>
   );
 }

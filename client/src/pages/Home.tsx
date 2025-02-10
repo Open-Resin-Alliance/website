@@ -61,6 +61,7 @@ export default function Home() {
                     src="/media/3dprintopia_2024.PNG"
                     alt="3D Printing Process"
                     className="rounded-lg shadow-2xl"
+                    fetchPriority="high"
                   />
                   <div className="absolute inset-0 bg-background/10 rounded-lg pointer-events-none" />
                 </div>

@@ -1,18 +1,13 @@
-import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { storage } from "./storage.js";
+import { Router } from "express";
+import contactRouter from "./routes/contact.js";
+import projectsRouter from "./routes/projects.js";
+import teamMembersRouter from "./routes/team-members.js";
 
-export function registerRoutes(app: Express): Server {
-  app.get("/api/projects", async (_req, res) => {
-    const projects = await storage.getAllProjects();
-    res.json(projects);
-  });
+const router = Router();
 
-  app.get("/api/team", async (_req, res) => {
-    const team = await storage.getAllTeamMembers();
-    res.json(team);
-  });
+// API routes
+router.use("/api/contact", contactRouter);
+router.use("/api/projects", projectsRouter);
+router.use("/api/team-members", teamMembersRouter);
 
-  const httpServer = createServer(app);
-  return httpServer;
-}
+export default router;

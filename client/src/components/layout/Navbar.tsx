@@ -15,6 +15,7 @@ export default function Navbar() {
     { href: "/", label: "Home" },
     { href: "/projects", label: "Projects" },
     { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
   ];
 
   return (
@@ -24,8 +25,10 @@ export default function Navbar() {
         <div className="flex justify-between h-16 pt-safe">
           <div className="flex-shrink-0 flex items-center">
             <Link href="/">
-              <a className="text-xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
-                Open Resin Alliance
+              <a className="flex items-center space-x-3">
+                <span className="text-xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
+                  Open Resin Alliance
+                </span>
               </a>
             </Link>
           </div>
@@ -70,9 +73,17 @@ export default function Navbar() {
                 className="w-[320px] p-0 border rounded-l-lg border-border/40 bg-background/20 backdrop-blur-md shadow-lg"
               >
                 <div className="p-6 border-b border-border/40 flex items-center justify-between">
-                  <span className="text-xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
-                    Menu
-                  </span>
+                  <div className="flex items-center space-x-3">
+                    <img
+                      src="/media/open_resin_alliance_logo_darkmode.png"
+                      alt="Open Resin Alliance Logo"
+                      className="w-7 h-7 dark:opacity-90 opacity-70 transition-opacity"
+                      fetchPriority="high"
+                    />
+                    <span className="text-xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
+                      Menu
+                    </span>
+                  </div>
                   <Button
                     variant="ghost"
                     size="icon"

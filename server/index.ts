@@ -1,11 +1,16 @@
 import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "./routes.js";
+import router from "./routes.js";
 import { setupVite, serveStatic, log } from "./vite.js";
 
 const app = express();
+const HOST = process.env.HOST || "127.0.0.1";
+const PORT = parseInt(process.env.PORT || "5000", 10);
+
+// Basic middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Logging middleware
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -24,11 +29,9 @@ app.use((req, res, next) => {
       if (capturedJsonResponse) {
         logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
       }
-
       if (logLine.length > 80) {
         logLine = logLine.slice(0, 79) + "…";
       }
-
       log(logLine);
     }
   });
@@ -36,32 +39,54 @@ app.use((req, res, next) => {
   next();
 });
 
+// Routes
+app.use(router);
+
+// Error handling middleware
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  const status = err.status || err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  
+  // Log error
+  log(`Error: ${status} - ${message}`, "error");
+  
+  // Don't expose internal error details in production
+  const response = app.get("env") === "production" 
+    ? { message: status === 500 ? "Internal Server Error" : message }
+    : { message, stack: err.stack };
+  
+  res.status(status).json(response);
+});
+
+// Graceful shutdown
+function gracefulShutdown(signal: string) {
+  return () => {
+    log(`Received ${signal}. Shutting down gracefully...`);
+    process.exit(0);
+  };
+}
+
+process.on("SIGTERM", gracefulShutdown("SIGTERM"));
+process.on("SIGINT", gracefulShutdown("SIGINT"));
+
+// Catch uncaught exceptions
+process.on("uncaughtException", (err) => {
+  log(`Uncaught Exception: ${err.message}`, "error");
+  log(err.stack || "", "error");
+  process.exit(1);
+});
+
+// Start server
 (async () => {
-  const server = registerRoutes(app);
-
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
-
-    res.status(status).json({ message });
-    throw err;
-  });
-
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
   if (app.get("env") === "development") {
+    const server = app.listen(PORT, HOST, () => {
+      log(`Development server running on http://${HOST}:${PORT}`);
+    });
     await setupVite(app, server);
   } else {
     serveStatic(app);
+    app.listen(PORT, HOST, () => {
+      log(`Production server running on http://${HOST}:${PORT}`);
+    });
   }
-
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client
-  const PORT = parseInt(process.env.PORT || '5000', 10);
-  const HOST = process.env.HOST || '127.0.0.1';
-
-  server.listen(PORT, HOST, () => {
-    log(`serving on http://${HOST}:${PORT}`);
-  });
 })();
