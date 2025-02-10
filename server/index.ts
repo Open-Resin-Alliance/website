@@ -1,6 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import router from "./routes.js";
-import { setupVite, serveStatic, log } from "./vite.js";
+import { log } from "./vite.js";
 
 const app = express();
 const HOST = process.env.HOST || "127.0.0.1";
@@ -82,8 +82,10 @@ process.on("uncaughtException", (err) => {
     const server = app.listen(PORT, HOST, () => {
       log(`Development server running on http://${HOST}:${PORT}`);
     });
+    const { setupVite } = await import("./vite.js");
     await setupVite(app, server);
   } else {
+    const { serveStatic } = await import("./vite.js");
     serveStatic(app);
     app.listen(PORT, HOST, () => {
       log(`Production server running on http://${HOST}:${PORT}`);
