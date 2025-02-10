@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch server/index.ts",
     "build": "vite build",
-    "build:server": "esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist/server && esbuild shared/schema.ts --platform=node --packages=external --bundle --format=esm --outdir=dist/shared",
+    "build:server": "esbuild server/{index,static}.ts --platform=node --packages=external --bundle --format=esm --outdir=dist/server && esbuild shared/schema.ts --platform=node --packages=external --bundle --format=esm --outdir=dist/shared",
     "start": "NODE_ENV=production node dist/server/index.js",
     "check": "tsc",
     "db:push": "drizzle-kit push"
