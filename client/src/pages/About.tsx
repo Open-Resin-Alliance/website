@@ -1,7 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
 import TeamMemberCard from "@/components/team/TeamMemberCard.js";
 import { type TeamMember } from "@shared/schema.js";
-import { cn } from "@/lib/utils.js";
+import { teamMembers } from "@/data/static.js";
 
 function BalancedGrid({ members, isBoardSection }: { members: TeamMember[]; isBoardSection?: boolean }) {
   // For 1-2 members (typically board members), center them in the layout
@@ -66,31 +65,8 @@ function BalancedGrid({ members, isBoardSection }: { members: TeamMember[]; isBo
 }
 
 export default function About() {
-  const { data: team, isLoading } = useQuery<TeamMember[]>({
-    queryKey: ["/api/team"],
-  });
-
-  if (isLoading) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="animate-pulse space-y-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-            {[1, 2].map((i) => (
-              <div key={i} className="h-[420px] bg-background/30 rounded-lg" />
-            ))}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-[420px] bg-background/30 rounded-lg" />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const boardMembers = team?.filter(member => member.isBoardMember) || [];
-  const otherMembers = team?.filter(member => !member.isBoardMember) || [];
+  const boardMembers = teamMembers.filter(member => member.isBoardMember);
+  const otherMembers = teamMembers.filter(member => !member.isBoardMember);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -100,7 +76,6 @@ export default function About() {
           Meet the dedicated professionals working to advance open source resin 3D printing technology.
         </p>
       </div>
-
       <div className="space-y-24">
         <div>
           <div className="text-center mb-12">
@@ -108,7 +83,6 @@ export default function About() {
           </div>
           <BalancedGrid members={boardMembers} isBoardSection />
         </div>
-
         <div>
           <div className="text-center mb-12">
             <h2 className="text-2xl font-semibold text-foreground/90">Team Members</h2>

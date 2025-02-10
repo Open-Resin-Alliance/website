@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
 import ProjectCard from "@/components/projects/ProjectCard.js";
 import { type Project } from "@shared/schema.js";
+import { projects } from "@/data/static.js";
 
 function BalancedGrid({ projects }: { projects: Project[] }) {
   // For 1-2 projects, center them in the layout
@@ -65,22 +65,6 @@ function BalancedGrid({ projects }: { projects: Project[] }) {
 }
 
 export default function Projects() {
-  const { data: projects, isLoading } = useQuery<Project[]>({
-    queryKey: ["/api/projects"],
-  });
-
-  if (isLoading) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="animate-pulse space-y-8 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-8">
-          {[1, 2].map((i) => (
-            <div key={i} className="h-[420px] bg-background/30 rounded-lg" />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center mb-16">
@@ -89,8 +73,7 @@ export default function Projects() {
           Explore our ongoing research and development initiatives in open source resin 3D printing.
         </p>
       </div>
-
-      <BalancedGrid projects={projects || []} />
+      <BalancedGrid projects={projects} />
     </div>
   );
 }
