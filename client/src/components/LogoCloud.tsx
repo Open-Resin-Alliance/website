@@ -15,8 +15,8 @@ interface LogoCloudProps {
 export default function LogoCloud({ logos, className }: LogoCloudProps) {
   return (
     <Card className={cn("border-border/40 bg-background/20 shadow-2xl", className)}>
-      <CardContent className="p-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <CardContent className="p-6 sm:p-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10">
           {logos.map((logo) => (
             <div key={logo.name} className="group relative isolate">
               <div className="flex flex-col items-center">
@@ -31,13 +31,13 @@ export default function LogoCloud({ logos, className }: LogoCloudProps) {
                       <object
                         data={logo.imageUrl}
                         type="image/svg+xml"
-                        className="h-32 w-auto drop-shadow-lg"
+                        className="h-24 sm:h-32 w-auto drop-shadow-lg"
                         aria-label={`${logo.name} logo`}
                       >
                         <img
                           src={logo.imageUrl}
                           alt={`${logo.name} logo`}
-                          className="h-32 object-contain"
+                          className="h-24 sm:h-32 object-contain"
                         />
                       </object>
                     </div>
@@ -45,11 +45,11 @@ export default function LogoCloud({ logos, className }: LogoCloudProps) {
                     <img
                       src={logo.imageUrl}
                       alt={`${logo.name} logo`}
-                      className="h-32 w-auto object-contain drop-shadow-lg"
+                      className="h-24 sm:h-32 w-auto object-contain drop-shadow-lg"
                     />
                   )}
                 </a>
-                <div className="mt-6 text-center md:hidden">
+                <div className="mt-4 text-center md:hidden">
                   <a
                     href={logo.url}
                     target="_blank"
@@ -58,6 +58,11 @@ export default function LogoCloud({ logos, className }: LogoCloudProps) {
                   >
                     {logo.name}
                   </a>
+                  {logo.description && (
+                    <p className="mt-2 text-sm text-muted-foreground/75 px-4">
+                      {logo.description}
+                    </p>
+                  )}
                 </div>
               </div>
               {logo.description && (
