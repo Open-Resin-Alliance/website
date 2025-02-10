@@ -10,7 +10,7 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <Card className="bg-card/50 backdrop-blur-sm border-border/40">
+    <Card className="group bg-background/20 backdrop-blur-sm border-border/40 shadow-2xl hover:bg-background/30 transition-colors">
       <div className="relative bg-background/5 [aspect-ratio:1.6] overflow-hidden">
         <img
           src={project.imageUrl}
@@ -26,11 +26,11 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
       </div>
       <CardHeader className="pb-2">
-        <CardTitle className="text-xl">{project.name}</CardTitle>
+        <CardTitle className="text-xl bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">{project.name}</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col">
         <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{project.description}</p>
-        <div className="space-y-2 flex-1">
+        <div className="space-y-2 flex-1 p-3 rounded-lg bg-background/10">
           <h4 className="text-sm font-medium">Key Features:</h4>
           <ul className="list-disc pl-4 space-y-0.5">
             {project.features.slice(0, 3).map((feature, index) => (

@@ -38,7 +38,7 @@ export default function OrionProject() {
       <div className="relative mx-auto mb-24 max-w-4xl perspective-1000">
         <div className="group">
           <div className="transform-gpu transition-transform duration-500 group-hover:rotate-y-3 group-hover:rotate-x-3 group-hover:translate-z-8">
-            <Card className="overflow-hidden border-border/40">
+            <Card className="overflow-hidden border-border/40 bg-background/20 backdrop-blur-sm shadow-2xl">
               <CardContent className="p-0">
                 <img
                   src="/projects/orion_no_border.png"
@@ -53,7 +53,7 @@ export default function OrionProject() {
 
       {/* Overview Section */}
       <div className="grid gap-8 md:grid-cols-2 mb-24">
-        <Card className="bg-card/50 backdrop-blur-sm border-border/40">
+        <Card className="group bg-background/20 backdrop-blur-sm border-border/40 shadow-2xl hover:bg-background/30 transition-colors">
           <CardContent className="p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2.5 rounded-md bg-yellow-500/10">
@@ -74,7 +74,7 @@ export default function OrionProject() {
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur-sm border-border/40">
+        <Card className="group bg-background/20 backdrop-blur-sm border-border/40 shadow-2xl hover:bg-background/30 transition-colors">
           <CardContent className="p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2.5 rounded-md bg-blue-500/10">
@@ -120,7 +120,7 @@ export default function OrionProject() {
               description: "Fine-tune your prints according to your specific needs"
             }
           ].map((feature, index) => (
-            <Card key={index} className="group bg-card/50 backdrop-blur-sm border-border/40 hover:bg-card/60 transition-colors">
+            <Card key={index} className="group bg-background/20 backdrop-blur-sm border-border/40 shadow-2xl hover:bg-background/30 transition-colors">
               <CardContent className="p-6">
                 <div className="flex items-start gap-3 mb-3">
                   <Badge 
@@ -139,7 +139,7 @@ export default function OrionProject() {
       </div>
 
       {/* Get Started Section */}
-      <Card className="bg-card/50 backdrop-blur-sm border-border/40">
+      <Card className="group bg-background/20 backdrop-blur-sm border-border/40 shadow-2xl hover:bg-background/30 transition-colors">
         <CardContent className="p-8 text-center">
           <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
             Ready to Get Started?

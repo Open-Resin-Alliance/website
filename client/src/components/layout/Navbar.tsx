@@ -18,10 +18,10 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-transparent">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent supports-[backdrop-filter]:bg-background/0">
       <div className="absolute inset-0 bg-background/30 dark:bg-background/10 backdrop-blur-md border-b border-border/40" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-between h-16 pt-safe">
           <div className="flex-shrink-0 flex items-center">
             <Link href="/">
               <a className="text-xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
@@ -67,21 +67,43 @@ export default function Navbar() {
               </SheetTrigger>
               <SheetContent 
                 side="right" 
-                className="w-[280px] p-0 border rounded-l-lg border-border/40 bg-background/20 backdrop-blur-md shadow-lg"
+                className="w-[320px] p-0 border rounded-l-lg border-border/40 bg-background/20 backdrop-blur-md shadow-lg"
               >
-                <div className="flex flex-col p-6 space-y-4">
+                <div className="p-6 border-b border-border/40 flex items-center justify-between">
+                  <span className="text-xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
+                    Menu
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hover:bg-background/30"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <X className="h-5 w-5" />
+                    <span className="sr-only">Close menu</span>
+                  </Button>
+                </div>
+                <div className="flex flex-col py-2">
                   {links.map((link) => (
                     <Link key={link.href} href={link.href}>
                       <a
                         onClick={() => setIsOpen(false)}
                         className={cn(
-                          "text-sm font-medium transition-colors hover:text-foreground/80",
+                          "px-6 py-5 text-lg font-medium transition-all hover:bg-background/30 flex items-center justify-between group",
                           location === link.href
-                            ? "text-foreground"
-                            : "text-muted-foreground"
+                            ? "text-foreground bg-gradient-to-r from-purple-600/10 via-pink-500/10 to-orange-400/10"
+                            : "text-muted-foreground hover:text-foreground"
                         )}
                       >
                         {link.label}
+                        <span 
+                          className={cn(
+                            "w-2 h-2 rounded-full transition-all duration-300",
+                            location === link.href
+                              ? "bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 scale-100 opacity-100"
+                              : "scale-50 opacity-0 bg-foreground group-hover:scale-75 group-hover:opacity-50"
+                          )}
+                        />
                       </a>
                     </Link>
                   ))}

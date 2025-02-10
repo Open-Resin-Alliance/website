@@ -79,13 +79,15 @@ export default function About() {
       <div className="space-y-24">
         <div>
           <div className="text-center mb-12">
-            <h2 className="text-2xl font-semibold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">Board Members</h2>
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">Board Members</h2>
+            <p className="mt-2 text-muted-foreground">Leading the Open Resin Alliance initiative</p>
           </div>
           <BalancedGrid members={boardMembers} isBoardSection />
         </div>
         <div>
           <div className="text-center mb-12">
             <h2 className="text-2xl font-semibold text-foreground/90">Team Members</h2>
+            <p className="mt-2 text-muted-foreground">Contributing to our shared vision</p>
           </div>
           <BalancedGrid members={otherMembers} />
         </div>
