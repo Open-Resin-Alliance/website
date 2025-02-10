@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 export default defineConfig({
   plugins: [react()],
-  base: "/website/", // Add base URL for GitHub Pages
+  base: "/", // Update base URL for GitHub Pages root domain
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "client", "src"),
