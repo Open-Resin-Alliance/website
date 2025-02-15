@@ -1,4 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
+import fs from "fs";
+import path from "path";
 import router from "./routes.js";
 
 const app = express();
@@ -49,8 +51,37 @@ app.use((req, res, next) => {
   next();
 });
 
-// Routes
-app.use(router);
+// Import and use routes
+app.use("/api", router);
+
+// Serve static files with proper caching
+function serveStatic() {
+  const clientDistPath = path.resolve(process.cwd(), "dist", "public");
+
+  if (!fs.existsSync(clientDistPath)) {
+    throw new Error(
+      `Could not find the client build directory: ${clientDistPath}, make sure to build the client first`,
+    );
+  }
+
+  // Serve static files with cache headers
+  app.use(express.static(clientDistPath, {
+    maxAge: '30d',
+    setHeaders: (res, path) => {
+      if (path.endsWith('.html')) {
+        // Don't cache HTML files
+        res.setHeader('Cache-Control', 'no-cache');
+      } else {
+        res.setHeader('Cache-Control', 'public, max-age=2592000'); // 30 days
+      }
+    }
+  }));
+
+  // SPA fallback - must come after API routes
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(clientDistPath, "index.html"));
+  });
+}
 
 // Error handling middleware
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -87,18 +118,21 @@ process.on("uncaughtException", (err) => {
 });
 
 // Start server
-(async () => {
-  if (app.get("env") === "development") {
+if (app.get("env") === "development") {
+  // Development mode with Vite
+  (async () => {
     const server = app.listen(PORT, HOST, () => {
       log(`Development server running on http://${HOST}:${PORT}`);
     });
     const { setupVite } = await import("./vite.js");
     await setupVite(app, server);
-  } else {
-    const { serveStatic } = await import("./static.js");
-    serveStatic(app);
-    app.listen(PORT, HOST, () => {
-      log(`Production server running on http://${HOST}:${PORT}`);
-    });
-  }
-})();
+  })();
+} else {
+  // Production mode - just serve static files and API
+  serveStatic();
+  app.listen(PORT, HOST, () => {
+    log(`Production server running on http://${HOST}:${PORT}`);
+  });
+}
+
+export default app;
