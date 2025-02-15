@@ -1,4 +1,4 @@
-import express, { type Request, Response, NextFunction } from "express";
+import express from "express";
 import fs from "fs";
 import path from "path";
 import router from "./routes.js";
@@ -51,47 +51,40 @@ app.use((req, res, next) => {
   next();
 });
 
-// Import and use routes
+// API routes
 app.use("/api", router);
 
-// Serve static files with proper caching
-function serveStatic() {
-  const clientDistPath = path.resolve(process.cwd(), "dist", "public");
-
-  if (!fs.existsSync(clientDistPath)) {
-    throw new Error(
-      `Could not find the client build directory: ${clientDistPath}, make sure to build the client first`,
-    );
-  }
-
-  // Serve static files with cache headers
-  app.use(express.static(clientDistPath, {
-    maxAge: '30d',
-    setHeaders: (res, path) => {
-      if (path.endsWith('.html')) {
-        // Don't cache HTML files
-        res.setHeader('Cache-Control', 'no-cache');
-      } else {
-        res.setHeader('Cache-Control', 'public, max-age=2592000'); // 30 days
-      }
-    }
-  }));
-
-  // SPA fallback - must come after API routes
-  app.get("*", (_req, res) => {
-    res.sendFile(path.join(clientDistPath, "index.html"));
-  });
+// Serve static files
+const clientDistPath = path.resolve(process.cwd(), "dist", "public");
+if (!fs.existsSync(clientDistPath)) {
+  throw new Error(
+    `Could not find the client build directory: ${clientDistPath}, make sure to build the client first`,
+  );
 }
 
+app.use(express.static(clientDistPath, {
+  maxAge: '30d',
+  setHeaders: (res, path) => {
+    if (path.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=2592000'); // 30 days
+    }
+  }
+}));
+
+// SPA fallback
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(clientDistPath, "index.html"));
+});
+
 // Error handling middleware
-app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   const status = err.status || err.statusCode || 500;
   const message = err.message || "Internal Server Error";
   
-  // Log error
   log(`Error: ${status} - ${message}`, "error");
   
-  // Don't expose internal error details in production
   const response = app.get("env") === "production" 
     ? { message: status === 500 ? "Internal Server Error" : message }
     : { message, stack: err.stack };
@@ -118,21 +111,8 @@ process.on("uncaughtException", (err) => {
 });
 
 // Start server
-if (app.get("env") === "development") {
-  // Development mode with Vite
-  (async () => {
-    const server = app.listen(PORT, HOST, () => {
-      log(`Development server running on http://${HOST}:${PORT}`);
-    });
-    const { setupVite } = await import("./vite.js");
-    await setupVite(app, server);
-  })();
-} else {
-  // Production mode - just serve static files and API
-  serveStatic();
-  app.listen(PORT, HOST, () => {
-    log(`Production server running on http://${HOST}:${PORT}`);
-  });
-}
+app.listen(PORT, HOST, () => {
+  log(`Production server running on http://${HOST}:${PORT}`);
+});
 
 export default app;
