@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button.js";
 import { Link } from "wouter";
 import type { Project } from "@shared/schema.js";
 import VersionBadge from "./VersionBadge.js";
+import { ImageWithLoading } from "@/components/ui/image-with-loading";
 
 interface ProjectCardProps {
   project: Project;
@@ -12,13 +13,11 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Card className="group bg-background/20 backdrop-blur-sm border-border/40 shadow-2xl hover:bg-background/30 transition-colors overflow-hidden">
       <div className="relative bg-background/5 [aspect-ratio:1.6] overflow-hidden">
-        <img
+        <ImageWithLoading
           src={project.imageUrl}
           alt={project.name}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full w-auto h-auto object-cover transform-gpu transition-transform duration-500 will-change-transform group-hover:scale-105"
-          loading="lazy"
-          decoding="async"
-          fetchPriority="auto"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full w-auto h-auto object-cover transform-gpu transition-[transform,opacity] duration-500 will-change-transform group-hover:scale-105"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/20 to-background/5" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-transparent" />
@@ -43,7 +42,17 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
         <div className="mt-4 flex justify-between items-center">
           <Link href={`/projects/${project.name.toLowerCase()}`}>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 hover:from-purple-700 hover:via-pink-600 hover:to-orange-500 text-white">Learn More</Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="w-full sm:w-auto bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 hover:from-purple-700 hover:via-pink-600 hover:to-orange-500 text-white"
+              style={{
+                transform: 'translateZ(0)', // Force GPU acceleration
+                willChange: 'transform, opacity'
+              }}
+            >
+              Learn More
+            </Button>
           </Link>
         </div>
       </CardContent>

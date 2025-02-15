@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge.js";
 import { Shield, Mail } from "lucide-react";
 import { cn } from "@/lib/utils.js";
 import type { TeamMember } from "@shared/schema.js";
+import { ImageWithLoading } from "@/components/ui/image-with-loading";
 
 interface TeamMemberCardProps {
   member: TeamMember;
@@ -14,7 +15,13 @@ export default function TeamMemberCard({ member }: TeamMemberCardProps) {
   const gradientText = "bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent";
 
   return (
-    <Card className="group bg-background/20 backdrop-blur-sm border-border/40 shadow-2xl hover:bg-background/30 transition-colors">
+    <Card 
+      className="group bg-background/20 backdrop-blur-sm border-border/40 shadow-2xl hover:bg-background/30 transition-colors"
+      style={{
+        transform: 'translateZ(0)', // Force GPU acceleration
+        willChange: 'transform, opacity'
+      }}
+    >
       <CardHeader className="text-center relative pb-12 pt-5 flex-shrink-0">
         {member.isAdmin && (
           <div className="absolute top-2.5 right-2.5">
@@ -24,8 +31,13 @@ export default function TeamMemberCard({ member }: TeamMemberCardProps) {
             </Badge>
           </div>
         )}
-        <Avatar className="w-32 h-32 mx-auto border-2 border-border/30 group-hover:border-border/50 transition-colors">
-          <AvatarImage src={member.imageUrl} alt={member.name} />
+        <Avatar className="w-32 h-32 mx-auto border-2 border-border/30 group-hover:border-border/50 transition-colors overflow-hidden">
+          <ImageWithLoading 
+            src={member.imageUrl} 
+            alt={member.name}
+            className="h-full w-full object-cover transform-gpu transition-transform duration-300 will-change-transform group-hover:scale-105"
+            fetchPriority="high"
+          />
           <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
         </Avatar>
         <div className="space-y-2 translate-y-4">
@@ -48,11 +60,15 @@ export default function TeamMemberCard({ member }: TeamMemberCardProps) {
             <a 
               href={`mailto:${member.email}`}
               className={cn(
-                "inline-flex items-center text-sm transition-colors gap-1.5 px-3 py-1.5 rounded-md",
+                "inline-flex items-center text-sm transition-colors gap-1.5 px-3 py-1.5 rounded-md transform-gpu",
                 isBoardMember 
                   ? "bg-gradient-to-r from-purple-600/10 via-pink-500/10 to-orange-400/10 hover:from-purple-600/20 hover:via-pink-500/20 hover:to-orange-400/20 text-foreground" 
                   : "text-muted-foreground hover:text-foreground hover:bg-background/20"
               )}
+              style={{
+                willChange: 'transform, opacity',
+                transform: 'translateZ(0)'
+              }}
             >
               <Mail className="w-3.5 h-3.5" />
               {member.email}
