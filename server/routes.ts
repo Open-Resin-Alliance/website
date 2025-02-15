@@ -5,9 +5,9 @@ import teamMembersRouter from "./routes/team-members.js";
 
 const router = Router();
 
-// API routes
-router.use("/api/contact", contactRouter);
-router.use("/api/projects", projectsRouter);
-router.use("/api/team-members", teamMembersRouter);
+// Remove the /api prefix since it's already added in index.ts
+router.use("/contact", contactRouter);
+router.use("/projects", projectsRouter);
+router.use("/team-members", teamMembersRouter);
 
 export default router;
