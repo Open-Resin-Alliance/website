@@ -10,7 +10,7 @@ export const SITE = {
   /** Verbatim org description from the GitHub API. */
   description:
     'The Open Resin Alliance (ORA) advances open-source innovations for resin 3D printing, empowering creators with accessible tools, materials, and technology.',
-  tagline: 'Advancing open-source resin 3D printing',
+  tagline: 'Advancing Open Source Resin 3D Printing',
   email: 'github@openresin.org',
   /** Org creation date, from the GitHub API. */
   founded: '2024-08-15',
@@ -22,7 +22,6 @@ export const LINKS = {
   discord: 'https://discord.gg/beFeTaPH6v',
   dragonfruitSite: 'https://dragonfruit-slicer.com',
   dragonfruitTranslate: 'https://translate.dragonfruit-slicer.com',
-  openCollective: 'https://opencollective.com/open-resin-alliance',
   rss: '/rss.xml',
   email: 'mailto:github@openresin.org',
 } as const;

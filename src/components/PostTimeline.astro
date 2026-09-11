@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { formatDate, isoDate } from '../lib/format';
+import { formatDayMonth, isoDate } from '../lib/format';
 
 interface Props {
   posts: CollectionEntry<'blog'>[];
@@ -43,7 +43,7 @@ for (const post of [...posts].sort((a, b) => b.data.pubDate.getTime() - a.data.p
                 <li class="timeline__item">
                   <a class="timeline__link" href={`/blog/${post.id}`}>
                     <time class="timeline__date mono" datetime={isoDate(post.data.pubDate)}>
-                      {formatDate(post.data.pubDate).replace(/ \d{4}$/, '')}
+                      {formatDayMonth(post.data.pubDate)}
                     </time>
                     <span class="timeline__content">
                       <span class="timeline__title">{post.data.title}</span>

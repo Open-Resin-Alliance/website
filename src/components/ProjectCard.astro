@@ -2,6 +2,7 @@
 import { projectPath, type Project } from '../data/projects';
 import { repoStats } from '../lib/stats';
 import { formatCompact } from '../lib/format';
+import { ISSUES_COLOR, LANGUAGE_COLORS, STARS_COLOR, licenseColor } from '../lib/tag-colors';
 import ReleaseChip from './ReleaseChip.astro';
 
 interface Props {
@@ -12,29 +13,62 @@ interface Props {
 
 const { project, detailed = false } = Astro.props;
 const live = repoStats(project.repo);
+// Prefer the newest stable release; fall back to the newest build of any kind
+// only for projects that have never cut one, so the chip is never empty-handed.
+const headline = live?.latestStableRelease ?? live?.latestRelease ?? null;
 ---
 
 {/* The whole card is a single link; the release chip inside it must not be one. */}
 <a class="card project-card" href={projectPath(project)}>
   <div class="project-card__head">
     <h3 class="project-card__name">{project.name}</h3>
-    {live?.language && <span class="tag mono">{live.language}</span>}
+    {
+      live?.language && (
+        <span
+          class="tag mono tag--tinted"
+          style={LANGUAGE_COLORS[live.language] ? `--tag:${LANGUAGE_COLORS[live.language]}` : undefined}
+        >
+          {live.language}
+        </span>
+      )
+    }
   </div>
 
   <p class="project-card__blurb">{detailed ? project.summary : project.blurb}</p>
 
   <div class="project-card__meta">
-    {project.license && <span class="tag mono">{project.license}</span>}
-    {live && live.stars > 0 && <span class="tag mono">★ {formatCompact(live.stars)}</span>}
-    {live && live.openIssues > 0 && <span class="tag mono">{formatCompact(live.openIssues)} issues</span>}
+    {
+      project.license && (
+        <span
+          class="tag mono tag--tinted"
+          style={licenseColor(project.license) ? `--tag:${licenseColor(project.license)}` : undefined}
+        >
+          {project.license}
+        </span>
+      )
+    }
+    {
+      live && live.stars > 0 && (
+        <span class="tag mono tag--tinted" style={`--tag:${STARS_COLOR}`}>
+          ★ {formatCompact(live.stars)}
+        </span>
+      )
+    }
+    {
+      live && live.openIssues > 0 && (
+        <span class="tag mono tag--tinted" style={`--tag:${ISSUES_COLOR}`}>
+          {formatCompact(live.openIssues)} issues
+        </span>
+      )
+    }
   </div>
 
   {
-    live?.latestRelease && (
+    headline && (
       <div class="project-card__release">
         <ReleaseChip
-          release={live.latestRelease}
-          label={live.latestRelease.prerelease ? 'Latest build' : 'Latest release'}
+          release={headline}
+          label={live?.latestStableRelease ? 'Latest release' : 'Latest build'}
           link={false}
         />
       </div>

@@ -37,17 +37,22 @@ async function api(path) {
   const res = await fetch(`${API}${path}`, { headers });
   if (!res.ok) {
     const body = await res.text().catch(() => '');
-    throw new Error(`${res.status} ${res.statusText} for ${path}${body ? ` — ${body.slice(0, 200)}` : ''}`);
+    const error = new Error(`${res.status} ${res.statusText} for ${path}${body ? ` — ${body.slice(0, 200)}` : ''}`);
+    error.status = res.status;
+    throw error;
   }
   return res.json();
 }
 
 /** Same semantics as api(), but a failure records a warning instead of aborting. */
-async function apiOptional(path, fallback) {
+async function apiOptional(path, fallback, { quiet404 = false } = {}) {
   try {
     return await api(path);
   } catch (error) {
-    warnings.push(String(error.message ?? error));
+    // A 404 is the documented answer for "this repo has no such resource", not
+    // a problem worth reporting — /releases/latest 404s for every repo that has
+    // never cut a stable release.
+    if (!(quiet404 && error.status === 404)) warnings.push(String(error.message ?? error));
     return fallback;
   }
 }
@@ -101,15 +106,24 @@ async function collect() {
   // Latest release per repo, in small concurrent batches to stay friendly.
   const releaseEntries = await Promise.all(
     own.map(async (repo) => {
-      const releases = await apiOptional(`/repos/${ORG}/${repo.name}/releases?per_page=5`, []);
+      // Two different questions, two endpoints: the paged list gives the newest
+      // release of any kind, while /releases/latest is the newest one that is
+      // neither a prerelease nor a draft. Only looking at the newest five would
+      // hide a stable release that predates a run of branch prereleases.
+      const [releases, stableRelease] = await Promise.all([
+        apiOptional(`/repos/${ORG}/${repo.name}/releases?per_page=5`, []),
+        apiOptional(`/repos/${ORG}/${repo.name}/releases/latest`, null, { quiet404: true }),
+      ]);
       const sorted = [...releases].sort(
         (a, b) => Date.parse(b.published_at ?? b.created_at) - Date.parse(a.published_at ?? a.created_at),
       );
-      const latest = normaliseRelease(repo.name, sorted[0]);
-      const stable = sorted.find((r) => !r.prerelease && !r.draft);
       return [
         repo.name,
-        { latest, stable: normaliseRelease(repo.name, stable), recent: sorted.slice(0, 5).map((r) => normaliseRelease(repo.name, r)) },
+        {
+          latest: normaliseRelease(repo.name, sorted[0]),
+          stable: normaliseRelease(repo.name, stableRelease),
+          recent: sorted.slice(0, 5).map((r) => normaliseRelease(repo.name, r)),
+        },
       ];
     }),
   );
@@ -256,11 +270,16 @@ function printSummary(snapshot) {
   console.log(`totals   ${totals.stars} stars, ${totals.forks} forks, ${totals.openIssues} open issues, ${totals.contributors} contributors`);
   console.log(`active   ${totals.activeRepos} repos pushed in the last 90 days`);
   console.log(`activity ${activity.length} events, latest ${activity[0]?.date ?? 'n/a'} (${activity[0]?.repo ?? 'n/a'})`);
-  const releases = Object.values(snapshot.repos)
-    .filter((r) => r.latestRelease)
+  const stable = Object.values(snapshot.repos)
+    .filter((r) => r.latestStableRelease)
+    .map((r) => `${r.name}@${r.latestStableRelease.tag}`)
+    .sort();
+  const builds = Object.values(snapshot.repos)
+    .filter((r) => r.latestRelease && !r.latestStableRelease)
     .map((r) => `${r.name}@${r.latestRelease.tag}`)
     .sort();
-  console.log(`releases ${releases.join(', ') || 'none'}`);
+  console.log(`stable   ${stable.join(', ') || 'none'}`);
+  console.log(`no stable yet (newest build) ${builds.join(', ') || 'none'}`);
   if (snapshot.warnings?.length) {
     console.log(`warnings (${snapshot.warnings.length}):`);
     for (const warning of snapshot.warnings) console.log(`  - ${warning}`);

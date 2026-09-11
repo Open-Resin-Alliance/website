@@ -30,6 +30,12 @@ export interface Project {
  * Every project below is a real repository in the Open Resin Alliance GitHub
  * organisation. Descriptions and capabilities are taken from the repository
  * description field and its README; nothing is invented.
+ *
+ * Repositories with nothing in them are deliberately absent: `ORA_Charter` is an
+ * empty placeholder, and `.github` is organisation configuration rather than a
+ * project, so neither belongs in a list someone reads to find software. Their
+ * pages do not exist; if either gains content, add an entry here and the route
+ * comes back with it.
  */
 export const PROJECTS: Project[] = [
   {
@@ -181,30 +187,6 @@ export const PROJECTS: Project[] = [
     capabilities: [],
   },
 
-  {
-    name: 'Governance Charter',
-    repo: 'ORA_Charter',
-    slug: 'governance',
-    blurb: 'Governance charter of the Open Resin Alliance.',
-    summary:
-      'The repository that holds the governance charter of the Open Resin Alliance. It is public and reserved for the charter text.',
-    language: '—',
-    license: null,
-    group: 'infrastructure',
-    capabilities: [],
-  },
-  {
-    name: 'Community Health',
-    repo: '.github',
-    slug: 'community-health',
-    blurb: 'Organisation profile and community defaults.',
-    summary:
-      'Organisation-level GitHub configuration. It currently carries the org profile README, which is the front door for the organisation on GitHub.',
-    language: '—',
-    license: null,
-    group: 'infrastructure',
-    capabilities: [],
-  },
   {
     name: 'openresin.org',
     repo: 'openresin.org',

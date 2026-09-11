@@ -4,52 +4,96 @@ import { formatRelative } from '../lib/format';
 
 interface Props {
   entries: ActivityEntry[];
+  /** Maximum entries shown per column. */
   limit?: number;
 }
 
-const { entries, limit = 8 } = Astro.props;
-const visible = entries.slice(0, limit);
+const { entries, limit = 5 } = Astro.props;
 
-const KIND_LABEL: Record<ActivityEntry['kind'], string> = {
-  release: 'Release',
-  push: 'Commits',
-  create: 'Branch',
-  pull_request: 'Pull request',
-  issue: 'Issue',
-  public: 'Public',
-};
+/**
+ * Three streams rather than one chronological list: issues, pull requests and
+ * commits are what a reader scans for, and side by side they use the width of
+ * the page. Releases are deliberately absent — they appear on each project page
+ * and as the release chip on every project card.
+ */
+const COLUMNS: { kind: ActivityEntry['kind']; label: string }[] = [
+  { kind: 'issue', label: 'Issues' },
+  { kind: 'pull_request', label: 'Pull requests' },
+  { kind: 'push', label: 'Commits' },
+];
+
+const columns = COLUMNS.map((column) => ({
+  ...column,
+  items: entries.filter((entry) => entry.kind === column.kind).slice(0, limit),
+}));
 ---
 
-<ul class="feed">
+<div class="feed">
   {
-    visible.map((entry) => (
-      <li class="feed__item">
-        <span class:list={['feed__dot', `feed__dot--${entry.kind}`]} aria-hidden="true" />
-        <div class="feed__body">
-          <p class="feed__line">
-            {entry.url ? (
-              <a href={entry.url} rel="noopener noreferrer" target="_blank">
-                <strong>{entry.repo}</strong>
-              </a>
-            ) : (
-              <strong>{entry.repo}</strong>
-            )}{' '}
-            <span class="feed__title">{entry.title}</span>
-            {entry.burst && entry.burst > 1 && <span class="feed__burst mono">×{entry.burst}</span>}
-          </p>
-          <p class="feed__meta mono">
-            <span class="feed__kind">{KIND_LABEL[entry.kind]}</span>
-            {entry.actor && <> &middot; {entry.actor}</>} &middot;{' '}
-            <time datetime={entry.date}>{formatRelative(entry.date)}</time>
-          </p>
-        </div>
-      </li>
+    columns.map((column) => (
+      <section class="feed__column">
+        <h3 class="feed__heading">
+          <span class:list={['feed__dot', `feed__dot--${column.kind}`]} aria-hidden="true" />
+          {column.label}
+        </h3>
+
+        {column.items.length > 0 ? (
+          <ul class="feed__list">
+            {column.items.map((entry) => (
+              <li class="feed__item">
+                <p class="feed__line">
+                  {entry.url ? (
+                    <a href={entry.url} rel="noopener noreferrer" target="_blank">
+                      <strong>{entry.repo}</strong>
+                    </a>
+                  ) : (
+                    <strong>{entry.repo}</strong>
+                  )}{' '}
+                  <span class="feed__title">{entry.title}</span>
+                  {entry.burst && entry.burst > 1 && <span class="feed__burst mono">×{entry.burst}</span>}
+                </p>
+                <p class="feed__meta mono">
+                  {entry.actor && <>{entry.actor} &middot; </>}
+                  <time datetime={entry.date}>{formatRelative(entry.date)}</time>
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="feed__empty mono">Nothing recent</p>
+        )}
+      </section>
     ))
   }
-</ul>
+</div>
 
 <style>
   .feed {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  .feed__column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    min-inline-size: 0;
+  }
+
+  .feed__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .feed__list {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -58,8 +102,6 @@ const KIND_LABEL: Record<ActivityEntry['kind'], string> = {
   }
 
   .feed__item {
-    display: flex;
-    gap: 0.85rem;
     padding: 0.7rem 0;
     border-bottom: 1px solid var(--border);
   }
@@ -72,17 +114,8 @@ const KIND_LABEL: Record<ActivityEntry['kind'], string> = {
     flex: 0 0 auto;
     inline-size: 7px;
     block-size: 7px;
-    margin-top: 0.5rem;
     border-radius: 999px;
     background: var(--muted-2);
-  }
-
-  .feed__dot--release {
-    background: var(--brand-pink);
-  }
-
-  .feed__dot--push {
-    background: var(--brand-pink);
   }
 
   .feed__dot--issue {
@@ -93,12 +126,8 @@ const KIND_LABEL: Record<ActivityEntry['kind'], string> = {
     background: #0ea5e9;
   }
 
-  .feed__dot--create {
-    background: #16a34a;
-  }
-
-  .feed__body {
-    min-width: 0;
+  .feed__dot--push {
+    background: var(--brand-orange);
   }
 
   .feed__line {
@@ -131,7 +160,20 @@ const KIND_LABEL: Record<ActivityEntry['kind'], string> = {
     margin-top: 0.1rem;
   }
 
-  .feed__kind {
-    color: var(--muted);
+  .feed__empty {
+    font-size: 0.75rem;
+    color: var(--muted-2);
+  }
+
+  @media (max-width: 64rem) {
+    .feed {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .feed {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 </style>

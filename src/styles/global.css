@@ -27,6 +27,14 @@
 
   /* Motion */
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* Glass surfaces: a neutral veil over the page wash. The blur softens the
+     backdrop and the sub-1 saturation mutes whatever hue is behind it, so the
+     gradient still reads through the pane but greys out; the inset top edge is
+     the cue that makes it look like glass rather than a flat fill. */
+  --glass-blur: blur(20px) saturate(0.62);
+  --glass-shadow: inset 0 1px 0 var(--glass-edge);
+  --glass-bg: var(--glass-fill);
 }
 
 /* Light (default) */
@@ -49,6 +57,13 @@
   --shadow-sm: 0 1px 2px rgb(24 24 27 / 0.06);
   --shadow: 0 1px 2px rgb(24 24 27 / 0.05), 0 8px 24px -12px rgb(24 24 27 / 0.14);
   --code-bg: #fafaf9;
+  --wash-1: rgb(147 51 234 / 0.15);
+  --wash-2: rgb(236 72 153 / 0.15);
+  --wash-3: rgb(249 115 22 / 0.15);
+  --glass-fill: rgb(255 255 255 / 0.78);
+  --glass-edge: rgb(255 255 255 / 0.9);
+  --glass-border: rgb(24 24 27 / 0.09);
+  --glass-blur: blur(20px) saturate(0.7);
 }
 
 :root[data-theme="dark"] {
@@ -69,6 +84,16 @@
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
   --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -16px rgb(0 0 0 / 0.7);
   --code-bg: #141417;
+  --wash-1: rgb(124 58 237 / 0.15);
+  --wash-2: rgb(219 39 119 / 0.15);
+  --wash-3: rgb(234 88 12 / 0.15);
+  /* A dark translucent base rather than a white veil: the pane sits a shade
+     below the page, and the wash behind it is blurred and desaturated but still
+     legible through the glass. The veil keeps its 0.4 alpha (so the same amount
+     of backdrop shows through) and only its tone is lifted. */
+  --glass-fill: rgb(20 20 25 / 0.4);
+  --glass-edge: rgb(255 255 255 / 0.09);
+  --glass-border: rgb(255 255 255 / 0.08);
 }
 
 /* --------------------------------------------------------------------------
@@ -105,7 +130,9 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: linear-gradient(135deg, var(--wash-1), var(--wash-2), var(--wash-3));
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 1rem;
@@ -350,6 +377,16 @@ section {
   --btn-ink: #ffffff;
   --btn-border: transparent;
 }
+.btn--discord {
+  --btn-bg: #5865f2;
+  --btn-ink: #ffffff;
+  --btn-border: #5865f2;
+}
+
+.btn--discord:hover {
+  --btn-bg: #4752c4;
+  --btn-border: #4752c4;
+}
 
 .btn--ghost:hover {
   --btn-bg: var(--bg-inset);
@@ -372,8 +409,11 @@ section {
    -------------------------------------------------------------------------- */
 
 .card {
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   transition: border-color 0.2s var(--ease), transform 0.2s var(--ease),
     box-shadow 0.2s var(--ease);
@@ -382,7 +422,7 @@ section {
 a.card:hover,
 .card--interactive:hover {
   border-color: var(--border-strong);
-  box-shadow: var(--shadow);
+  box-shadow: var(--glass-shadow), var(--shadow);
   transform: translateY(-2px);
 }
 
@@ -405,6 +445,16 @@ a.card:hover,
   color: var(--accent);
   border-color: color-mix(in oklab, var(--brand-pink) 42%, var(--border));
   background: color-mix(in oklab, var(--brand-pink) 9%, transparent);
+}
+
+/* Tinted chip: set --tag to a colour and the fill, border and text follow it.
+   The text mixes toward the theme ink (55% is where the gold and light-orange
+   chips clear 4.5:1 on the light theme, measured), so a dark palette colour
+   still reads on a dark ground and a pale one still reads on white. */
+.tag--tinted {
+  color: color-mix(in oklab, var(--tag) 55%, var(--ink));
+  border-color: color-mix(in oklab, var(--tag) 38%, var(--border));
+  background: color-mix(in oklab, var(--tag) 12%, transparent);
 }
 
 .dot {

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T14:09:07.416Z",
+  "generatedAt": "2026-09-11T15:40:51.385Z",
   "source": "https://api.github.com/orgs/Open-Resin-Alliance",
   "org": {
     "login": "Open-Resin-Alliance",
@@ -275,7 +275,7 @@
       "defaultBranch": "main",
       "createdAt": "2025-11-11T20:44:18Z",
       "updatedAt": "2026-09-10T07:04:04Z",
-      "pushedAt": "2026-09-11T00:17:03Z",
+      "pushedAt": "2026-09-11T15:21:09Z",
       "latestRelease": {
         "repo": "DragonFruit",
         "tag": "nightly_feat_auto-supports-v1.6",
@@ -285,7 +285,15 @@
         "prerelease": true,
         "draft": false
       },
-      "latestStableRelease": null,
+      "latestStableRelease": {
+        "repo": "DragonFruit",
+        "tag": "v0.1.9",
+        "name": "Stable v0.1.9",
+        "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/v0.1.9",
+        "publishedAt": "2026-07-06T04:55:27Z",
+        "prerelease": false,
+        "draft": false
+      },
       "recentReleases": [
         {
           "repo": "DragonFruit",
@@ -364,7 +372,15 @@
         "prerelease": true,
         "draft": false
       },
-      "latestStableRelease": null,
+      "latestStableRelease": {
+        "repo": "Odyssey",
+        "tag": "0.4.1",
+        "name": "0.4.1",
+        "url": "https://github.com/Open-Resin-Alliance/Odyssey/releases/tag/0.4.1",
+        "publishedAt": "2024-11-11T02:43:56Z",
+        "prerelease": false,
+        "draft": false
+      },
       "recentReleases": [
         {
           "repo": "Odyssey",
@@ -662,8 +678,8 @@
       "topics": [],
       "defaultBranch": "main",
       "createdAt": "2025-02-09T23:58:09Z",
-      "updatedAt": "2026-09-11T14:06:59Z",
-      "pushedAt": "2026-09-11T14:06:50Z",
+      "updatedAt": "2026-09-11T15:05:07Z",
+      "pushedAt": "2026-09-11T15:05:03Z",
       "latestRelease": null,
       "latestStableRelease": null,
       "recentReleases": []
@@ -851,6 +867,16 @@
     ]
   },
   "activity": [
+    {
+      "repo": "website",
+      "date": "2026-09-11T15:05:04Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to main",
+      "url": "https://github.com/Open-Resin-Alliance/website",
+      "burst": 2
+    },
     {
       "repo": "DragonFruit",
       "date": "2026-09-11T10:22:27Z",
@@ -1060,15 +1086,6 @@
       "avatar": "https://avatars.githubusercontent.com/u/23582247?",
       "kind": "pull_request",
       "title": "merged pull request #625",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-08T13:46:54Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "pull_request",
-      "title": "labeled pull request #625",
       "url": null
     }
   ],

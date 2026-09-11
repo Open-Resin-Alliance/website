@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { LINKS, SITE } from '../data/site';
+import { FEATURED_PROJECTS, PROJECTS } from '../data/projects';
 import { stats } from '../lib/stats';
 import { formatDate, formatCompact, formatNumber } from '../lib/format';
 
@@ -21,6 +22,18 @@ const principles = [
 
 const languages = Object.entries(stats.totals.languages).sort((a, b) => b[1] - a[1]);
 const established = `We are a group of hobbyists and developers from around the globe, joined in our dedication to advancing the field of resin-based 3D printing through open source collaboration. The alliance was established on ${formatDate(SITE.founded)}.`;
+
+/** Reads "A, B, C and D" rather than a comma list. */
+const listFormat = new Intl.ListFormat('en-GB', { style: 'long', type: 'conjunction' });
+
+/** Names only — the sentence around them stays in the template. */
+const coreProjects = listFormat.format(FEATURED_PROJECTS.map((project) => project.name));
+
+/** Projects whose repository was created before the alliance existed. */
+const predating = PROJECTS.filter((project) => {
+  const createdAt = stats.repos[project.repo]?.createdAt;
+  return Boolean(createdAt && Date.parse(createdAt) < Date.parse(SITE.founded));
+});
 ---
 
 <BaseLayout
@@ -39,14 +52,17 @@ const established = `We are a group of hobbyists and developers from around the 
         <h2>What we do</h2>
         <p>
           All of our projects, primarily software and reference designs for open-source resin 3D printing, are hosted
-          on GitHub. They fall into four areas: the DragonFruit slicer and its plugin ecosystem, the Orion printer
-          frontend, the Odyssey printer backend, and utilities such as VoxelShift that move files between ecosystems.
+          on GitHub: {coreProjects}, plus the plugins and tooling that support them.
         </p>
-        <p>
-          Some of these projects grew elsewhere before moving to the alliance, so that they could better serve the
-          community at large. Odyssey and Orion in particular predate the organisation and were built for the Apollo
-          control board series and the Prometheus MSLA printer.
-        </p>
+        {
+          predating.length > 0 && (
+            <p>
+              Some of these projects grew elsewhere before moving to the alliance.{' '}
+              {listFormat.format(predating.map((project) => project.name))} predate the organisation itself and were
+              built for the Apollo control board series and the Prometheus MSLA printer.
+            </p>
+          )
+        }
         <div class="btn-row">
           <a class="btn btn--primary btn--sm" href="/projects">Browse projects</a>
           <a class="btn btn--ghost btn--sm" href={LINKS.githubRepos} rel="noopener noreferrer" target="_blank">
@@ -54,26 +70,38 @@ const established = `We are a group of hobbyists and developers from around the 
           </a>
         </div>
       </div>
-
-      <dl class="panel__stats">
-        <div>
-          <dt>Public repositories</dt>
-          <dd>{formatNumber(stats.totals.repos)}</dd>
-        </div>
-        <div>
-          <dt>Contributors</dt>
-          <dd>{formatNumber(stats.totals.contributors)}</dd>
-        </div>
-        <div>
-          <dt>GitHub followers</dt>
-          <dd>{formatNumber(stats.org.followers)}</dd>
-        </div>
-        <div>
-          <dt>Stars</dt>
-          <dd>{formatCompact(stats.totals.stars)}</dd>
-        </div>
-      </dl>
     </div>
+
+    <dl class="stats">
+      <div class="stats__item">
+        <dt class="stats__value">{formatNumber(stats.totals.repos)}</dt>
+        <dd class="stats__label">
+          public repositories
+          <span class="mono">on GitHub</span>
+        </dd>
+      </div>
+      <div class="stats__item">
+        <dt class="stats__value">{formatCompact(stats.totals.stars)}</dt>
+        <dd class="stats__label">
+          stars
+          <span class="mono">across the org</span>
+        </dd>
+      </div>
+      <div class="stats__item">
+        <dt class="stats__value">{formatNumber(stats.totals.contributors)}</dt>
+        <dd class="stats__label">
+          contributors
+          <span class="mono">flagship projects</span>
+        </dd>
+      </div>
+      <div class="stats__item">
+        <dt class="stats__value">{stats.totals.activeRepos}</dt>
+        <dd class="stats__label">
+          active repos
+          <span class="mono">pushed in 90 days</span>
+        </dd>
+      </div>
+    </dl>
   </section>
 
   <section class="shell section">
@@ -152,21 +180,6 @@ const established = `We are a group of hobbyists and developers from around the 
       </div>
     </div>
   </section>
-
-  <section class="shell section">
-    <div class="rules">
-      <h2>Licensing at a glance</h2>
-      <p class="muted">
-        Projects are licensed individually — always read the licence in the repository you are working with.
-      </p>
-      <ul class="rules__list">
-        <li><span class="mono">AGPL-3.0</span><span>DragonFruit slicer</span></li>
-        <li><span class="mono">MIT</span><span>DragonFruit plugins</span></li>
-        <li><span class="mono">Apache-2.0</span><span>Orion, VoxelShift</span></li>
-        <li><span class="mono">GPL-3.0</span><span>Odyssey</span></li>
-      </ul>
-    </div>
-  </section>
 </BaseLayout>
 
 <style>
@@ -175,8 +188,7 @@ const established = `We are a group of hobbyists and developers from around the 
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
-    padding: clamp(2.5rem, 2rem + 3vw, 4rem) 0 0;
-    max-width: 900px;
+    padding-block: clamp(2.5rem, 2rem + 3vw, 4rem) 0;
   }
 
   .page-head .lede {
@@ -185,18 +197,17 @@ const established = `We are a group of hobbyists and developers from around the 
 
 
   .section {
-    padding: 3rem 0 0;
+    padding-block: 3rem 0;
   }
 
   .panel {
-    display: grid;
-    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-    gap: 2.5rem;
     padding: 2rem 2.25rem;
-    background: var(--bg-raised);
-    border: 1px solid var(--border);
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
-    align-items: start;
   }
 
   .panel__block {
@@ -212,39 +223,48 @@ const established = `We are a group of hobbyists and developers from around the 
 
   .panel__block p {
     color: var(--muted);
-    max-width: 66ch;
   }
 
-  .panel__stats {
+  /* Organisation figures: the same glass cells that used to sit in the hero. */
+  .stats {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1px;
-    margin: 0;
-    background: var(--border);
-    border: 1px solid var(--border);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+  }
+
+  /* Independent cells, not one sealed grid: a shared container background sits
+     behind the translucent fill and hides the wash. */
+  .stats__item {
+    padding: 1.4rem 1.5rem;
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius);
-    overflow: hidden;
+    box-shadow: var(--glass-shadow);
   }
 
-  .panel__stats > div {
-    padding: 0.9rem 1rem;
-    background: var(--bg);
-  }
-
-  .panel__stats dt {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted-2);
-  }
-
-  .panel__stats dd {
-    margin: 0.15rem 0 0;
-    font-size: 1.35rem;
+  .stats__value {
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
     font-weight: 620;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
     font-variant-numeric: tabular-nums;
+  }
+
+  .stats__label {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .stats__label .mono {
+    font-size: 0.625rem;
+    color: var(--muted-2);
   }
 
   .principle {
@@ -319,8 +339,11 @@ const established = `We are a group of hobbyists and developers from around the 
     flex-direction: column;
     gap: 0.1rem;
     padding: 0.9rem 1rem;
-    background: var(--bg-raised);
-    border: 1px solid var(--border);
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     font-size: 0.9375rem;
     transition: border-color 0.18s var(--ease), transform 0.18s var(--ease);
@@ -335,41 +358,13 @@ const established = `We are a group of hobbyists and developers from around the 
     font-size: 0.8125rem;
   }
 
-  .rules {
-    padding: 2rem 2.25rem;
-    background: var(--bg-sunken);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-  }
-
-  .rules h2 {
-    font-size: 1.25rem;
-    margin-bottom: 0.35rem;
-  }
-
-  .rules__list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-    gap: 1rem;
-    list-style: none;
-    margin: 1.5rem 0 0;
-    padding: 0;
-  }
-
-  .rules__list li {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    font-size: 0.9375rem;
-  }
-
-  .rules__list .mono {
-    color: var(--accent);
-    font-size: 0.75rem;
+  @media (max-width: 64rem) {
+    .stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   @media (max-width: 960px) {
-    .panel,
     .split {
       grid-template-columns: minmax(0, 1fr);
       gap: 2rem;
@@ -379,8 +374,11 @@ const established = `We are a group of hobbyists and developers from around the 
       padding: 1.5rem 1.25rem;
     }
 
-    .rules {
-      padding: 1.5rem 1.25rem;
+  }
+
+  @media (max-width: 34rem) {
+    .stats {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

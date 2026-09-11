@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { post, withDescription = true, featured = false } = Astro.props;
-const { title, description, pubDate, category, author, tags, project } = post.data;
+const { title, description, pubDate, category, tags, project } = post.data;
 const href = `/blog/${post.id}`;
 
 const CATEGORY_LABEL: Record<string, string> = {
@@ -41,16 +41,17 @@ const CATEGORY_LABEL: Record<string, string> = {
 
   {withDescription && <p class="post-card__description">{description}</p>}
 
-  <div class="post-card__foot mono">
-    <span>{author}</span>
-    {tags.length > 0 && (
-      <span class="post-card__tags">
-        {tags.map((tag) => (
-          <span class="tag">{tag}</span>
-        ))}
-      </span>
-    )}
-  </div>
+  {
+    tags.length > 0 && (
+      <div class="post-card__foot mono">
+        <span class="post-card__tags">
+          {tags.map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </span>
+      </div>
+    )
+  }
 </article>
 
 <style>
@@ -62,19 +63,12 @@ const CATEGORY_LABEL: Record<string, string> = {
 
   .post-card--featured {
     padding: 1.6rem 1.75rem;
-    background: var(--bg-raised);
-    border: 1px solid var(--border);
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .post-card--featured::before {
-    content: '';
-    position: absolute;
-    inset: 0 0 auto;
-    block-size: 2px;
-    background: var(--brand-gradient);
   }
 
   .post-card__meta {
@@ -127,9 +121,14 @@ const CATEGORY_LABEL: Record<string, string> = {
   .post-card__foot {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    /* Baseline, not centre: the tag chips sit on the card's text baseline
+       instead of floating against their own padding. */
+    align-items: baseline;
     gap: 0.5rem 0.75rem;
-    margin-top: 0.15rem;
+    /* Push the footer to the bottom so it lines up across cards of different
+       content lengths. */
+    margin-top: auto;
+    padding-top: 0.75rem;
     font-size: 0.75rem;
     color: var(--muted-2);
   }

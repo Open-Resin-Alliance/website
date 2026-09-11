@@ -3,49 +3,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PostCard from '../components/PostCard.astro';
 import ActivityFeed from '../components/ActivityFeed.astro';
-import ReleaseChip from '../components/ReleaseChip.astro';
+
+import DiscordIcon from '../components/DiscordIcon.astro';
 import { getCollection } from 'astro:content';
-import { FEATURED_PROJECTS, PLUGIN_PROJECTS, projectSlug, slugForRepo } from '../data/projects';
+import { FEATURED_PROJECTS, PLUGIN_PROJECTS, projectSlug } from '../data/projects';
 import { LINKS, SITE } from '../data/site';
 import { stats } from '../lib/stats';
-import { formatCompact, formatDate, formatNumber } from '../lib/format';
+import { collectiveUrl, formatAmount, supporters } from '../lib/supporters';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 const latestPosts = posts.slice(0, 3);
 
-const headlineStats = [
-  { value: formatNumber(stats.totals.repos), label: 'public repositories', hint: 'on GitHub' },
-  { value: formatCompact(stats.totals.stars), label: 'stars', hint: 'across the org' },
-  { value: formatNumber(stats.totals.contributors), label: 'contributors', hint: 'flagship projects' },
-  { value: String(stats.totals.activeRepos), label: 'active repos', hint: 'pushed in 90 days' },
-];
-
-const sponsors = [
-  {
-    name: 'Atlas 3D Solutions',
-    url: 'https://atlas3dss.com',
-    logo: '/sponsors/atlas3dss.webp',
-    blurb: 'Support solutions for resin 3D printing.',
-  },
-  {
-    name: 'The Contrapposto Shop',
-    url: 'https://contrapposto.shop',
-    logo: '/sponsors/thecontrappostoshop.svg',
-    blurb: 'Creators of the Prometheus mSLA printer.',
-  },
-];
 ---
 
 <BaseLayout description={SITE.description}>
   <section class="hero">
-    <div class="shell hero__inner">
+    <div class="shell">
       <div class="hero__copy">
-        <p class="eyebrow">Open-source resin 3D printing</p>
         <h1>
-          Advancing open-source<br />
-          <span class="text-brand">resin 3D printing</span>
+          Advancing Open Source<br />
+          <span class="text-brand">Resin 3D Printing</span>
         </h1>
         <p class="lede">
           We are a group of hobbyists and developers from around the globe, joined in our dedication to advancing
@@ -53,23 +32,11 @@ const sponsors = [
         </p>
         <div class="btn-row">
           <a class="btn btn--primary" href="/projects">Explore our projects</a>
-          <a class="btn btn--ghost" href={LINKS.discord} rel="noopener noreferrer" target="_blank">Join us on Discord</a>
+          <a class="btn btn--discord" href={LINKS.discord} rel="noopener noreferrer" target="_blank">
+            <DiscordIcon size={16} />Join the Discord
+          </a>
         </div>
       </div>
-
-      <dl class="hero__stats">
-        {
-          headlineStats.map((stat) => (
-            <div class="hero__stat">
-              <dt class="hero__stat-value">{stat.value}</dt>
-              <dd class="hero__stat-label">
-                {stat.label}
-                <span class="mono">{stat.hint}</span>
-              </dd>
-            </div>
-          ))
-        }
-      </dl>
     </div>
   </section>
 
@@ -105,42 +72,18 @@ const sponsors = [
   </section>
 
   <section class="shell section">
-    <div class="split">
-      <div class="split__main">
-        <div class="section-head">
-          <div class="section-head__text">
-            <p class="eyebrow">Recent activity</p>
-            <h2>Built in the open</h2>
-            <p class="lede">
-              Releases, merges and issues straight from the organisation&apos;s public GitHub activity.
-            </p>
-          </div>
-        </div>
-        <ActivityFeed entries={stats.activity} limit={7} />
-      </div>
-
-      <aside class="split__aside">
-        <div class="section-head">
-          <div class="section-head__text">
-            <p class="eyebrow">Releases</p>
-            <h2>Latest builds</h2>
-          </div>
-        </div>
-        <ul class="release-list">
-          {
-            stats.recentReleases.slice(0, 6).map((release) => (
-              <li class="release-list__item">
-                <a href={`/projects/${slugForRepo(release.repo)}`}>{release.repo}</a>
-                <ReleaseChip release={release} label={release.prerelease ? 'Build' : 'Release'} />
-              </li>
-            ))
-          }
-        </ul>
-        <p class="mono muted release-list__note">
-          Snapshot generated {formatDate(stats.generatedAt)} from {stats.totals.repos} repositories.
+    <div class="section-head">
+      <div class="section-head__text">
+        <p class="eyebrow">Recent activity</p>
+        <h2>Built in the open</h2>
+        <p class="lede">
+          Issues, pull requests and commits straight from the organisation&apos;s public GitHub activity — releases are
+          listed on each project page.
         </p>
-      </aside>
+      </div>
     </div>
+
+    <ActivityFeed entries={stats.activity} limit={5} />
   </section>
 
   <section class="shell section">
@@ -159,54 +102,51 @@ const sponsors = [
   </section>
 
   <section class="shell section">
-    <div class="standards">
-      <div class="standards__block">
-        <p class="eyebrow">How we work</p>
-        <h2>Open by default</h2>
-        <ul class="standards__list">
-          <li>
-            <strong>Licensed in the open.</strong> DragonFruit is AGPL-3.0-or-later, Orion and VoxelShift are
-            Apache-2.0, Odyssey is GPL-3.0, and DragonFruit plugins are MIT.
-          </li>
-          <li>
-            <strong>Developed in the open.</strong> Nightly and dev builds ship straight from feature branches so
-            anyone can test work before it stabilises.
-          </li>
-          <li>
-            <strong>Documented in the repository.</strong> Installation notes, configuration and API references live
-            next to the code they describe.
-          </li>
-        </ul>
-        <div class="btn-row">
-          <a class="btn btn--ghost btn--sm" href="/about">About the alliance</a>
-          <a class="btn btn--ghost btn--sm" href={LINKS.githubRepos} rel="noopener noreferrer" target="_blank">
-            Browse on GitHub
-          </a>
-        </div>
-      </div>
-
-      <div class="standards__block">
-        <p class="eyebrow">Supporters</p>
-        <h2>Partners and supporters</h2>
-        <ul class="sponsors">
+    <div class="supporters">
+      <p class="eyebrow">Supporters</p>
+        <h2>Open Collective backers</h2>
+        <p class="muted">
+          Fiscally hosted by {supporters.host?.name ?? 'Open Source Collective'}.{' '}
+          {formatAmount(supporters.totals.raised, supporters.totals.currency)} contributed by{' '}
+          {supporters.totals.backers} backers so far.
+        </p>
+        <ul class="backers">
           {
-            sponsors.map((sponsor) => (
+            supporters.backers.map((backer) => (
               <li>
-                <a href={sponsor.url} rel="noopener noreferrer" target="_blank">
-                  <img src={sponsor.logo} alt={sponsor.name} loading="lazy" decoding="async" />
+                <a href={backer.url ?? collectiveUrl} rel="noopener noreferrer" target="_blank">
+                  {backer.imageUrl && (
+                    <img src={backer.imageUrl} alt="" width="32" height="32" loading="lazy" decoding="async" />
+                  )}
                   <span>
-                    <strong>{sponsor.name}</strong>
-                    <span class="muted">{sponsor.blurb}</span>
+                    <strong>{backer.name}</strong>
+                    <span class="muted">
+                      {backer.recurring && backer.recurringAmount
+                        ? `Monthly · ${formatAmount(backer.recurringAmount, backer.currency)}/mo`
+                        : `One-time · ${formatAmount(backer.amount, backer.currency)}`}
+                    </span>
                   </span>
                 </a>
               </li>
             ))
           }
         </ul>
-        <p class="muted standards__note">
-          Sponsor logos are property of their respective owners and used with permission.
+        <div class="btn-row">
+          <a class="btn btn--ghost btn--sm" href={collectiveUrl} rel="noopener noreferrer" target="_blank">
+            Become a backer
+          </a>
+          {
+            supporters.host && (
+              <a class="btn btn--ghost btn--sm" href={supporters.host.url ?? collectiveUrl} rel="noopener noreferrer" target="_blank">
+                {supporters.host.name}
+              </a>
+            )
+          }
+        </div>
+        <p class="muted supporters__note">
+          Names, avatars and amounts are read from Open Collective at build time; incognito contributors are never
+          published.
         </p>
-      </div>
     </div>
   </section>
 
@@ -220,7 +160,7 @@ const sponsors = [
         </p>
       </div>
       <div class="btn-row">
-        <a class="btn btn--brand" href={LINKS.discord} rel="noopener noreferrer" target="_blank">Join the Discord</a>
+        <a class="btn btn--discord" href={LINKS.discord} rel="noopener noreferrer" target="_blank"><DiscordIcon size={16} />Join the Discord</a>
         <a class="btn btn--ghost" href="/contact">Contact us</a>
       </div>
     </div>
@@ -229,87 +169,36 @@ const sponsors = [
 
 <style>
   .hero {
-    position: relative;
-    padding: clamp(3rem, 2rem + 6vw, 6rem) 0 clamp(2.5rem, 2rem + 3vw, 4rem);
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset-inline: 0;
-    top: -40%;
-    block-size: 80%;
-    background:
-      radial-gradient(58% 60% at 20% 48%, color-mix(in oklab, var(--brand-violet) 20%, transparent), transparent 70%),
-      radial-gradient(52% 56% at 76% 34%, color-mix(in oklab, var(--brand-pink) 18%, transparent), transparent 70%),
-      radial-gradient(46% 52% at 58% 88%, color-mix(in oklab, var(--brand-orange) 15%, transparent), transparent 72%);
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  .hero__inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    gap: 3rem;
-    align-items: center;
+    /* With the eyebrow gone the heading is the first thing under the header, so
+       the top gap carries the whole opening breath: ~74px on desktop, down from
+       the original 96px and up from the 55px that followed the eyebrow removal. */
+    padding-block: clamp(2.5rem, 1.9rem + 3vw, 5rem) clamp(2.5rem, 2rem + 3vw, 4rem);
   }
 
   .hero__copy {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    align-items: flex-start;
+    /* Centred hero: the column spans the content box so the heading, lede and
+       buttons centre on the same axis. */
+    align-items: center;
+    inline-size: 100%;
+    text-align: center;
   }
 
   .hero__copy h1 {
     margin: 0;
-  }
-
-  .hero__stats {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1px;
-    margin: 0;
-    padding: 0;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-
-  .hero__stat {
-    padding: 1.4rem 1.5rem;
-    background: var(--bg-raised);
-  }
-
-  .hero__stat-value {
-    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
-    font-weight: 620;
-    letter-spacing: -0.035em;
-    line-height: 1.05;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .hero__stat-label {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    font-size: 0.8125rem;
-    color: var(--muted);
-  }
-
-  .hero__stat-label .mono {
-    font-size: 0.625rem;
-    color: var(--muted-2);
+    /* Full width: without this the flex column shrinks the heading to its own
+       text width, so it never lines up with the content below. */
+    inline-size: 100%;
   }
 
   .section {
-    padding: 3.5rem 0;
+    padding-block: 3.5rem;
   }
 
   .section + .section {
-    padding-top: 1rem;
+    padding-block-start: 1rem;
   }
 
   .plugin-strip {
@@ -348,141 +237,80 @@ const sponsors = [
     color: var(--ink);
   }
 
-  .split {
-    display: grid;
-    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
-    gap: 3.5rem;
-  }
 
-  .release-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-  }
 
-  .release-list__item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--border);
-  }
 
-  .release-list__item:last-child {
-    border-bottom: 0;
-  }
 
-  .release-list__item > a {
-    font-size: 0.9375rem;
-    font-weight: 550;
-    letter-spacing: -0.012em;
-  }
 
-  .release-list__item > a:hover {
-    color: var(--brand-violet-deep);
-  }
 
-  :global(:root[data-theme='dark']) .release-list__item > a:hover {
-    color: var(--brand-orange);
-  }
 
-  .release-list__note {
-    margin-top: 1rem;
-    font-size: 0.6875rem;
-    line-height: 1.6;
-  }
-
-  .standards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
-    gap: 2.5rem;
-  }
-
-  .standards__block {
+  /* Supporters block: eyebrow, copy, backer cards, actions. */
+  .supporters {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
   }
 
-  .standards__list {
+  /* Backer cards: avatar, name, and how they contribute. */
+  .backers {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    max-width: 58ch;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 0.6rem;
+    inline-size: 100%;
   }
 
-  .standards__list li {
-    position: relative;
-    padding-left: 1.1rem;
-    color: var(--muted);
-    font-size: 0.9375rem;
-    line-height: 1.65;
-  }
-
-  .standards__list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.6rem;
-    inline-size: 5px;
-    block-size: 5px;
-    border-radius: 999px;
-    background: var(--brand-gradient);
-  }
-
-  .standards__list strong {
-    color: var(--ink);
-    font-weight: 600;
-  }
-
-  .sponsors {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    width: 100%;
-  }
-
-  .sponsors a {
+  .backers a {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.9rem 1rem;
-    background: var(--bg-raised);
-    border: 1px solid var(--border);
+    gap: 0.7rem;
+    block-size: 100%;
+    padding: 0.6rem 0.7rem;
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     transition: border-color 0.18s var(--ease), transform 0.18s var(--ease);
   }
 
-  .sponsors a:hover {
+  .backers a:hover {
     border-color: var(--border-strong);
     transform: translateY(-1px);
   }
 
-  .sponsors img {
-    inline-size: auto;
-    block-size: 2.25rem;
-    max-inline-size: 8rem;
-    object-fit: contain;
+  .backers img {
+    inline-size: 2rem;
+    block-size: 2rem;
+    border-radius: 999px;
+    background: var(--bg-inset);
+    object-fit: cover;
     flex: 0 0 auto;
   }
 
-  .sponsors span {
+  .backers span {
     display: flex;
     flex-direction: column;
+    min-inline-size: 0;
     font-size: 0.875rem;
-    line-height: 1.45;
+    line-height: 1.4;
   }
 
-  .standards__note {
+  .backers strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .backers .muted {
+    font-size: 0.75rem;
+  }
+
+  .supporters__note {
     font-size: 0.75rem;
   }
 
@@ -493,8 +321,11 @@ const sponsors = [
     justify-content: space-between;
     gap: 1.5rem 2.5rem;
     padding: 2rem 2.25rem;
-    background: var(--bg-sunken);
-    border: 1px solid var(--border);
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
   }
 
@@ -510,19 +341,7 @@ const sponsors = [
     color: var(--muted);
   }
 
-  @media (max-width: 960px) {
-    .hero__inner,
-    .split {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 2.5rem;
-    }
-  }
-
-  @media (max-width: 560px) {
-    .hero__stats {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
+  @media (max-width: 34rem) {
     .cta {
       padding: 1.5rem 1.25rem;
     }
