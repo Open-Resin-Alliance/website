@@ -106,6 +106,35 @@ numbers. Use `slug` when the repository name is not a good URL segment
 - No CSS framework. Tokens and primitives live in `src/styles/global.css`, component
   styles are scoped in their `.astro` files.
 
+## Deployment
+
+`.github/workflows/deploy.yml` publishes `dist/` to GitHub Pages via
+`actions/deploy-pages`. Pages is configured with `build_type: workflow`, so there is no
+branch-based build and no Jekyll processing (`public/.nojekyll` is kept anyway so the
+underscore-prefixed `_astro/` directory survives if that ever changes).
+
+The build targets the apex domain: `site: 'https://openresin.org'` with the default
+`base: '/'`. That means the artifact must be served from the root of a domain. Until the
+repository's Pages custom domain is set to `openresin.org`, the project URL
+(`https://open-resin-alliance.github.io/website/`) serves the same HTML but every
+root-relative asset 404s, because the paths in the HTML assume the root.
+
+`openresin.org` itself is currently fronted by Cloudflare, which serves the previous
+React build (unknown paths return that app's `index.html`). Deploying to Pages does not
+change what Cloudflare serves. To put this site on the apex domain, either:
+
+- set the repository's Pages custom domain to `openresin.org` and point DNS at GitHub
+  Pages (A `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`,
+  AAAA `2606:50c0:8000::153` and up, or CNAME to `open-resin-alliance.github.io`, with the
+  Cloudflare proxy disabled), or
+- keep Cloudflare as the origin and connect it to this repository instead: build command
+  `npm run build`, output directory `dist`, and a `GITHUB_TOKEN` environment variable so
+  the statistics step is not rate limited.
+
+If a non-root path is ever needed permanently, set `base` in `astro.config.mjs` **and**
+the matching `site` path, otherwise canonical URLs, the sitemap and the RSS links will
+disagree with where the files are served.
+
 ## Licensing
 
 Source code in this repository is licensed under the MIT License — see
