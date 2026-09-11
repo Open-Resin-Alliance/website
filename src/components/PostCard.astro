@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { getProject } from '../data/projects';
 import { formatDate, isoDate } from '../lib/format';
 
 interface Props {
@@ -13,6 +14,8 @@ interface Props {
 const { post, withDescription = true, featured = false } = Astro.props;
 const { title, description, pubDate, category, tags, project } = post.data;
 const href = `/blog/${post.id}`;
+/** The catalogue's name for the repo, so a plugin reads as a project, not a slug. */
+const projectLabel = project ? getProject(project)?.name ?? project : null;
 
 const CATEGORY_LABEL: Record<string, string> = {
   release: 'Release',
@@ -27,10 +30,10 @@ const CATEGORY_LABEL: Record<string, string> = {
     <time datetime={isoDate(pubDate)}>{formatDate(pubDate)}</time>
     <span class="post-card__sep" aria-hidden="true">/</span>
     <span class="post-card__category">{CATEGORY_LABEL[category] ?? category}</span>
-    {project && (
+    {projectLabel && (
       <>
         <span class="post-card__sep" aria-hidden="true">/</span>
-        <span>{project}</span>
+        <span>{projectLabel}</span>
       </>
     )}
   </div>

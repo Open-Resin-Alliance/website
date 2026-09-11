@@ -4,7 +4,7 @@ description: Printer and file-format support for DragonFruit ships as eight sepa
 pubDate: 2026-07-15
 category: project
 tags: [dragonfruit, plugins, architecture, rust, typescript]
-project: df-plugin-uniformation
+project: DragonFruit
 ---
 
 DragonFruit does not grow printer support in its own repository. Instead, hardware and file-format integrations ship as separate plugin repositories under the DragonFruit plugin architecture, and the newest of them, [df-plugin-uniformation](https://github.com/Open-Resin-Alliance/df-plugin-uniformation), was created on 15 July 2026.

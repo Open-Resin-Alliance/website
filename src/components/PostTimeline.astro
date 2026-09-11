@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { getProject } from '../data/projects';
 import { formatDayMonth, isoDate } from '../lib/format';
 
 interface Props {
@@ -50,7 +51,7 @@ for (const post of [...posts].sort((a, b) => b.data.pubDate.getTime() - a.data.p
                       <span class="timeline__description">{post.data.description}</span>
                       <span class="timeline__tags mono">
                         <span class="timeline__category">{CATEGORY_LABEL[post.data.category] ?? post.data.category}</span>
-                        {post.data.project && <span>&middot; {post.data.project}</span>}
+                        {post.data.project && <span>&middot; {getProject(post.data.project)?.name ?? post.data.project}</span>}
                         {post.data.version && <span>&middot; {post.data.version}</span>}
                       </span>
                     </span>
