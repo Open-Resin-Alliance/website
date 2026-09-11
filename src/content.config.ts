@@ -4,7 +4,7 @@ import { z } from 'astro/zod';
 
 /**
  * Blog posts live as Markdown files in src/content/blog/.
- * Adding a post is one file plus a git push — no build configuration, no CMS.
+ * Adding a post is one file plus a git push - no build configuration, no CMS.
  */
 const blog = defineCollection({
   loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),

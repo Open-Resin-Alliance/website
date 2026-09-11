@@ -3,14 +3,14 @@
  *
  * The site is static: without JavaScript every value comes from the committed
  * snapshots in `src/data/`, and that stays true whenever the APIs cannot be
- * reached — offline, rate limited, blocked, or down. This module only ever
+ * reached - offline, rate limited, blocked, or down. This module only ever
  * improves on those numbers; it never blanks one out or shows an error, so the
  * page a visitor gets is the page that was built, optionally with fresher data.
  *
  * One GitHub call and one Open Collective call per page, no token: an
  * unauthenticated browser gets 60 GitHub requests per hour per IP, so anything
- * that costs a call per repository stays snapshot-only — open issue, pull
- * request and commit counts, contributor totals, per-release tags — and every
+ * that costs a call per repository stays snapshot-only - open issue, pull
+ * request and commit counts, contributor totals, per-release tags - and every
  * result is reused for five minutes across pages.
  */
 import { COLLECTIVE_SLUG, ORG } from '../data/site';

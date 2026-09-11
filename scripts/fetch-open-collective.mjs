@@ -97,7 +97,7 @@ async function collect() {
   });
 
   if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText} — ${(await res.text()).slice(0, 200)}`);
+    throw new Error(`${res.status} ${res.statusText} - ${(await res.text()).slice(0, 200)}`);
   }
 
   const payload = await res.json();
@@ -186,7 +186,7 @@ async function readExisting() {
 function printSummary(snapshot) {
   const { collective, totals, host } = snapshot;
   console.log(`snapshot generatedAt ${snapshot.generatedAt}`);
-  console.log(`collective ${collective.name} (${collective.slug}) — ${collective.url}`);
+  console.log(`collective ${collective.name} (${collective.slug}) - ${collective.url}`);
   console.log(`totals     ${totals.backers} backers, ${totals.contributors} contributors, ${totals.raised} ${totals.currency} raised`);
   console.log(`fiscal host ${host ? host.name : 'none reported'}`);
   for (const backer of snapshot.backers) {
@@ -202,7 +202,7 @@ const offline = process.argv.includes('--offline');
 if (offline) {
   const existing = await readExisting();
   if (!existing) {
-    console.error(`no snapshot at ${OUT} — run without --offline first`);
+    console.error(`no snapshot at ${OUT} - run without --offline first`);
     process.exit(1);
   }
   printSummary(existing);
@@ -223,7 +223,7 @@ try {
     printSummary(previous);
     process.exit(0);
   }
-  console.error('no existing snapshot to fall back on — failing');
+  console.error('no existing snapshot to fall back on - failing');
   process.exit(1);
 }
 

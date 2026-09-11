@@ -1,7 +1,7 @@
 # AGENTS.md
 
 Astro 7 + TypeScript static site for `openresin.org`, deployed to GitHub Pages by
-`.github/workflows/deploy.yml`. Read `README.md` first — it documents the content
+`.github/workflows/deploy.yml`. Read `README.md` first - it documents the content
 workflow, the stats pipeline and the file layout.
 
 ## Commands
@@ -9,7 +9,7 @@ workflow, the stats pipeline and the file layout.
 ```
 npm install
 npm run dev              # dev server on http://localhost:4321
-npm run check            # astro check (types + template diagnostics) — must be 0 errors
+npm run check            # astro check (types + template diagnostics) - must be 0 errors
 npm run build            # static build into dist/
 npm run stats            # refresh src/data/github-stats.json (GITHUB_TOKEN raises the limit)
 npm run stats:offline    # print the committed snapshot summary without network
@@ -34,7 +34,7 @@ There is no test suite. `npm run check` plus a real build is the gate.
 - **`Project.repo` is a join key.** It must match the GitHub repository name exactly;
   a typo silently drops the live stats for that project with no error.
 - **Pages render snapshots; the browser may refresh them.** Every page is built from
-  `src/data/*.json` and has to be correct with JavaScript disabled — that rendering is the
+  `src/data/*.json` and has to be correct with JavaScript disabled - that rendering is the
   fallback, not a leftover. The one place allowed to touch the network is `src/lib/live.ts`,
   which replaces the values marked with `data-live` (and `data-repo` scope) and leaves them
   exactly as built on any failure: offline, rate limited, blocked, API down. Do not add
@@ -42,11 +42,11 @@ There is no test suite. `npm run check` plus a real build is the gate.
   attribute in the markup, the key in `textFor()` in `live.ts`, the formatter the page
   already uses (imported from `src/lib/format.ts`), and a `data-live-status` element on the
   page. `data-live` keys the client does not know are ignored, so markup can land first.
-  Counts that need a per-repository call — open issues, pull requests, commits — are
+  Counts that need a per-repository call - open issues, pull requests, commits - are
   deliberately snapshot-only: the snapshot's `openIssues` *excludes* pull requests, while the
   REST field a browser can read includes them, so a live refresh would silently change what
   the column means rather than update it.
-- **No nested anchors.** A card that is itself an `<a>` must not contain another `<a>` —
+- **No nested anchors.** A card that is itself an `<a>` must not contain another `<a>` -
   the HTML parser splits them and the DOM stops matching the source. Pass
   `link={false}` to `ReleaseChip` inside `ProjectCard`; that prop exists for this reason.
 - **Fixed grid track counts.** `.grid--2/3/4` use explicit `repeat(N, minmax(0, 1fr))`.
@@ -61,7 +61,7 @@ There is no test suite. `npm run check` plus a real build is the gate.
 - **Blog frontmatter is validated.** The schema in `src/content.config.ts` is the contract;
   a bad field fails the build. Add posts as `src/content/blog/YYYY-MM-DD-slug.md`.
 - **Assets are WebP/JPEG and all of `public/` must be rendered.** Before committing new
-  images, check that nothing in `public/` is unreferenced — the deployed artifact ships
+  images, check that nothing in `public/` is unreferenced - the deployed artifact ships
   every file verbatim.
 
 ## Verification
@@ -73,8 +73,8 @@ A change is not finished until:
 3. For layout changes, the page is loaded in a browser and asserted at 1600/1280/1024/820/
    480/360 px wide with `documentElement.scrollWidth - clientWidth === 0` and no element
    whose `getBoundingClientRect().right` exceeds the viewport.
-4. Every `.shell` reports the same content box — 228…1340 at a 1568px viewport, 164…1276 at
-   1440 — so sections, grids and cards share one left edge:
+4. Every `.shell` reports the same content box - 228…1340 at a 1568px viewport, 164…1276 at
+   1440 - so sections, grids and cards share one left edge:
 
    ```
    [...document.querySelectorAll('.shell')].map(el => {
@@ -86,10 +86,10 @@ A change is not finished until:
 
 5. No `a > a` nesting anywhere in the built HTML.
 6. For `src/lib/live.ts` or any `data-live` markup: load the built site, confirm the numbers
-   actually change when the APIs answer (intercept a response and doctor it — a value that
+   actually change when the APIs answer (intercept a response and doctor it - a value that
    happens to be unchanged proves nothing), then block `api.github.com` and
    `api.opencollective.com` and confirm every rendered value is byte-identical to `dist/`,
    the status still reads `Snapshot · …`, and no console error comes from the page itself.
    A blocked fetch logs a network failure in the console; that is the browser, not the module.
 
-Do not run a formatter or linter over the repository — there is none configured.
+Do not run a formatter or linter over the repository - there is none configured.

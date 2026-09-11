@@ -71,7 +71,7 @@ const UNITS: [limitSeconds: number, perUnit: number, unit: Intl.RelativeTimeForm
 
 /**
  * Human distance between a timestamp and the build time. Static output, so the
- * reference point is the moment `astro build` ran — see the "generated" line in
+ * reference point is the moment `astro build` ran - see the "generated" line in
  * the footer for the exact time.
  */
 export function formatRelative(value: string | Date, reference: Date = new Date()): string {

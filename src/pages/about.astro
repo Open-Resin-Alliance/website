@@ -26,7 +26,7 @@ const established = `We are a group of hobbyists and developers from around the 
 /** Reads "A, B, C and D" rather than a comma list. */
 const listFormat = new Intl.ListFormat('en-GB', { style: 'long', type: 'conjunction' });
 
-/** Names only — the sentence around them stays in the template. */
+/** Names only - the sentence around them stays in the template. */
 const coreProjects = listFormat.format(FEATURED_PROJECTS.map((project) => project.name));
 
 /** Projects whose repository was created before the alliance existed. */
@@ -156,7 +156,7 @@ const predating = PROJECTS.filter((project) => {
         <h2>Joining in</h2>
         <p class="muted">
           There is no formal membership process. Pick a repository, read its contributing section, and open a pull
-          request — or bring a question, a bug report or a printer to the Discord.
+          request - or bring a question, a bug report or a printer to the Discord.
         </p>
         <ul class="join__list">
           <li>

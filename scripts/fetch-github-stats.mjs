@@ -14,7 +14,7 @@
  * one org-wide GraphQL query that splits open issues from open pull requests and
  * counts commits on each default branch. Without it those three numbers are
  * carried from the existing snapshot, or degraded to REST's open_issues_count
- * (which counts pull requests as issues) — either way a warning is recorded.
+ * (which counts pull requests as issues) - either way a warning is recorded.
  */
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
@@ -62,7 +62,7 @@ async function api(path) {
   const res = await fetch(`${API}${path}`, { headers });
   if (!res.ok) {
     const body = await res.text().catch(() => '');
-    const error = new Error(`${res.status} ${res.statusText} for ${path}${body ? ` — ${body.slice(0, 200)}` : ''}`);
+    const error = new Error(`${res.status} ${res.statusText} for ${path}${body ? ` - ${body.slice(0, 200)}` : ''}`);
     error.status = res.status;
     throw error;
   }
@@ -75,7 +75,7 @@ async function apiOptional(path, fallback, { quiet404 = false } = {}) {
     return await api(path);
   } catch (error) {
     // A 404 is the documented answer for "this repo has no such resource", not
-    // a problem worth reporting — /releases/latest 404s for every repo that has
+    // a problem worth reporting - /releases/latest 404s for every repo that has
     // never cut a stable release.
     if (!(quiet404 && error.status === 404)) warnings.push(String(error.message ?? error));
     return fallback;
@@ -100,7 +100,7 @@ async function fetchRepoCounts() {
     });
     if (!res.ok) {
       const body = await res.text().catch(() => '');
-      throw new Error(`${res.status} ${res.statusText}${body ? ` — ${body.slice(0, 200)}` : ''}`);
+      throw new Error(`${res.status} ${res.statusText}${body ? ` - ${body.slice(0, 200)}` : ''}`);
     }
     const payload = await res.json();
     if (payload.errors?.length) throw new Error(payload.errors.map((error) => error.message).join('; '));
@@ -123,7 +123,7 @@ async function collectRepoCounts(previous, own) {
   const graphql = await fetchRepoCounts();
   if (!graphql && !process.env.GITHUB_TOKEN) {
     warnings.push(
-      'GITHUB_TOKEN is not set — issue/PR/commit counts come from the existing snapshot, or REST open_issues_count when it has none',
+      'GITHUB_TOKEN is not set - issue/PR/commit counts come from the existing snapshot, or REST open_issues_count when it has none',
     );
   }
 
@@ -154,7 +154,7 @@ async function collectRepoCounts(previous, own) {
 
     counts.set(repo.name, { openIssues: repo.openIssues, openPulls: 0, commits: null });
     warnings.push(
-      `no GraphQL or snapshot counts for ${repo.name} — openIssues fell back to REST open_issues_count (${repo.openIssues}, includes pull requests), openPulls 0, commits null`,
+      `no GraphQL or snapshot counts for ${repo.name} - openIssues fell back to REST open_issues_count (${repo.openIssues}, includes pull requests), openPulls 0, commits null`,
     );
   }
 
@@ -278,7 +278,7 @@ async function collect(previous) {
   }
   const contributorTop = [...contributors.values()].sort((a, b) => b.contributions - a.contributions);
 
-  // Org activity feed — the closest thing GitHub gives us to a webhook stream. The
+  // Org activity feed - the closest thing GitHub gives us to a webhook stream. The
   // mapping lives in src/lib/activity.js because the browser refresh re-renders the
   // same feed from a live event list.
   const events = await apiOptional(`/orgs/${ORG}/events?per_page=100`, []);
@@ -341,7 +341,7 @@ async function readExisting() {
 function printSummary(snapshot) {
   const { totals, org, activity } = snapshot;
   console.log(`snapshot generatedAt ${snapshot.generatedAt}`);
-  console.log(`org      ${org.login} — ${totals.repos} repos, ${org.followers} followers`);
+  console.log(`org      ${org.login} - ${totals.repos} repos, ${org.followers} followers`);
   console.log(`totals   ${totals.stars} stars, ${totals.forks} forks, ${totals.openIssues} open issues, ${totals.openPulls ?? 'n/a'} open PRs, ${totals.commits ?? 'n/a'} commits, ${totals.contributors} contributors`);
   console.log(`active   ${totals.activeRepos} repos pushed in the last 90 days`);
   console.log(`activity ${activity.length} events, latest ${activity[0]?.date ?? 'n/a'} (${activity[0]?.repo ?? 'n/a'})`);
@@ -366,7 +366,7 @@ const offline = process.argv.includes('--offline');
 if (offline) {
   const existing = await readExisting();
   if (!existing) {
-    console.error(`no snapshot at ${OUT} — run without --offline first`);
+    console.error(`no snapshot at ${OUT} - run without --offline first`);
     process.exit(1);
   }
   printSummary(existing);
@@ -387,7 +387,7 @@ try {
     printSummary(previous);
     process.exit(0);
   }
-  console.error('no existing snapshot to fall back on — failing');
+  console.error('no existing snapshot to fall back on - failing');
   process.exit(1);
 }
 

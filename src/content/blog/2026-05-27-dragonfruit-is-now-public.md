@@ -1,6 +1,6 @@
 ---
 title: "DragonFruit is now public"
-description: The alliance's resin slicer is open to everyone — the repository, the plugin ecosystem and the development builds are public as of 27 May 2026.
+description: The alliance's resin slicer is open to everyone - the repository, the plugin ecosystem and the development builds are public as of 27 May 2026.
 pubDate: 2026-05-27
 category: project
 tags: [dragonfruit, slicer, release]
@@ -50,4 +50,4 @@ Builds are also attached to the releases, alongside the project site at [dragonf
 
 The README's contributing section is three steps and worth following literally: fork the repository and branch from it, make focused changes that follow the project's conventions, run `npm run lint` and `npm run test` where they apply, then open a pull request with a clear summary, rationale and validation notes.
 
-If you would rather talk first — a question, a bug report, a printer that behaves oddly — the [Open Resin Alliance Discord](https://discord.gg/beFeTaPH6v) is where the people building this are.
+If you would rather talk first - a question, a bug report, a printer that behaves oddly - the [Open Resin Alliance Discord](https://discord.gg/beFeTaPH6v) is where the people building this are.

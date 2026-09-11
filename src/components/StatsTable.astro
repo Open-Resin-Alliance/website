@@ -4,7 +4,7 @@ import { repoStats, stats } from '../lib/stats';
 import { formatDate, formatNumber } from '../lib/format';
 
 /**
- * One row per core project — the four the site treats as its main software.
+ * One row per core project - the four the site treats as its main software.
  *
  * The DragonFruit plugins and the organisation's own tooling are deliberately
  * not rows here: eight plugin repos reporting two pull requests between them
@@ -13,8 +13,8 @@ import { formatDate, formatNumber } from '../lib/format';
  *
  * A project the snapshot does not know about is skipped rather than shown as a
  * row of zeros: we have no counts for it, and zeros would read as a real answer.
- * A single count may also be missing — `commits` is null until the fetcher has
- * walked the default branch — which renders as an em dash.
+ * A single count may also be missing - `commits` is null until the fetcher has
+ * walked the default branch - which renders as a hyphen.
  */
 type Count = number | null;
 
@@ -78,7 +78,7 @@ const COLUMNS: { key: CountKey; label: string; title: string | null; narrowHidde
 const cellTitle = (value: Count, title: string | null) =>
   value === null ? 'Not reported in this snapshot' : title ?? undefined;
 
-const display = (value: Count) => (value === null ? '—' : formatNumber(value));
+const display = (value: Count) => (value === null ? '-' : formatNumber(value));
 ---
 
 <table class="stats__table">
@@ -232,7 +232,7 @@ const display = (value: Count) => (value === null ? '—' : formatNumber(value))
 
   /* Four columns cannot fit the content box of a phone: the header labels alone
      need more width than 320px leaves after the gutter, and the table must not
-     scroll. PRs is the column to drop — its header is already the abbreviation
+     scroll. PRs is the column to drop - its header is already the abbreviation
      and its counts are the smallest of the three, so issues and commits stay. */
   @media (max-width: 480px) {
     .stats__pulls {

@@ -5,7 +5,7 @@ export type ProjectGroup = 'featured' | 'plugin' | 'infrastructure';
 export interface Project {
   /** Display name. */
   name: string;
-  /** GitHub repository name — also the join key for live stats. */
+  /** GitHub repository name - also the join key for live stats. */
   repo: string;
   /** URL segment for the project page. Defaults to the lowercased repo name. */
   slug?: string;
@@ -18,14 +18,14 @@ export interface Project {
   /**
    * Other languages the project ships as a meaningful share of its code, shown as
    * extra chips after `language`. Sourced from the repository's language
-   * breakdown — a project that is 15% Rust by bytes belongs on the chip row, but
+   * breakdown - a project that is 15% Rust by bytes belongs on the chip row, but
    * a handful of lines in a build script does not.
    */
   additionalLanguages?: readonly string[];
   /** SPDX identifier, or null when the repo declares no licence. */
   license: string | null;
   group: ProjectGroup;
-  /** What the project actually does — quoted from its README. */
+  /** What the project actually does - quoted from its README. */
   capabilities: string[];
   /** Optional hero image under /public. */
   image?: string;
@@ -61,7 +61,7 @@ export const PROJECTS: Project[] = [
       'Interactive 3D workspace: high-performance model visualization and manipulation using three.js + react-three-fiber',
       'Support authoring systems: branch/grid/raft support workflows with rendering and snapping infrastructure',
       'Island analysis, transform tooling, and native slicing integration',
-      'A plugin architecture — printer and file-format support ships as separate MIT-licensed plugins',
+      'A plugin architecture - printer and file-format support ships as separate MIT-licensed plugins',
     ],
     website: LINKS.dragonfruitSite,
   },
@@ -202,7 +202,7 @@ export const PROJECTS: Project[] = [
     repo: 'openresin.org',
     blurb: 'Documentation site.',
     summary: 'The openresin.org documentation website.',
-    language: '—',
+    language: '-',
     license: null,
     group: 'infrastructure',
     capabilities: [],

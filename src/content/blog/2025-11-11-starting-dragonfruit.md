@@ -1,6 +1,6 @@
 ---
 title: "Starting DragonFruit: building our own resin slicer"
-description: In November 2025 the alliance began work on DragonFruit — an open-source resin slicer with a Next.js and React frontend, native Rust slicing backends and a Tauri desktop runtime.
+description: In November 2025 the alliance began work on DragonFruit - an open-source resin slicer with a Next.js and React frontend, native Rust slicing backends and a Tauri desktop runtime.
 pubDate: 2025-11-11
 category: project
 tags: [dragonfruit, slicer, rust, tauri, nextjs]
@@ -19,7 +19,7 @@ That is the whole motivation. A slicer sits between a model and a machine, and w
 
 The README describes the split as "a modern Next.js + React frontend with native Rust slicing backends and a Tauri desktop runtime". Each part of that is a deliberate call.
 
-The user interface stays in web technology so it can be iterated quickly — a slicing interface is a lot of interaction design, and rebuilding it for every experiment is a bad trade. The work that has to be fast, and has to be right, runs in native Rust instead: slicing, and the geometry that supports it. Tauri is what binds the two into a desktop application without shipping a browser engine of our own.
+The user interface stays in web technology so it can be iterated quickly - a slicing interface is a lot of interaction design, and rebuilding it for every experiment is a bad trade. The work that has to be fast, and has to be right, runs in native Rust instead: slicing, and the geometry that supports it. Tauri is what binds the two into a desktop application without shipping a browser engine of our own.
 
 Around that sits an interactive workspace built on `three.js` and `react-three-fiber`, which the README calls "high-performance model visualization and manipulation". Models are inspected, moved and supported directly in that view rather than through a separate dialog. Support authoring is part of the same environment, built on what the README describes as "branch/grid/raft support workflows with rendering and snapping infrastructure".
 
@@ -33,7 +33,7 @@ Two decisions were made before there was much code to license. The application i
 
 ## Working privately, then in the open
 
-We kept the repository private through the first stretch for an unglamorous reason: an early slicer is mostly scaffolding, and scaffolding is not worth reading. Once there was something real to look at, the repository went public and development moved into the open — dev builds from the `dev` branch, nightlies from feature branches, and everything visible on GitHub.
+We kept the repository private through the first stretch for an unglamorous reason: an early slicer is mostly scaffolding, and scaffolding is not worth reading. Once there was something real to look at, the repository went public and development moved into the open - dev builds from the `dev` branch, nightlies from feature branches, and everything visible on GitHub.
 
 That happened on 27 May 2026. [DragonFruit is now public](/blog/2026-05-27-dragonfruit-is-now-public).
 

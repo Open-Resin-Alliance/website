@@ -1,6 +1,6 @@
 # openresin.org
 
-The website for the **Open Resin Alliance** — a static site built with
+The website for the **Open Resin Alliance** - a static site built with
 [Astro](https://astro.build) that renders its blog from Markdown files in this repository
 and its GitHub and Open Collective numbers from committed snapshots, which the browser then
 refreshes against the public APIs.
@@ -9,7 +9,7 @@ Deployed to GitHub Pages at <https://openresin.org>.
 
 ## Adding a blog post
 
-Create one Markdown file in `src/content/blog/` and push it. That is the whole workflow —
+Create one Markdown file in `src/content/blog/` and push it. That is the whole workflow -
 no CMS, no database, no rebuild configuration.
 
 ```md
@@ -41,8 +41,8 @@ Two build-time pipelines write JSON snapshots that the pages read:
 
 | Script | Source | Output |
 |---|---|---|
-| `scripts/fetch-github-stats.mjs` | public GitHub API for the `Open-Resin-Alliance` org — repositories, releases, activity feed, contributors, and open issue / pull request / commit counts | `src/data/github-stats.json` |
-| `scripts/fetch-open-collective.mjs` | public Open Collective GraphQL API for `openresinalliance` — backers, amounts, recurring vs one-time, fiscal host | `src/data/supporters.json` |
+| `scripts/fetch-github-stats.mjs` | public GitHub API for the `Open-Resin-Alliance` org - repositories, releases, activity feed, contributors, and open issue / pull request / commit counts | `src/data/github-stats.json` |
+| `scripts/fetch-open-collective.mjs` | public Open Collective GraphQL API for `openresinalliance` - backers, amounts, recurring vs one-time, fiscal host | `src/data/supporters.json` |
 
 ```
 npm run stats           # refresh both snapshots (GITHUB_TOKEN raises the GitHub rate limit)
@@ -83,7 +83,7 @@ with a freshly fetched one:
 | per-repo `stars` / `forks` / `pushed` / `updated` | the same payload | none |
 | supporters `backers` / `raised` | the collective GraphQL query | one call |
 
-Two requests per page, reused for five minutes in `sessionStorage`, no token — an
+Two requests per page, reused for five minutes in `sessionStorage`, no token - an
 unauthenticated browser gets 60 GitHub requests per hour per IP, which is why everything
 that costs a call per repository stays snapshot-only: open issue, pull request and commit
 counts (they need GraphQL, which a browser cannot authenticate), contributor totals,
@@ -92,12 +92,12 @@ counts (they need GraphQL, which a browser cannot authenticate), contributor tot
 Issue counts are deliberately not a live target in either form. The snapshot records open
 issues *excluding* pull requests, while the REST field available to a browser
 (`open_issues_count`) includes them, so a refresh would quietly change what "issues" means
-— on the DragonFruit repository the two differ by nine.
+- on the DragonFruit repository the two differ by nine.
 
 The suffix after the colon picks the formatter (`compact` = `formatCompact`, otherwise
 `formatNumber`); every formatter is imported from `src/lib/format.ts`, so a refreshed value
 is formatted exactly like the built one. If a page carries live targets and the refresh
-fails — offline, blocked, rate limited, API down — nothing is written, no error is shown,
+fails - offline, blocked, rate limited, API down - nothing is written, no error is shown,
 and the elements marked `data-live-status` keep reading `Snapshot · 11 Sept 2026`. When it
 succeeds they read `Live · updated just now` (or `Partly live` if some sources answered).
 
@@ -124,7 +124,7 @@ Node 22.12 or newer is required (see the `engines` field in `package.json`).
 ```
 src/
   components/       header, footer, cards, stats table, release chip, Discord icon
-  content/blog/     blog posts — one Markdown file per post
+  content/blog/     blog posts - one Markdown file per post
   content.config.ts blog collection schema
   data/
     site.ts         org constants: name, URLs, navigation
@@ -148,7 +148,7 @@ public/             CNAME, robots.txt, favicon, brand and project images
 
 ### Adding or changing a project
 
-Edit `src/data/projects.ts`. `repo` must match the GitHub repository name exactly — that
+Edit `src/data/projects.ts`. `repo` must match the GitHub repository name exactly - that
 is the join key into `src/data/github-stats.json`, so a typo silently drops the live
 numbers. Use `slug` when the repository name is not a good URL segment
 (`ORA_Charter` → `/projects/governance`).
@@ -165,15 +165,15 @@ untinted chip.
 - One accent ramp, the ORA purple → pink → orange gradient: violet `#9333ea`, pink
   `#ec4899`, orange `#f59e0b`. The hero heading carries it as text; block rules, markers
   and hover states use single stops from it. The page background is the previous site's
-  pastel wash verbatim — a fixed 135-degree linear gradient through the three stops at
-  15% over the theme background — so the grade is identical on every page with no seams;
+  pastel wash verbatim - a fixed 135-degree linear gradient through the three stops at
+  15% over the theme background - so the grade is identical on every page with no seams;
   full-bleed sections stay transparent so it shows through, while cards and panels keep
   solid surfaces for readability.
 - The logo is the real artwork. `/brand/ora-lockup.webp` is the full lockup (ORA wordmark
   plus emblem) used at 64px in the footer; the header is a text-only wordmark. `favicon.png`
   and `/brand/ora-avatar.png` derive from the same source file. Nothing is redrawn.
 - The social card and the avatar carry the site's own page wash rather than a flat fill:
-  the brand ramp at the dark theme's 15% over `#0a0a0b`, at 135 degrees — `rgb(124 58 237)`,
+  the brand ramp at the dark theme's 15% over `#0a0a0b`, at 135 degrees - `rgb(124 58 237)`,
   `rgb(219 39 119)`, `rgb(234 88 12)`, the same three stops `body` uses, so the card and the
   page agree. The lockup sits centred on it, 300px wide in the 1200×630 card and 123px in
   the 180×180 avatar.
@@ -202,7 +202,7 @@ root-relative asset 404ing. It is not a preview; use the local dev server, or Cl
 Pages, whose project sites are served from a root. A `base` build does not fix it either:
 Astro prefixes the assets it emits but not author-written links, and the copy's canonical
 URLs and sitemap would then claim `openresin.org/<repo>/…`, so subpath support would need
-every internal link — Markdown links included — to go through `import.meta.env.BASE_URL`.
+every internal link - Markdown links included - to go through `import.meta.env.BASE_URL`.
 
 Two hosts are not on the new site yet, both a dashboard change rather than a code one:
 
@@ -217,7 +217,7 @@ disagree with where the files are served.
 
 ## Licensing
 
-Source code in this repository is licensed under the MIT License — see
+Source code in this repository is licensed under the MIT License - see
 [LICENSE](LICENSE). Content, logos and images are copyright © Open Resin Alliance unless
 stated otherwise. Sponsor logos are the property of their respective owners and are used
 with permission.
