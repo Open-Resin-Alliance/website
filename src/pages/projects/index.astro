@@ -1,0 +1,240 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { FEATURED_PROJECTS, INFRA_PROJECTS, PLUGIN_PROJECTS, repoUrl } from '../../data/projects';
+import { stats } from '../../lib/stats';
+import { formatCompact, formatDate, formatNumber } from '../../lib/format';
+
+const languageRows = Object.entries(stats.totals.languages).sort((a, b) => b[1] - a[1]);
+const lastPush = [...Object.values(stats.repos)]
+  .map((repo) => repo.pushedAt)
+  .filter(Boolean)
+  .sort()
+  .at(-1);
+
+const structuredData = [
+  {
+    '@type': 'CollectionPage',
+    name: 'Projects — Open Resin Alliance',
+    url: 'https://openresin.org/projects',
+    description:
+      'Open-source slicer, printer frontend and backend, file conversion tools and plugins for resin 3D printing.',
+    isPartOf: { '@id': 'https://openresin.org/#website' },
+  },
+];
+---
+
+<BaseLayout
+  title="Projects"
+  description={`Every public repository from the Open Resin Alliance: ${stats.totals.repos} projects spanning resin slicers, printer control, file conversion and hardware plugins.`}
+  structuredData={structuredData}
+>
+  <section class="shell page-head">
+    <p class="eyebrow">Projects</p>
+    <h1>Built for resin printers, in the open</h1>
+    <p class="lede">
+      All of our projects, primarily software and reference designs for open-source resin 3D printing, are public on
+      GitHub. Each project keeps its own licence, release cadence and issue tracker.
+    </p>
+
+    <dl class="metrics">
+      <div class="metrics__item">
+        <dt>Repositories</dt>
+        <dd>{formatNumber(stats.totals.repos)}</dd>
+      </div>
+      <div class="metrics__item">
+        <dt>Stars</dt>
+        <dd>{formatCompact(stats.totals.stars)}</dd>
+      </div>
+      <div class="metrics__item">
+        <dt>Forks</dt>
+        <dd>{formatCompact(stats.totals.forks)}</dd>
+      </div>
+      <div class="metrics__item">
+        <dt>Open issues</dt>
+        <dd>{formatCompact(stats.totals.openIssues)}</dd>
+      </div>
+      <div class="metrics__item">
+        <dt>Active in 90 days</dt>
+        <dd>{stats.totals.activeRepos}</dd>
+      </div>
+      <div class="metrics__item">
+        <dt>Last push</dt>
+        <dd>{lastPush ? formatDate(lastPush) : '—'}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="shell section">
+    <div class="section-head">
+      <div class="section-head__text">
+        <h2>Core projects</h2>
+        <p class="lede">The four projects most people will meet first.</p>
+      </div>
+    </div>
+    <div class="grid grid--2">
+      {FEATURED_PROJECTS.map((project) => <ProjectCard project={project} detailed />)}
+    </div>
+  </section>
+
+  <section class="shell section">
+    <div class="section-head">
+      <div class="section-head__text">
+        <h2>DragonFruit plugins</h2>
+        <p class="lede">
+          Printer and file-format support ships as separate MIT-licensed repositories, loaded into the slicer as git
+          submodules. A missing submodule is skipped with a warning rather than failing the build.
+        </p>
+      </div>
+      <a class="btn btn--ghost btn--sm" href={repoUrl('DragonFruit')} rel="noopener noreferrer" target="_blank">
+        DragonFruit on GitHub
+      </a>
+    </div>
+    <div class="grid grid--3">
+      {PLUGIN_PROJECTS.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section class="shell section">
+    <div class="section-head">
+      <div class="section-head__text">
+        <h2>Organisation and tooling</h2>
+        <p class="lede">Governance, documentation and the website you are reading.</p>
+      </div>
+    </div>
+    <div class="grid grid--3">
+      {INFRA_PROJECTS.map((project) => <ProjectCard project={project} />)}
+    </div>
+
+    <div class="languages">
+      <h3 class="languages__title mono">Languages across the organisation</h3>
+      <ul class="languages__list">
+        {
+          languageRows.map(([language, count]) => (
+            <li>
+              <span class="languages__name">{language}</span>
+              <span class="languages__bar" aria-hidden="true">
+                <span style={`inline-size:${Math.round((count / stats.totals.repos) * 100)}%`} />
+              </span>
+              <span class="languages__count mono">{count}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="muted languages__note">
+        Counts repos by GitHub's reported primary language. Snapshot generated {formatDate(stats.generatedAt)}.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: clamp(2.5rem, 2rem + 3vw, 4rem) 0 0;
+    max-width: 900px;
+  }
+
+  .page-head .lede {
+    max-width: 68ch;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+    gap: 1px;
+    inline-size: 100%;
+    margin: 1.5rem 0 0;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .metrics__item {
+    padding: 0.9rem 1.1rem;
+    background: var(--bg-raised);
+  }
+
+  .metrics__item dt {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-2);
+  }
+
+  .metrics__item dd {
+    margin: 0.2rem 0 0;
+    font-size: 1.25rem;
+    font-weight: 620;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .section {
+    padding: 3.5rem 0 0;
+  }
+
+  .languages {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    max-width: 640px;
+  }
+
+  .languages__title {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .languages__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .languages__list li {
+    display: grid;
+    grid-template-columns: 6rem 1fr 1.5rem;
+    align-items: center;
+    gap: 0.85rem;
+    font-size: 0.875rem;
+  }
+
+  .languages__bar {
+    display: block;
+    block-size: 5px;
+    background: var(--bg-inset);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .languages__bar > span {
+    display: block;
+    block-size: 100%;
+    border-radius: 999px;
+    background: var(--brand-gradient);
+  }
+
+  .languages__count {
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .languages__note {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+  }
+</style>

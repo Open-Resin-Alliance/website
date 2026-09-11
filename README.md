@@ -1,48 +1,114 @@
-# Open Resin Alliance
+# openresin.org
 
-<div align="center">
-  <img src="/client/public/media/open_resin_alliance_logo_darkmode.png" alt="Open Resin Alliance Logo" width="200"/>
-  <p><em>Advancing open-source resin 3D printing technology</em></p>
-</div>
+The website for the **Open Resin Alliance** — a mostly-static site built with
+[Astro](https://astro.build) that shows live GitHub statistics and renders its blog from
+Markdown files in this repository.
 
-## About
+Deployed to GitHub Pages at <https://openresin.org>.
 
-The Open Resin Alliance is a collaborative initiative dedicated to advancing open-source resin 3D printing technology. We bring together engineers, developers, and enthusiasts to create accessible, high-quality solutions for MSLA 3D printing.
+## Adding a blog post
 
-## Projects
+Create one Markdown file in `src/content/blog/` and push it. That is the whole workflow —
+no CMS, no database, no rebuild configuration.
 
-### 🌟 Orion
-A user-friendly interface built for Linux SBCs, designed specifically for MSLA printer control. Features real-time monitoring, simplified file management, and customizable print settings.
+```md
+---
+title: DragonFruit v0.1.16 is out
+description: One or two sentences used on the timeline card, the meta description and the RSS feed.
+pubDate: 2026-09-20
+author: Open Resin Alliance
+category: release          # release | project | community | engineering
+tags: [dragonfruit, release]
+project: DragonFruit        # repository name, links the post to a project page
+version: v0.1.16            # release tag, optional
+featured: false             # pins the post to the top of /blog and the home page
+draft: false                # true hides the post everywhere, including RSS
+---
 
-### 🚀 Odyssey
-A powerful engine for processing Prusa SL1 slicer files, compatible with the Apollo series of control boards. Offers extensive printer control and advanced configuration options.
+Body text in Markdown. `##` and `###` headings also build the "On this page" sidebar.
+```
 
-## Getting Started
+`pubDate` drives ordering, so the timeline, the RSS feed and the sitemap all update
+themselves. The filename becomes the URL (`/blog/<filename>`); name it
+`YYYY-MM-DD-slug.md` to keep dates visible in the file listing.
 
-Visit our website at [open-resin-alliance.github.io/website](https://open-resin-alliance.github.io/website) to learn more about our projects and team.
+The frontmatter schema lives in [`src/content.config.ts`](src/content.config.ts). A
+malformed post fails the build with the field name.
 
-## Contributing
+## How the statistics work
 
-We welcome contributions from the community! If you're interested in contributing to any of our projects, please visit the respective GitHub repositories:
+`scripts/fetch-github-stats.mjs` reads the public GitHub API for the whole
+`Open-Resin-Alliance` organisation — repositories, releases, an activity feed and
+contributor counts — and writes a snapshot to `src/data/github-stats.json`.
 
-- [Orion](https://github.com/Open-Resin-Alliance/orion)
-- [Odyssey](https://github.com/Open-Resin-Alliance/odyssey)
+```
+npm run stats           # refresh the snapshot (set GITHUB_TOKEN to raise the rate limit)
+npm run stats:offline   # inspect the committed snapshot, no network
+```
 
-## Sponsors
+Every page reads only that snapshot, so `astro build` never touches the network and a
+build is byte-for-byte reproducible. If the API is unreachable, the script keeps the
+previous snapshot and exits `0` so a deployment can never fail because GitHub was slow.
 
-<div align="center">
-  <a href="https://atlas3dss.com">
-    <img src="/client/public/sponsors/atlas3dss.png" alt="Atlas 3D Solutions" height="60"/>
-  </a>
-  <a href="https://thecontrappostoshop.com">
-    <img src="/client/public/sponsors/thecontrappostoshop.svg" alt="The Contrapposto Shop" height="60"/>
-  </a>
-</div>
+Two workflows keep it fresh:
 
-## License
+| Workflow | Trigger | Effect |
+|---|---|---|
+| `.github/workflows/stats.yml` | daily cron, `repository_dispatch`, manual | refreshes the snapshot and commits it as `data: refresh GitHub statistics` |
+| `.github/workflows/deploy.yml` | push to `main`, manual | refreshes the snapshot, builds, and deploys to GitHub Pages |
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+`stats.yml` carries the instructions for wiring an organisation webhook to it at the
+bottom of the file.
 
-## Media
+## Local development
 
-All media assets including logos and images are Copyright © 2025 Open Resin Alliance. All rights reserved, unless otherwise stated. Sponsor logos are property of their respective owners and used with permission.
+```
+npm install
+npm run dev       # http://localhost:4321
+npm run check     # astro check: types, template diagnostics
+npm run build     # static output in dist/
+npm run stats:offline
+```
+
+Node 22.12 or newer is required (see the `engines` field in `package.json`).
+
+## Layout
+
+```
+src/
+  components/       header, footer, cards, activity feed, release chip
+  content/blog/     blog posts — one Markdown file per post
+  content.config.ts blog collection schema
+  data/
+    site.ts         org constants: name, URLs, navigation
+    projects.ts     curated project catalogue (repo name joins into the stats snapshot)
+    github-stats.json   generated snapshot, refreshed by the workflows
+  layouts/BaseLayout.astro   document shell, SEO tags, JSON-LD, theme bootstrap
+  lib/              stats reader and date/number formatting
+  pages/            routes: /, /projects, /projects/[repo], /blog, /blog/[...id], /about, /contact, /404
+  styles/global.css design tokens and base styles
+scripts/fetch-github-stats.mjs
+public/             CNAME, robots.txt, favicon, brand and project images
+```
+
+### Adding or changing a project
+
+Edit `src/data/projects.ts`. `repo` must match the GitHub repository name exactly — that
+is the join key into `src/data/github-stats.json`, so a typo silently drops the live
+numbers. Use `slug` when the repository name is not a good URL segment
+(`ORA_Charter` → `/projects/governance`).
+
+### Design notes
+
+- One accent ramp, sampled from the ORA logo: amber `#f0991f` → magenta `#e9318a`.
+- Light and dark themes, both driven by `data-theme` on `<html>`; the choice is stored in
+  `localStorage` and applied before first paint, so there is no flash of the wrong theme.
+- No CSS framework. Tokens and primitives live in `src/styles/global.css`, component
+  styles are scoped in their `.astro` files.
+
+## Licensing
+
+Source code in this repository is licensed under the MIT License — see
+[LICENSE](LICENSE). Content, logos and images are copyright © Open Resin Alliance unless
+stated otherwise. Sponsor logos are the property of their respective owners and are used
+with permission.

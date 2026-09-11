@@ -1,0 +1,32 @@
+---
+interface Props {
+  size?: number;
+  class?: string;
+}
+
+const { size = 26, class: className = '' } = Astro.props;
+const id = `ora-mark-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox="0 0 100 100"
+  role="img"
+  aria-label="Open Resin Alliance"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f0991f"></stop>
+      <stop offset="52%" stop-color="#f2603f"></stop>
+      <stop offset="100%" stop-color="#e9318a"></stop>
+    </linearGradient>
+  </defs>
+  <path
+    fill={`url(#${id})`}
+    fill-rule="evenodd"
+    d="M50 4c9 11 38 42 38 58 0 21-17 34-38 34S12 83 12 62C12 46 41 15 50 4Zm0 34a20 20 0 1 0 0 40 20 20 0 0 0 0-40Z"
+  ></path>
+</svg>

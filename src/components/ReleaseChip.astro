@@ -1,0 +1,79 @@
+---
+import type { Release } from '../lib/stats';
+import { formatDate } from '../lib/format';
+
+interface Props {
+  release: Release | null;
+  /** Label shown before the tag, e.g. "Latest" or "Latest stable". */
+  label?: string;
+  /**
+   * Render as a link to the release. Set false inside a card that is itself a
+   * link — nested anchors are invalid HTML and the parser splits them apart.
+   */
+  link?: boolean;
+}
+
+const { release, label = 'Latest', link = true } = Astro.props;
+const Element = link ? 'a' : 'span';
+---
+
+{
+  release && (
+    <Element
+      class="release"
+      {...link ? { href: release.url, rel: 'noopener noreferrer', target: '_blank' } : {}}
+    >
+      <span class="release__label mono">{label}</span>
+      <span class="release__tag mono">{release.tag}</span>
+      {release.prerelease && <span class="release__flag mono">pre-release</span>}
+      <time class="release__date mono" datetime={release.publishedAt}>
+        {formatDate(release.publishedAt)}
+      </time>
+    </Element>
+  )
+}
+
+<style>
+  .release {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.6rem;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  a.release:hover .release__tag {
+    color: var(--brand-magenta-deep);
+  }
+
+  :global(:root[data-theme='dark']) a.release:hover .release__tag {
+    color: var(--brand-amber);
+  }
+
+  .release__label {
+    color: var(--muted-2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.625rem;
+  }
+
+  .release__tag {
+    color: var(--ink);
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  .release__flag {
+    padding: 0.05rem 0.4rem;
+    font-size: 0.625rem;
+    color: var(--accent);
+    border: 1px solid color-mix(in oklab, var(--brand-amber) 40%, var(--border));
+    border-radius: 999px;
+  }
+
+  .release__date {
+    color: var(--muted-2);
+    font-size: 0.6875rem;
+  }
+</style>

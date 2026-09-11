@@ -1,0 +1,528 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import PostCard from '../components/PostCard.astro';
+import ActivityFeed from '../components/ActivityFeed.astro';
+import ReleaseChip from '../components/ReleaseChip.astro';
+import { getCollection } from 'astro:content';
+import { FEATURED_PROJECTS, PLUGIN_PROJECTS, projectSlug, slugForRepo } from '../data/projects';
+import { LINKS, SITE } from '../data/site';
+import { stats } from '../lib/stats';
+import { formatCompact, formatDate, formatNumber } from '../lib/format';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const latestPosts = posts.slice(0, 3);
+
+const headlineStats = [
+  { value: formatNumber(stats.totals.repos), label: 'public repositories', hint: 'on GitHub' },
+  { value: formatCompact(stats.totals.stars), label: 'stars', hint: 'across the org' },
+  { value: formatNumber(stats.totals.contributors), label: 'contributors', hint: 'flagship projects' },
+  { value: String(stats.totals.activeRepos), label: 'active repos', hint: 'pushed in 90 days' },
+];
+
+const sponsors = [
+  {
+    name: 'Atlas 3D Solutions',
+    url: 'https://atlas3dss.com',
+    logo: '/sponsors/atlas3dss.webp',
+    blurb: 'Support solutions for resin 3D printing.',
+  },
+  {
+    name: 'The Contrapposto Shop',
+    url: 'https://contrapposto.shop',
+    logo: '/sponsors/thecontrappostoshop.svg',
+    blurb: 'Creators of the Prometheus mSLA printer.',
+  },
+];
+---
+
+<BaseLayout description={SITE.description}>
+  <section class="hero">
+    <div class="shell hero__inner">
+      <div class="hero__copy">
+        <p class="eyebrow">Open-source resin 3D printing</p>
+        <h1>
+          Advancing open-source<br />
+          <span class="text-brand">resin 3D printing</span>
+        </h1>
+        <p class="lede">
+          We are a group of hobbyists and developers from around the globe, joined in our dedication to advancing
+          the field of resin-based 3D printing through open source collaboration.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="/projects">Explore our projects</a>
+          <a class="btn btn--ghost" href={LINKS.discord} rel="noopener noreferrer" target="_blank">Join us on Discord</a>
+        </div>
+      </div>
+
+      <dl class="hero__stats">
+        {
+          headlineStats.map((stat) => (
+            <div class="hero__stat">
+              <dt class="hero__stat-value">{stat.value}</dt>
+              <dd class="hero__stat-label">
+                {stat.label}
+                <span class="mono">{stat.hint}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="shell section">
+    <div class="section-head">
+      <div class="section-head__text">
+        <p class="eyebrow">Projects</p>
+        <h2>Software and reference designs for resin printing</h2>
+        <p class="lede">
+          Everything we build is public — a slicer, a printer frontend and backend, file conversion tools, and the
+          plugins that connect them to real hardware.
+        </p>
+      </div>
+      <a class="btn btn--ghost btn--sm" href="/projects">All {stats.totals.repos} repositories</a>
+    </div>
+
+    <div class="grid grid--2">
+      {FEATURED_PROJECTS.map((project) => <ProjectCard project={project} />)}
+    </div>
+
+    <div class="plugin-strip">
+      <p class="plugin-strip__label mono">DragonFruit plugins</p>
+      <ul class="plugin-strip__list">
+        {
+          PLUGIN_PROJECTS.map((plugin) => (
+            <li>
+              <a href={`/projects/${projectSlug(plugin)}`}>{plugin.name}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="shell section">
+    <div class="split">
+      <div class="split__main">
+        <div class="section-head">
+          <div class="section-head__text">
+            <p class="eyebrow">Recent activity</p>
+            <h2>Built in the open</h2>
+            <p class="lede">
+              Releases, merges and issues straight from the organisation&apos;s public GitHub activity.
+            </p>
+          </div>
+        </div>
+        <ActivityFeed entries={stats.activity} limit={7} />
+      </div>
+
+      <aside class="split__aside">
+        <div class="section-head">
+          <div class="section-head__text">
+            <p class="eyebrow">Releases</p>
+            <h2>Latest builds</h2>
+          </div>
+        </div>
+        <ul class="release-list">
+          {
+            stats.recentReleases.slice(0, 6).map((release) => (
+              <li class="release-list__item">
+                <a href={`/projects/${slugForRepo(release.repo)}`}>{release.repo}</a>
+                <ReleaseChip release={release} label={release.prerelease ? 'Build' : 'Release'} />
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mono muted release-list__note">
+          Snapshot generated {formatDate(stats.generatedAt)} from {stats.totals.repos} repositories.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="shell section">
+    <div class="section-head">
+      <div class="section-head__text">
+        <p class="eyebrow">Blog</p>
+        <h2>Notes from the workshop</h2>
+        <p class="lede">Release notes, project write-ups and how we ship open-source hardware software.</p>
+      </div>
+      <a class="btn btn--ghost btn--sm" href="/blog">All posts</a>
+    </div>
+
+    <div class="grid grid--3">
+      {latestPosts.map((post) => <PostCard post={post} withDescription={false} />)}
+    </div>
+  </section>
+
+  <section class="shell section">
+    <div class="standards">
+      <div class="standards__block">
+        <p class="eyebrow">How we work</p>
+        <h2>Open by default</h2>
+        <ul class="standards__list">
+          <li>
+            <strong>Licensed in the open.</strong> DragonFruit is AGPL-3.0-or-later, Orion and VoxelShift are
+            Apache-2.0, Odyssey is GPL-3.0, and DragonFruit plugins are MIT.
+          </li>
+          <li>
+            <strong>Developed in the open.</strong> Nightly and dev builds ship straight from feature branches so
+            anyone can test work before it stabilises.
+          </li>
+          <li>
+            <strong>Documented in the repository.</strong> Installation notes, configuration and API references live
+            next to the code they describe.
+          </li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn--ghost btn--sm" href="/about">About the alliance</a>
+          <a class="btn btn--ghost btn--sm" href={LINKS.githubRepos} rel="noopener noreferrer" target="_blank">
+            Browse on GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="standards__block">
+        <p class="eyebrow">Supporters</p>
+        <h2>Partners and supporters</h2>
+        <ul class="sponsors">
+          {
+            sponsors.map((sponsor) => (
+              <li>
+                <a href={sponsor.url} rel="noopener noreferrer" target="_blank">
+                  <img src={sponsor.logo} alt={sponsor.name} loading="lazy" decoding="async" />
+                  <span>
+                    <strong>{sponsor.name}</strong>
+                    <span class="muted">{sponsor.blurb}</span>
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="muted standards__note">
+          Sponsor logos are property of their respective owners and used with permission.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell section">
+    <div class="cta">
+      <div class="cta__text">
+        <h2>Get involved</h2>
+        <p>
+          Contributions, bug reports and hardware testing are all welcome. Join the Discord to talk to the people
+          building this, or pick up an issue on GitHub and open a pull request.
+        </p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn--brand" href={LINKS.discord} rel="noopener noreferrer" target="_blank">Join the Discord</a>
+        <a class="btn btn--ghost" href="/contact">Contact us</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    padding: clamp(3rem, 2rem + 6vw, 6rem) 0 clamp(2.5rem, 2rem + 3vw, 4rem);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: -40%;
+    block-size: 80%;
+    background: radial-gradient(60% 60% at 22% 50%, color-mix(in oklab, var(--brand-amber) 16%, transparent), transparent 70%),
+      radial-gradient(50% 55% at 78% 40%, color-mix(in oklab, var(--brand-magenta) 14%, transparent), transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .hero__copy h1 {
+    margin: 0;
+  }
+
+  .hero__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .hero__stat {
+    padding: 1.4rem 1.5rem;
+    background: var(--bg-raised);
+  }
+
+  .hero__stat-value {
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
+    font-weight: 620;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hero__stat-label {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .hero__stat-label .mono {
+    font-size: 0.625rem;
+    color: var(--muted-2);
+  }
+
+  .section {
+    padding: 3.5rem 0;
+  }
+
+  .section + .section {
+    padding-top: 1rem;
+  }
+
+  .plugin-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.65rem 1.1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .plugin-strip__label {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted-2);
+  }
+
+  .plugin-strip__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9375rem;
+  }
+
+  .plugin-strip__list a {
+    color: var(--muted);
+    transition: color 0.15s var(--ease);
+  }
+
+  .plugin-strip__list a:hover {
+    color: var(--ink);
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    gap: 3.5rem;
+  }
+
+  .release-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .release-list__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .release-list__item:last-child {
+    border-bottom: 0;
+  }
+
+  .release-list__item > a {
+    font-size: 0.9375rem;
+    font-weight: 550;
+    letter-spacing: -0.012em;
+  }
+
+  .release-list__item > a:hover {
+    color: var(--brand-magenta-deep);
+  }
+
+  :global(:root[data-theme='dark']) .release-list__item > a:hover {
+    color: var(--brand-amber);
+  }
+
+  .release-list__note {
+    margin-top: 1rem;
+    font-size: 0.6875rem;
+    line-height: 1.6;
+  }
+
+  .standards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    gap: 2.5rem;
+  }
+
+  .standards__block {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .standards__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    max-width: 58ch;
+  }
+
+  .standards__list li {
+    position: relative;
+    padding-left: 1.1rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+
+  .standards__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    inline-size: 5px;
+    block-size: 5px;
+    border-radius: 999px;
+    background: var(--brand-gradient);
+  }
+
+  .standards__list strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .sponsors {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .sponsors a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1rem;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.18s var(--ease), transform 0.18s var(--ease);
+  }
+
+  .sponsors a:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+  }
+
+  .sponsors img {
+    inline-size: auto;
+    block-size: 2.25rem;
+    max-inline-size: 8rem;
+    object-fit: contain;
+    flex: 0 0 auto;
+  }
+
+  .sponsors span {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  .standards__note {
+    font-size: 0.75rem;
+  }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 2.5rem;
+    padding: 2rem 2.25rem;
+    background: var(--bg-sunken);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .cta__text {
+    max-width: 62ch;
+  }
+
+  .cta__text h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .cta__text p {
+    color: var(--muted);
+  }
+
+  @media (max-width: 960px) {
+    .hero__inner,
+    .split {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2.5rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero__stats {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .cta {
+      padding: 1.5rem 1.25rem;
+    }
+  }
+</style>

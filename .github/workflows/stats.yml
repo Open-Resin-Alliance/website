@@ -1,0 +1,55 @@
+name: Refresh statistics
+
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  repository_dispatch:
+    types: [github-stats]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Refresh GitHub statistics
+        run: npm run stats
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit the snapshot if it changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/github-stats.json
+          git diff --staged --quiet || git commit -m "data: refresh GitHub statistics"
+          git push
+
+# Wiring an organisation webhook to this workflow:
+#  1. Org Settings -> Webhooks -> Add webhook.
+#  2. Payload URL: https://api.github.com/repos/Open-Resin-Alliance/website/dispatches
+#  3. Content type: application/json.
+#  4. Events: select individual events -> Release (optionally Push, Issues, Pull requests).
+#  5. Secret: a fine-grained PAT with "Contents: write" on this repository (classic PATs
+#     need the repo scope). repository_dispatch rejects read-only tokens.
+#  6. The dispatch body must carry "event_type": "github-stats"; a webhook cannot set a
+#     JSON body, so use a relay (or a workflow that runs `gh api ... /dispatches`) to
+#     map the webhook payload onto that event type.
+# This hook is the only reason a webhook exists at all: the site is static, so a hook can
+# trigger a rebuild of the committed snapshot, never serve live data.

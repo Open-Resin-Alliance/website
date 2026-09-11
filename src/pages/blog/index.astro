@@ -1,0 +1,183 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import PostTimeline from '../../components/PostTimeline.astro';
+import { LINKS } from '../../data/site';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const featured = posts.filter((post) => post.data.featured);
+const pinned = featured.length > 0 ? featured : posts.slice(0, 1);
+const rest = posts.filter((post) => !pinned.includes(post));
+
+const categories = [...new Set(posts.map((post) => post.data.category))].sort();
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
+
+const structuredData = [
+  {
+    '@type': 'Blog',
+    name: 'Open Resin Alliance blog',
+    url: 'https://openresin.org/blog',
+    description:
+      'Release notes, project write-ups and engineering notes from the Open Resin Alliance, an open-source resin 3D printing collective.',
+    isPartOf: { '@id': 'https://openresin.org/#website' },
+    publisher: { '@id': 'https://openresin.org/#organization' },
+    blogPost: posts.map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.data.title,
+      datePublished: post.data.pubDate.toISOString(),
+      url: `https://openresin.org/blog/${post.id}`,
+      author: { '@type': 'Person', name: post.data.author },
+    })),
+  },
+];
+---
+
+<BaseLayout
+  title="Blog"
+  description={`Release notes, project write-ups and engineering notes from the Open Resin Alliance — ${posts.length} posts and counting.`}
+  structuredData={structuredData}
+>
+  <section class="shell page-head">
+    <p class="eyebrow">Blog</p>
+    <h1>Notes from the workshop</h1>
+    <p class="lede">
+      Releases as they happen, project introductions, and how we build open-source tooling for resin 3D printing.
+      Every post is a Markdown file in the website repository, published by pushing to it.
+    </p>
+    <div class="page-head__meta mono">
+      <span>{posts.length} posts</span>
+      <span class="page-head__sep" aria-hidden="true">/</span>
+      <a href={LINKS.rss}>RSS</a>
+      <span class="page-head__sep" aria-hidden="true">/</span>
+      <a href={LINKS.github} rel="noopener noreferrer" target="_blank">GitHub</a>
+    </div>
+  </section>
+
+  {
+    pinned.length > 0 && (
+      <section class="shell pinned">
+        <div class="pinned__grid">
+          {pinned.map((post) => (
+            <PostCard post={post} featured />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section class="shell section">
+    <div class="section-head">
+      <div class="section-head__text">
+        <h2>Timeline</h2>
+        <p class="lede">Everything we have published, newest first.</p>
+      </div>
+      {rest.length > 0 && (
+        <div class="filters mono">
+          <span class="filters__label">Categories</span>
+          {categories.map((category) => (
+            <span class="tag">{category}</span>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <PostTimeline posts={posts} />
+  </section>
+
+  {
+    tags.length > 0 && (
+      <section class="shell section">
+        <h2 class="tags-title mono">Tags</h2>
+        <p class="tags-list">
+          {tags.map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </p>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .page-head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: clamp(2.5rem, 2rem + 3vw, 4rem) 0 0;
+    max-width: 900px;
+  }
+
+  .page-head .lede {
+    max-width: 68ch;
+  }
+
+  .page-head__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    color: var(--muted-2);
+  }
+
+  .page-head__meta a {
+    color: var(--muted);
+  }
+
+  .page-head__meta a:hover {
+    color: var(--ink);
+  }
+
+  .page-head__sep {
+    color: var(--border-strong);
+  }
+
+  .pinned {
+    padding-top: 2.5rem;
+  }
+
+  .pinned__grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
+  }
+
+  .section {
+    padding: 3.5rem 0 0;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.6875rem;
+  }
+
+  .filters__label {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-2);
+    margin-right: 0.25rem;
+  }
+
+  .tags-title {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted-2);
+    margin-bottom: 0.85rem;
+  }
+
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+</style>

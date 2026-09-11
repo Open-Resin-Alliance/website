@@ -1,0 +1,401 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { LINKS, SITE } from '../data/site';
+import { stats } from '../lib/stats';
+import { formatDate, formatCompact, formatNumber } from '../lib/format';
+
+const principles = [
+  {
+    title: 'Open source collaboration',
+    body: 'We believe that by sharing knowledge and resources, we can accelerate innovation and make high-quality 3D printing accessible to everyone. Every project we ship is public, and every design decision is open to review.',
+  },
+  {
+    title: 'Hardware independence',
+    body: 'Proprietary file formats and closed firmware limit what a resin printer can do. We build tooling that keeps the hardware honest and the data readable, including clean-room reverse engineering where interoperability requires it.',
+  },
+  {
+    title: 'Reference designs, not just software',
+    body: 'Alongside the slicer, the printer frontend and the printer backend, we publish the reference designs that prove the stack works on real machines.',
+  },
+];
+
+const languages = Object.entries(stats.totals.languages).sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout
+  title="About"
+  description={`${SITE.name} is a group of hobbyists and developers from around the globe advancing resin-based 3D printing through open source collaboration. Founded ${formatDate(SITE.founded)}.`}
+>
+  <section class="shell page-head">
+    <p class="eyebrow">About</p>
+    <h1>A collective for open-source resin printing</h1>
+    <p class="lede">
+      We are a group of hobbyists and developers from around the globe, joined in our dedication to advancing the
+      field of resin-based 3D printing through open source collaboration. The alliance was established on
+      {formatDate(SITE.founded)}.
+    </p>
+    <img
+      class="lockup"
+      src="/brand/ora-lockup.webp"
+      alt={`${SITE.name} logo: ORA wordmark above a resin-drip emblem`}
+      width="364"
+      height="432"
+    />
+  </section>
+
+  <section class="shell section">
+    <div class="panel">
+      <div class="panel__block">
+        <h2>What we do</h2>
+        <p>
+          All of our projects, primarily software and reference designs for open-source resin 3D printing, are hosted
+          on GitHub. They fall into four areas: the DragonFruit slicer and its plugin ecosystem, the Orion printer
+          frontend, the Odyssey printer backend, and utilities such as VoxelShift that move files between ecosystems.
+        </p>
+        <p>
+          Some of these projects grew elsewhere before moving to the alliance, so that they could better serve the
+          community at large. Odyssey and Orion in particular predate the organisation and were built for the Apollo
+          control board series and the Prometheus MSLA printer.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn--primary btn--sm" href="/projects">Browse projects</a>
+          <a class="btn btn--ghost btn--sm" href={LINKS.githubRepos} rel="noopener noreferrer" target="_blank">
+            {stats.totals.repos} repositories on GitHub
+          </a>
+        </div>
+      </div>
+
+      <dl class="panel__stats">
+        <div>
+          <dt>Public repositories</dt>
+          <dd>{formatNumber(stats.totals.repos)}</dd>
+        </div>
+        <div>
+          <dt>Contributors</dt>
+          <dd>{formatNumber(stats.totals.contributors)}</dd>
+        </div>
+        <div>
+          <dt>GitHub followers</dt>
+          <dd>{formatNumber(stats.org.followers)}</dd>
+        </div>
+        <div>
+          <dt>Stars</dt>
+          <dd>{formatCompact(stats.totals.stars)}</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="shell section">
+    <div class="section-head">
+      <div class="section-head__text">
+        <h2>What we believe</h2>
+      </div>
+    </div>
+    <div class="grid grid--3">
+      {
+        principles.map((principle) => (
+          <div class="card principle">
+            <h3>{principle.title}</h3>
+            <p>{principle.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="shell section">
+    <div class="split">
+      <div>
+        <h2>Where the work happens</h2>
+        <p class="muted">
+          Development is public. Issues, pull requests, releases and nightly builds are all visible on GitHub, and
+          day-to-day discussion happens on Discord. There is no private roadmap: if we are working on something, you
+          can watch it happen or join in.
+        </p>
+        <ul class="facts-list">
+          <li>
+            <span class="mono">Releases</span>
+            <span>{stats.totals.releases} projects with a tagged release, refreshed continuously</span>
+          </li>
+          <li>
+            <span class="mono">Active repos</span>
+            <span>{stats.totals.activeRepos} pushed to in the last 90 days</span>
+          </li>
+          <li>
+            <span class="mono">Open issues</span>
+            <span>{formatNumber(stats.totals.openIssues)} across the organisation</span>
+          </li>
+          <li>
+            <span class="mono">Languages</span>
+            <span>{languages.map(([language, count]) => `${language} (${count})`).join(', ')}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="join">
+        <h2>Joining in</h2>
+        <p class="muted">
+          There is no formal membership process. Pick a repository, read its contributing section, and open a pull
+          request — or bring a question, a bug report or a printer to the Discord.
+        </p>
+        <ul class="join__list">
+          <li>
+            <a href={LINKS.discord} rel="noopener noreferrer" target="_blank">
+              <strong>Discord</strong>
+              <span class="muted">Talk to the people building this</span>
+            </a>
+          </li>
+          <li>
+            <a href={LINKS.githubRepos} rel="noopener noreferrer" target="_blank">
+              <strong>GitHub</strong>
+              <span class="muted">Issues, pull requests and source</span>
+            </a>
+          </li>
+          <li>
+            <a href={LINKS.email}>
+              <strong>Email</strong>
+              <span class="muted">{SITE.email}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell section">
+    <div class="rules">
+      <h2>Licensing at a glance</h2>
+      <p class="muted">
+        Projects are licensed individually — always read the licence in the repository you are working with.
+      </p>
+      <ul class="rules__list">
+        <li><span class="mono">AGPL-3.0</span><span>DragonFruit slicer</span></li>
+        <li><span class="mono">MIT</span><span>DragonFruit plugins</span></li>
+        <li><span class="mono">Apache-2.0</span><span>Orion, VoxelShift</span></li>
+        <li><span class="mono">GPL-3.0</span><span>Odyssey</span></li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: clamp(2.5rem, 2rem + 3vw, 4rem) 0 0;
+    max-width: 900px;
+  }
+
+  .page-head .lede {
+    max-width: 68ch;
+  }
+
+  .lockup {
+    block-size: 180px;
+    inline-size: auto;
+    margin-top: 0.75rem;
+  }
+
+  .section {
+    padding: 3rem 0 0;
+  }
+
+  .panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    padding: 2rem 2.25rem;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    align-items: start;
+  }
+
+  .panel__block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    align-items: flex-start;
+  }
+
+  .panel__block h2 {
+    font-size: 1.4rem;
+  }
+
+  .panel__block p {
+    color: var(--muted);
+    max-width: 66ch;
+  }
+
+  .panel__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .panel__stats > div {
+    padding: 0.9rem 1rem;
+    background: var(--bg);
+  }
+
+  .panel__stats dt {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-2);
+  }
+
+  .panel__stats dd {
+    margin: 0.15rem 0 0;
+    font-size: 1.35rem;
+    font-weight: 620;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .principle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.4rem 1.5rem;
+  }
+
+  .principle h3 {
+    font-size: 1.0625rem;
+  }
+
+  .principle p {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .split h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .split p {
+    max-width: 62ch;
+  }
+
+  .facts-list {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .facts-list li {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 1rem;
+    padding: 0.65rem 0;
+    border-top: 1px solid var(--border);
+    font-size: 0.9375rem;
+  }
+
+  .facts-list .mono {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.625rem;
+    color: var(--muted-2);
+    padding-top: 0.2rem;
+  }
+
+  .join__list {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .join__list a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.9rem 1rem;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.9375rem;
+    transition: border-color 0.18s var(--ease), transform 0.18s var(--ease);
+  }
+
+  .join__list a:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+  }
+
+  .join__list span {
+    font-size: 0.8125rem;
+  }
+
+  .rules {
+    padding: 2rem 2.25rem;
+    background: var(--bg-sunken);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .rules h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .rules__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 1rem;
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+  }
+
+  .rules__list li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: 0.9375rem;
+  }
+
+  .rules__list .mono {
+    color: var(--accent);
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 960px) {
+    .panel,
+    .split {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
+    }
+
+    .panel {
+      padding: 1.5rem 1.25rem;
+    }
+
+    .rules {
+      padding: 1.5rem 1.25rem;
+    }
+  }
+</style>

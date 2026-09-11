@@ -1,0 +1,224 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, isoDate } from '../lib/format';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+
+const CATEGORY_LABEL: Record<string, string> = {
+  release: 'Release',
+  project: 'Project',
+  community: 'Community',
+  engineering: 'Engineering',
+};
+
+const years = new Map<string, Map<string, CollectionEntry<'blog'>[]>>();
+for (const post of [...posts].sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())) {
+  const year = String(post.data.pubDate.getUTCFullYear());
+  const month = post.data.pubDate.toLocaleString('en-GB', { month: 'long', timeZone: 'UTC' });
+  if (!years.has(year)) years.set(year, new Map());
+  const months = years.get(year)!;
+  if (!months.has(month)) months.set(month, []);
+  months.get(month)!.push(post);
+}
+---
+
+<div class="timeline">
+  {
+    [...years.entries()].map(([year, months]) => (
+      <section class="timeline__year">
+        <header class="timeline__year-head">
+          <h2 class="timeline__year-label mono">{year}</h2>
+          <span class="rule-brand" aria-hidden="true" />
+        </header>
+
+        {[...months.entries()].map(([month, entries]) => (
+          <>
+            <h3 class="timeline__month mono">{month}</h3>
+            <ol class="timeline__list">
+              {entries.map((post) => (
+                <li class="timeline__item">
+                  <a class="timeline__link" href={`/blog/${post.id}`}>
+                    <time class="timeline__date mono" datetime={isoDate(post.data.pubDate)}>
+                      {formatDate(post.data.pubDate).replace(/ \d{4}$/, '')}
+                    </time>
+                    <span class="timeline__content">
+                      <span class="timeline__title">{post.data.title}</span>
+                      <span class="timeline__description">{post.data.description}</span>
+                      <span class="timeline__tags mono">
+                        <span class="timeline__category">{CATEGORY_LABEL[post.data.category] ?? post.data.category}</span>
+                        {post.data.project && <span>&middot; {post.data.project}</span>}
+                        {post.data.version && <span>&middot; {post.data.version}</span>}
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </>
+        ))}
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+  }
+
+  .timeline__year-head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .timeline__year-label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .timeline__year-head :global(.rule-brand) {
+    flex: 1 1 auto;
+  }
+
+  .timeline__month {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted-2);
+    margin: 0 0 0.5rem;
+    padding-left: 6.5rem;
+  }
+
+  .timeline__list {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    position: relative;
+  }
+
+  /* the rail */
+  .timeline__list::before {
+    content: '';
+    position: absolute;
+    top: 0.35rem;
+    bottom: 0.35rem;
+    left: 5.25rem;
+    inline-size: 1px;
+    background: var(--border);
+  }
+
+  .timeline__item {
+    position: relative;
+  }
+
+  .timeline__link {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: 2rem;
+    padding: 0.85rem 0.75rem 0.85rem 0;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.16s var(--ease);
+  }
+
+  .timeline__link:hover {
+    background: var(--bg-sunken);
+  }
+
+  .timeline__link::before {
+    content: '';
+    position: absolute;
+    left: calc(5.25rem - 3px);
+    top: 1.35rem;
+    inline-size: 7px;
+    block-size: 7px;
+    border-radius: 999px;
+    background: var(--bg);
+    border: 1.5px solid var(--border-strong);
+    transition: border-color 0.16s var(--ease), background-color 0.16s var(--ease);
+  }
+
+  .timeline__link:hover::before {
+    background: var(--brand-amber);
+    border-color: var(--brand-amber);
+  }
+
+  .timeline__date {
+    font-size: 0.6875rem;
+    color: var(--muted-2);
+    text-align: right;
+    padding-top: 0.25rem;
+    white-space: nowrap;
+  }
+
+  .timeline__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+  }
+
+  .timeline__title {
+    font-size: 1.0625rem;
+    font-weight: 570;
+    letter-spacing: -0.016em;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+
+  .timeline__description {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 66ch;
+  }
+
+  .timeline__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-size: 0.6875rem;
+    color: var(--muted-2);
+    margin-top: 0.15rem;
+  }
+
+  .timeline__category {
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 700px) {
+    .timeline__month {
+      padding-left: 0;
+    }
+
+    .timeline__list::before,
+    .timeline__link::before {
+      display: none;
+    }
+
+    .timeline__link {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .timeline__date {
+      text-align: left;
+      padding-top: 0;
+    }
+  }
+</style>

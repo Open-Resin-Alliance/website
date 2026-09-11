@@ -1,0 +1,308 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import ReleaseChip from '../../components/ReleaseChip.astro';
+import { getProject, projectPath, repoUrl } from '../../data/projects';
+import { repoStats } from '../../lib/stats';
+import { formatDateLong, isoDate } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const { title, description, pubDate, updatedDate, author, category, tags, project, version } = post.data;
+
+const relatedProject = project ? getProject(project) : undefined;
+const relatedStats = project ? repoStats(project) : undefined;
+const relatedRelease =
+  version && relatedStats
+    ? relatedStats.recentReleases.find((release) => release.tag === version) ??
+      (relatedStats.latestRelease?.tag === version ? relatedStats.latestRelease : null)
+    : null;
+
+const relatedPosts = (await getCollection('blog', ({ data, id }) => !data.draft && id !== post.id))
+  .filter((other) => other.data.project && other.data.project === project)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+
+const structuredData = [
+  {
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    datePublished: isoDate(pubDate),
+    ...(updatedDate ? { dateModified: isoDate(updatedDate) } : {}),
+    author: { '@type': 'Person', name: author },
+    publisher: { '@id': 'https://openresin.org/#organization' },
+    mainEntityOfPage: `https://openresin.org/blog/${post.id}`,
+    url: `https://openresin.org/blog/${post.id}`,
+    articleSection: category,
+    keywords: tags.join(', '),
+    inLanguage: 'en',
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  type="article"
+  publishedTime={isoDate(pubDate)}
+  modifiedTime={updatedDate ? isoDate(updatedDate) : undefined}
+  noindex={post.data.draft}
+  structuredData={structuredData}
+>
+  <article class="shell post">
+    <nav class="crumbs mono" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="/blog">Blog</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{category}</span>
+    </nav>
+
+    <header class="post__head">
+      <div class="post__meta mono">
+        <span class="post__category">{category}</span>
+        <span class="post__sep" aria-hidden="true">/</span>
+        <time datetime={isoDate(pubDate)}>{formatDateLong(pubDate)}</time>
+        <span class="post__sep" aria-hidden="true">/</span>
+        <span>{author}</span>
+        {updatedDate && (
+          <>
+            <span class="post__sep" aria-hidden="true">/</span>
+            <span>updated {formatDateLong(updatedDate)}</span>
+          </>
+        )}
+      </div>
+
+      <h1>{title}</h1>
+      <p class="lede">{description}</p>
+
+      {
+        (relatedProject || relatedRelease) && (
+          <div class="post__links">
+            {relatedProject && (
+              <a class="btn btn--ghost btn--sm" href={projectPath(relatedProject)}>
+                {relatedProject.name} project page
+              </a>
+            )}
+            {relatedProject && (
+              <a class="btn btn--ghost btn--sm" href={repoUrl(relatedProject.repo)} rel="noopener noreferrer" target="_blank">
+                Repository
+              </a>
+            )}
+            {relatedRelease && <ReleaseChip release={relatedRelease} label={relatedRelease.prerelease ? 'Build' : 'Release'} />}
+          </div>
+        )
+      }
+
+      {tags.length > 0 && <p class="post__tags">{tags.map((tag) => <span class="tag">{tag}</span>)}</p>}
+    </header>
+
+    <div class="post__grid">
+      <div class="post__body prose">
+        <Content />
+      </div>
+
+      {
+        toc.length > 1 && (
+          <aside class="post__toc">
+            <h2 class="post__toc-title mono">On this page</h2>
+            <ul>
+              {toc.map((heading) => (
+                <li class:list={[`post__toc-item--h${heading.depth}`]}>
+                  <a href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )
+      }
+    </div>
+
+    {
+      relatedPosts.length > 0 && (
+        <section class="post__related">
+          <h2 class="post__related-title mono">More on {relatedProject?.name ?? project}</h2>
+          <div class="post__related-grid">
+            {relatedPosts.map((other) => (
+              <PostCard post={other} withDescription={false} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    padding-top: 2.5rem;
+  }
+
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-2);
+    margin-bottom: 1.75rem;
+  }
+
+  .crumbs a:hover {
+    color: var(--ink);
+  }
+
+  .crumbs span[aria-current] {
+    color: var(--muted);
+  }
+
+  .post__head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    max-width: 780px;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .post__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-2);
+  }
+
+  .post__category {
+    color: var(--accent);
+  }
+
+  .post__sep {
+    color: var(--border-strong);
+  }
+
+  .post__head h1 {
+    font-size: clamp(1.9rem, 1.4rem + 2.2vw, 2.8rem);
+  }
+
+  .post__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.25rem;
+  }
+
+  .post__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 13rem;
+    gap: 4rem;
+    align-items: start;
+    padding-top: 2.5rem;
+  }
+
+  .post__body {
+    min-width: 0;
+  }
+
+  .post__toc {
+    position: sticky;
+    top: 5.5rem;
+    font-size: 0.8125rem;
+  }
+
+  .post__toc-title {
+    font-size: 0.625rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted-2);
+    margin-bottom: 0.75rem;
+  }
+
+  .post__toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    border-left: 1px solid var(--border);
+  }
+
+  .post__toc li {
+    padding-left: 0.85rem;
+    line-height: 1.45;
+  }
+
+  .post__toc li a {
+    color: var(--muted);
+    transition: color 0.15s var(--ease);
+  }
+
+  .post__toc li a:hover {
+    color: var(--ink);
+  }
+
+  .post__toc-item--h3 {
+    padding-left: 1.55rem;
+    font-size: 0.75rem;
+  }
+
+  .post__related {
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .post__related-title {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted-2);
+    margin-bottom: 1.25rem;
+  }
+
+  .post__related-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  }
+
+  @media (max-width: 960px) {
+    .post__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2.5rem;
+    }
+
+    .post__toc {
+      position: static;
+      order: -1;
+    }
+  }
+</style>

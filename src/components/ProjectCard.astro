@@ -1,0 +1,81 @@
+---
+import { projectPath, type Project } from '../data/projects';
+import { repoStats } from '../lib/stats';
+import { formatCompact } from '../lib/format';
+import ReleaseChip from './ReleaseChip.astro';
+
+interface Props {
+  project: Project;
+  /** Show the longer summary instead of the one-line blurb. */
+  detailed?: boolean;
+}
+
+const { project, detailed = false } = Astro.props;
+const live = repoStats(project.repo);
+---
+
+{/* The whole card is a single link; the release chip inside it must not be one. */}
+<a class="card project-card" href={projectPath(project)}>
+  <div class="project-card__head">
+    <h3 class="project-card__name">{project.name}</h3>
+    {live?.language && <span class="tag mono">{live.language}</span>}
+  </div>
+
+  <p class="project-card__blurb">{detailed ? project.summary : project.blurb}</p>
+
+  <div class="project-card__meta">
+    {project.license && <span class="tag mono">{project.license}</span>}
+    {live && live.stars > 0 && <span class="tag mono">★ {formatCompact(live.stars)}</span>}
+    {live && live.openIssues > 0 && <span class="tag mono">{formatCompact(live.openIssues)} issues</span>}
+  </div>
+
+  {
+    live?.latestRelease && (
+      <div class="project-card__release">
+        <ReleaseChip
+          release={live.latestRelease}
+          label={live.latestRelease.prerelease ? 'Latest build' : 'Latest release'}
+          link={false}
+        />
+      </div>
+    )
+  }
+</a>
+
+<style>
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.35rem 1.4rem 1.4rem;
+  }
+
+  .project-card__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .project-card__name {
+    font-size: 1.0625rem;
+  }
+
+  .project-card__blurb {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    flex: 1 1 auto;
+  }
+
+  .project-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .project-card__release {
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+</style>
