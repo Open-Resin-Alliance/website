@@ -3,10 +3,11 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ReleaseChip from '../../components/ReleaseChip.astro';
 import PostCard from '../../components/PostCard.astro';
+import LanguageTags from '../../components/LanguageTags.astro';
 import { PROJECTS, projectSlug, repoUrl } from '../../data/projects';
 import { repoStats } from '../../lib/stats';
 import { formatCompact, formatDate, formatRelative } from '../../lib/format';
-import { LANGUAGE_COLORS, licenseColor } from '../../lib/tag-colors';
+import { licenseColor } from '../../lib/tag-colors';
 
 export function getStaticPaths() {
   return PROJECTS.map((project) => ({
@@ -81,12 +82,7 @@ const structuredData = [
     </header>
 
     <div class="page__badges">
-      <span
-        class="tag mono tag--tinted"
-        style={LANGUAGE_COLORS[project.language] ? `--tag:${LANGUAGE_COLORS[project.language]}` : undefined}
-      >
-        {project.language}
-      </span>
+      <LanguageTags languages={[project.language, ...(project.additionalLanguages ?? [])]} />
       {
         project.license && (
           <span

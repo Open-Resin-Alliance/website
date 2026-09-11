@@ -15,6 +15,13 @@ export interface Project {
   summary: string;
   /** GitHub's reported primary language. */
   language: string;
+  /**
+   * Other languages the project ships as a meaningful share of its code, shown as
+   * extra chips after `language`. Sourced from the repository's language
+   * breakdown — a project that is 15% Rust by bytes belongs on the chip row, but
+   * a handful of lines in a build script does not.
+   */
+  additionalLanguages?: readonly string[];
   /** SPDX identifier, or null when the repo declares no licence. */
   license: string | null;
   group: ProjectGroup;
@@ -45,6 +52,9 @@ export const PROJECTS: Project[] = [
     summary:
       'DragonFruit is an open-source resin slicer and support-generation environment built by the Open Resin Alliance. It combines a modern Next.js + React frontend with native Rust slicing backends and a Tauri desktop runtime.',
     language: 'TypeScript',
+    // 82.8% TypeScript / 15.3% Rust by bytes: the Next.js frontend and the native
+    // slicing backends behind it are both real, load-bearing halves.
+    additionalLanguages: ['Rust'],
     license: 'AGPL-3.0',
     group: 'featured',
     capabilities: [

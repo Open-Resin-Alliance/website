@@ -9,6 +9,7 @@
 export const LANGUAGE_COLORS: Record<string, string> = {
   TypeScript: '#3178c6',
   JavaScript: '#f1e05a',
+  Astro: '#ff5a03',
   Rust: '#dea584',
   Dart: '#00b4ab',
   Python: '#3572a5',

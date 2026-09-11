@@ -139,6 +139,13 @@ is the join key into `src/data/github-stats.json`, so a typo silently drops the 
 numbers. Use `slug` when the repository name is not a good URL segment
 (`ORA_Charter` → `/projects/governance`).
 
+`additionalLanguages` adds chips after the primary one, for projects that ship a second
+language as a real share of their code (DragonFruit is 83% TypeScript, 15% Rust). Take the
+figure from the repository's language breakdown on GitHub rather than by eye, and leave it
+off for a language that only shows up in build scripts. Colours come from
+`LANGUAGE_COLORS` in `src/lib/tag-colors.ts`; a language missing from that map renders an
+untinted chip.
+
 ### Design notes
 
 - One accent ramp, the ORA purple → pink → orange gradient: violet `#9333ea`, pink

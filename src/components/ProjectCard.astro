@@ -2,7 +2,8 @@
 import { projectPath, type Project } from '../data/projects';
 import { repoStats } from '../lib/stats';
 import { formatCompact } from '../lib/format';
-import { ISSUES_COLOR, LANGUAGE_COLORS, STARS_COLOR, licenseColor } from '../lib/tag-colors';
+import { ISSUES_COLOR, STARS_COLOR, licenseColor } from '../lib/tag-colors';
+import LanguageTags from './LanguageTags.astro';
 import ReleaseChip from './ReleaseChip.astro';
 
 interface Props {
@@ -24,11 +25,8 @@ const headline = live?.latestStableRelease ?? live?.latestRelease ?? null;
     <h3 class="project-card__name">{project.name}</h3>
     {
       live?.language && (
-        <span
-          class="tag mono tag--tinted"
-          style={LANGUAGE_COLORS[live.language] ? `--tag:${LANGUAGE_COLORS[live.language]}` : undefined}
-        >
-          {live.language}
+        <span class="project-card__languages">
+          <LanguageTags languages={[live.language, ...(project.additionalLanguages ?? [])]} />
         </span>
       )
     }
@@ -89,6 +87,15 @@ const headline = live?.latestStableRelease ?? live?.latestRelease ?? null;
     align-items: baseline;
     justify-content: space-between;
     gap: 0.75rem;
+  }
+
+  /* Keep the language chips together at the right edge; the head row spreads its
+     children apart, which would pull a second chip away from the first. */
+  .project-card__languages {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.4rem;
   }
 
   .project-card__name {

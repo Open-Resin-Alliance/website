@@ -1,0 +1,21 @@
+---
+import { LANGUAGE_COLORS } from '../lib/tag-colors';
+
+interface Props {
+  /** Primary language first, then any the project also ships. */
+  languages: readonly string[];
+}
+
+const { languages } = Astro.props;
+---
+
+{
+  languages.map((language) => (
+    <span
+      class="tag mono tag--tinted"
+      style={LANGUAGE_COLORS[language] ? `--tag:${LANGUAGE_COLORS[language]}` : undefined}
+    >
+      {language}
+    </span>
+  ))
+}
