@@ -53,6 +53,9 @@
   --muted-2: #9ca3af;
   --accent: var(--brand-violet-deep);
   --accent-ink: #ffffff;
+  /* Hover colour for accent-coloured text, one step along the ramp. Kept as a
+     token because the prose link rule is theme-agnostic. */
+  --accent-hover: var(--brand-pink-deep);
   --focus: var(--brand-violet);
   --shadow-sm: 0 1px 2px rgb(24 24 27 / 0.06);
   --shadow: 0 1px 2px rgb(24 24 27 / 0.05), 0 8px 24px -12px rgb(24 24 27 / 0.14);
@@ -80,6 +83,7 @@
   --muted-2: #71717a;
   --accent: var(--brand-orange);
   --accent-ink: #0a0a0b;
+  --accent-hover: var(--brand-pink);
   --focus: var(--brand-pink);
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
   --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -16px rgb(0 0 0 / 0.7);
@@ -521,17 +525,27 @@ a.card:hover,
   font-size: 1.1875rem;
 }
 
+/*
+ * Body links are carried by colour, not a resting underline. That trades away
+ * the one cue a reader who cannot separate these hues would rely on: no accent
+ * in this palette reaches the 3:1 against the body text that WCAG 1.4.1 wants
+ * for colour alone (violet-deep is 1.5:1 against --ink-soft), which is exactly
+ * what the underline used to provide. The underline comes back on hover and on
+ * keyboard focus, so the cue exists the moment a pointer or caret is on it.
+ */
 .prose a {
-  color: var(--ink);
-  text-decoration: underline;
-  text-decoration-color: color-mix(in oklab, var(--brand-pink) 70%, transparent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 2px;
-  transition: text-decoration-color 0.15s var(--ease);
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
 }
 
-.prose a:hover {
-  text-decoration-color: var(--brand-orange);
+.prose a:hover,
+.prose a:focus-visible {
+  color: var(--accent-hover);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, currentColor 60%, transparent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
 }
 
 .prose strong {
