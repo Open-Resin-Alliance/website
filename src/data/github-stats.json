@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T13:43:24.539Z",
+  "generatedAt": "2026-09-11T14:09:07.416Z",
   "source": "https://api.github.com/orgs/Open-Resin-Alliance",
   "org": {
     "login": "Open-Resin-Alliance",
@@ -21,11 +21,12 @@
     "contributors": 12,
     "languages": {
       "Rust": 5,
-      "TypeScript": 5,
+      "TypeScript": 4,
       "JavaScript": 1,
-      "Dart": 2
+      "Dart": 2,
+      "Astro": 1
     },
-    "activeRepos": 12,
+    "activeRepos": 13,
     "releases": 4
   },
   "repos": {
@@ -648,8 +649,8 @@
       "description": null,
       "url": "https://github.com/Open-Resin-Alliance/website",
       "homepage": null,
-      "language": "TypeScript",
-      "license": "MIT",
+      "language": "Astro",
+      "license": null,
       "stars": 0,
       "forks": 0,
       "openIssues": 0,
@@ -661,8 +662,8 @@
       "topics": [],
       "defaultBranch": "main",
       "createdAt": "2025-02-09T23:58:09Z",
-      "updatedAt": "2025-02-15T18:01:41Z",
-      "pushedAt": "2025-02-15T18:01:38Z",
+      "updatedAt": "2026-09-11T14:06:59Z",
+      "pushedAt": "2026-09-11T14:06:50Z",
       "latestRelease": null,
       "latestStableRelease": null,
       "recentReleases": []
