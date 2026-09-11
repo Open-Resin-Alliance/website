@@ -1,10 +1,15 @@
 ---
-import { PROJECTS, projectPath } from '../data/projects';
+import { FEATURED_PROJECTS, projectPath } from '../data/projects';
 import { repoStats, stats } from '../lib/stats';
 import { formatDate, formatNumber } from '../lib/format';
 
 /**
- * One row per published project, counted from the GitHub snapshot.
+ * One row per core project — the four the site treats as its main software.
+ *
+ * The DragonFruit plugins and the organisation's own tooling are deliberately
+ * not rows here: eight plugin repos reporting two pull requests between them
+ * would bury the four projects the numbers are about. They stay on /projects,
+ * which the section links to.
  *
  * A project the snapshot does not know about is skipped rather than shown as a
  * row of zeros: we have no counts for it, and zeros would read as a real answer.
@@ -27,7 +32,7 @@ type CountKey = 'openIssues' | 'openPulls' | 'commits';
 const asCount = (value: number | null | undefined): Count =>
   typeof value === 'number' && Number.isFinite(value) ? value : null;
 
-const rows = PROJECTS.flatMap((project): Row[] => {
+const rows = FEATURED_PROJECTS.flatMap((project): Row[] => {
   const snapshot = repoStats(project.repo);
   if (!snapshot) return [];
   return [
@@ -78,7 +83,7 @@ const display = (value: Count) => (value === null ? '—' : formatNumber(value))
 
 <table class="stats__table">
   <caption class="visually-hidden">
-    Open issues, open pull requests and total commits for every project we publish.
+    Open issues, open pull requests and total commits for the core projects.
   </caption>
 
   <thead>
@@ -116,7 +121,7 @@ const display = (value: Count) => (value === null ? '—' : formatNumber(value))
 
   <tfoot>
     <tr>
-      <th scope="row">All projects</th>
+      <th scope="row">All core projects</th>
       {
         COLUMNS.map((column) => (
           <td class:list={['mono', { stats__pulls: column.narrowHidden }]}>{display(total(column.key))}</td>
