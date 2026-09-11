@@ -16,7 +16,6 @@ no CMS, no database, no rebuild configuration.
 title: DragonFruit v0.1.16 is out
 description: One or two sentences used on the timeline card, the meta description and the RSS feed.
 pubDate: 2026-09-20
-author: Open Resin Alliance
 category: release          # release | project | community | engineering
 tags: [dragonfruit, release]
 project: DragonFruit        # repository name, links the post to a project page
@@ -35,27 +34,32 @@ themselves. The filename becomes the URL (`/blog/<filename>`); name it
 The frontmatter schema lives in [`src/content.config.ts`](src/content.config.ts). A
 malformed post fails the build with the field name.
 
-## How the statistics work
+## How the statistics and supporters work
 
-`scripts/fetch-github-stats.mjs` reads the public GitHub API for the whole
-`Open-Resin-Alliance` organisation — repositories, releases, an activity feed and
-contributor counts — and writes a snapshot to `src/data/github-stats.json`.
+Two build-time pipelines write JSON snapshots that the pages read:
+
+| Script | Source | Output |
+|---|---|---|
+| `scripts/fetch-github-stats.mjs` | public GitHub API for the `Open-Resin-Alliance` org — repositories, releases, activity feed, contributors | `src/data/github-stats.json` |
+| `scripts/fetch-open-collective.mjs` | public Open Collective GraphQL API for `openresinalliance` — backers, amounts, recurring vs one-time, fiscal host | `src/data/supporters.json` |
 
 ```
-npm run stats           # refresh the snapshot (set GITHUB_TOKEN to raise the rate limit)
-npm run stats:offline   # inspect the committed snapshot, no network
+npm run stats           # refresh both snapshots (GITHUB_TOKEN raises the GitHub rate limit)
+npm run stats:offline   # print what is committed, no network
 ```
 
-Every page reads only that snapshot, so `astro build` never touches the network and a
-build is byte-for-byte reproducible. If the API is unreachable, the script keeps the
-previous snapshot and exits `0` so a deployment can never fail because GitHub was slow.
+Every page reads only those snapshots, so `astro build` never touches the network and a
+build is byte-for-byte reproducible. If a source is unreachable its script keeps the
+previous snapshot and exits `0`, so a deployment can never fail because a third party was
+slow. Incognito Open Collective contributors are filtered out in the pipeline, so they
+cannot reach the markup.
 
-Two workflows keep it fresh:
+Two workflows keep them fresh:
 
 | Workflow | Trigger | Effect |
 |---|---|---|
-| `.github/workflows/stats.yml` | daily cron, `repository_dispatch`, manual | refreshes the snapshot and commits it as `data: refresh GitHub statistics` |
-| `.github/workflows/deploy.yml` | push to `main`, manual | refreshes the snapshot, builds, and deploys to GitHub Pages |
+| `.github/workflows/stats.yml` | daily cron, `repository_dispatch`, manual | refreshes both snapshots and commits them as `data: refresh statistics snapshots` |
+| `.github/workflows/deploy.yml` | push to `main`, manual | refreshes both snapshots, builds, and deploys to GitHub Pages |
 
 `stats.yml` carries the instructions for wiring an organisation webhook to it at the
 bottom of the file.
@@ -76,18 +80,24 @@ Node 22.12 or newer is required (see the `engines` field in `package.json`).
 
 ```
 src/
-  components/       header, footer, cards, activity feed, release chip
+  components/       header, footer, cards, activity feed, release chip, Discord icon
   content/blog/     blog posts — one Markdown file per post
   content.config.ts blog collection schema
   data/
     site.ts         org constants: name, URLs, navigation
     projects.ts     curated project catalogue (repo name joins into the stats snapshot)
-    github-stats.json   generated snapshot, refreshed by the workflows
+    github-stats.json   generated: GitHub snapshot, refreshed by the workflows
+    supporters.json     generated: Open Collective snapshot
   layouts/BaseLayout.astro   document shell, SEO tags, JSON-LD, theme bootstrap
-  lib/              stats reader and date/number formatting
+  lib/
+    stats.ts        typed reader for the GitHub snapshot
+    supporters.ts   typed reader for the Open Collective snapshot
+    format.ts       date and number formatting
   pages/            routes: /, /projects, /projects/[repo], /blog, /blog/[...id], /about, /contact, /404
-  styles/global.css design tokens and base styles
-scripts/fetch-github-stats.mjs
+  styles/global.css design tokens (including the glass set) and base styles
+scripts/
+  fetch-github-stats.mjs
+  fetch-open-collective.mjs
 public/             CNAME, robots.txt, favicon, brand and project images
 ```
 
@@ -101,13 +111,15 @@ numbers. Use `slug` when the repository name is not a good URL segment
 ### Design notes
 
 - One accent ramp, the ORA purple → pink → orange gradient: violet `#9333ea`, pink
-  `#ec4899`, orange `#f59e0b`. The wordmark and the hero heading carry it as text; block
-  rules, markers and hover states use single stops from it.
+  `#ec4899`, orange `#f59e0b`. The hero heading carries it as text; block rules, markers
+  and hover states use single stops from it. The page background is the previous site's
+  pastel wash verbatim — a fixed 135-degree linear gradient through the three stops at
+  15% over the theme background — so the grade is identical on every page with no seams;
+  full-bleed sections stay transparent so it shows through, while cards and panels keep
+  solid surfaces for readability.
 - The logo is the real artwork. `/brand/ora-lockup.webp` is the full lockup (ORA wordmark
-  plus emblem) used in the footer; `/brand/ora-mark.webp` is the emblem cropped from the
-  same file starting below the wordmark, so no sliced letter fragments remain at its top
-  edge, and is used at 40px in the header; `favicon.png` and `/brand/ora-avatar.png`
-  derive from the same file. Nothing is redrawn.
+  plus emblem) used at 64px in the footer; the header is a text-only wordmark. `favicon.png`
+  and `/brand/ora-avatar.png` derive from the same source file. Nothing is redrawn.
 - Light and dark themes, both driven by `data-theme` on `<html>`; the choice is stored in
   `localStorage` and applied before first paint, so there is no flash of the wrong theme.
 - No CSS framework. Tokens and primitives live in `src/styles/global.css`, component

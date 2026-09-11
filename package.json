@@ -12,8 +12,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "stats": "node scripts/fetch-github-stats.mjs",
-    "stats:offline": "node scripts/fetch-github-stats.mjs --offline"
+    "stats": "node scripts/fetch-github-stats.mjs && node scripts/fetch-open-collective.mjs",
+    "stats:offline": "node scripts/fetch-github-stats.mjs --offline && node scripts/fetch-open-collective.mjs --offline"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.1",
