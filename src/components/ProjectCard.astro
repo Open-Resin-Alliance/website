@@ -19,7 +19,7 @@ const headline = live?.latestStableRelease ?? live?.latestRelease ?? null;
 ---
 
 {/* The whole card is a single link; the release chip inside it must not be one. */}
-<a class="card project-card" href={projectPath(project)}>
+<a class="card project-card" href={projectPath(project)} data-repo={project.repo}>
   <div class="project-card__head">
     <h3 class="project-card__name">{project.name}</h3>
     {
@@ -50,14 +50,14 @@ const headline = live?.latestStableRelease ?? live?.latestRelease ?? null;
     {
       live && live.stars > 0 && (
         <span class="tag mono tag--tinted" style={`--tag:${STARS_COLOR}`}>
-          ★ {formatCompact(live.stars)}
+          ★ <span data-live="stars:compact">{formatCompact(live.stars)}</span>
         </span>
       )
     }
     {
       live && live.openIssues > 0 && (
         <span class="tag mono tag--tinted" style={`--tag:${ISSUES_COLOR}`}>
-          {formatCompact(live.openIssues)} issues
+          <span data-live="issues:compact">{formatCompact(live.openIssues)}</span> issues
         </span>
       )
     }

@@ -66,7 +66,7 @@ const predating = PROJECTS.filter((project) => {
         <div class="btn-row">
           <a class="btn btn--primary btn--sm" href="/projects">Browse projects</a>
           <a class="btn btn--ghost btn--sm" href={LINKS.githubRepos} rel="noopener noreferrer" target="_blank">
-            {stats.totals.repos} repositories on GitHub
+            <span data-live="repos">{stats.totals.repos}</span> repositories on GitHub
           </a>
         </div>
       </div>
@@ -74,14 +74,14 @@ const predating = PROJECTS.filter((project) => {
 
     <dl class="stats">
       <div class="stats__item">
-        <dt class="stats__value">{formatNumber(stats.totals.repos)}</dt>
+        <dt class="stats__value" data-live="repos">{formatNumber(stats.totals.repos)}</dt>
         <dd class="stats__label">
           public repositories
           <span class="mono">on GitHub</span>
         </dd>
       </div>
       <div class="stats__item">
-        <dt class="stats__value">{formatCompact(stats.totals.stars)}</dt>
+        <dt class="stats__value" data-live="stars:compact">{formatCompact(stats.totals.stars)}</dt>
         <dd class="stats__label">
           stars
           <span class="mono">across the org</span>
@@ -95,13 +95,14 @@ const predating = PROJECTS.filter((project) => {
         </dd>
       </div>
       <div class="stats__item">
-        <dt class="stats__value">{stats.totals.activeRepos}</dt>
+        <dt class="stats__value" data-live="active-repos">{stats.totals.activeRepos}</dt>
         <dd class="stats__label">
           active repos
           <span class="mono">pushed in 90 days</span>
         </dd>
       </div>
     </dl>
+    <p class="muted" data-live-status>Snapshot &middot; {formatDate(stats.generatedAt)}</p>
   </section>
 
   <section class="shell section">
@@ -138,11 +139,11 @@ const predating = PROJECTS.filter((project) => {
           </li>
           <li>
             <span class="mono">Active repos</span>
-            <span>{stats.totals.activeRepos} pushed to in the last 90 days</span>
+            <span><span data-live="active-repos">{stats.totals.activeRepos}</span> pushed to in the last 90 days</span>
           </li>
           <li>
             <span class="mono">Open issues</span>
-            <span>{formatNumber(stats.totals.openIssues)} across the organisation</span>
+            <span><span data-live="open-issues">{formatNumber(stats.totals.openIssues)}</span> across the organisation</span>
           </li>
           <li>
             <span class="mono">Languages</span>

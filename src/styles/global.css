@@ -682,3 +682,27 @@ a.card:hover,
 .muted {
   color: var(--muted);
 }
+
+/*
+ * Live-refresh marker. src/lib/live.ts sets data-state on these elements once it
+ * has replaced the build-time numbers; without it the snapshot text stands alone
+ * and no dot is drawn.
+ */
+[data-live-status][data-state]::before {
+  content: '';
+  display: inline-block;
+  inline-size: 0.4rem;
+  block-size: 0.4rem;
+  margin-inline-end: 0.4rem;
+  border-radius: 999px;
+  background: var(--muted-2);
+  vertical-align: 0.05em;
+}
+
+[data-live-status][data-state='live']::before {
+  background: var(--brand-orange);
+}
+
+p[data-live-status] {
+  margin-top: 0.75rem;
+}

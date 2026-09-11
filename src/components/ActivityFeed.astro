@@ -28,7 +28,7 @@ const columns = COLUMNS.map((column) => ({
 }));
 ---
 
-<div class="feed">
+<div class="feed" data-live="activity" data-live-limit={limit}>
   {
     columns.map((column) => (
       <section class="feed__column">

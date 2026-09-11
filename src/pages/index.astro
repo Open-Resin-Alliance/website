@@ -9,7 +9,8 @@ import { getCollection } from 'astro:content';
 import { FEATURED_PROJECTS, PLUGIN_PROJECTS, projectSlug } from '../data/projects';
 import { LINKS, SITE } from '../data/site';
 import { stats } from '../lib/stats';
-import { collectiveUrl, formatAmount, supporters } from '../lib/supporters';
+import { collectiveUrl, supporters } from '../lib/supporters';
+import { formatAmount } from '../lib/format';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -50,7 +51,7 @@ const latestPosts = posts.slice(0, 3);
           plugins that connect them to real hardware.
         </p>
       </div>
-      <a class="btn btn--ghost btn--sm" href="/projects">All {stats.totals.repos} repositories</a>
+      <a class="btn btn--ghost btn--sm" href="/projects">All <span data-live="repos">{stats.totals.repos}</span> repositories</a>
     </div>
 
     <div class="grid grid--2">
@@ -107,8 +108,8 @@ const latestPosts = posts.slice(0, 3);
         <h2>Open Collective backers</h2>
         <p class="muted">
           Fiscally hosted by {supporters.host?.name ?? 'Open Source Collective'}.{' '}
-          {formatAmount(supporters.totals.raised, supporters.totals.currency)} contributed by{' '}
-          {supporters.totals.backers} backers so far.
+          <span data-live="raised">{formatAmount(supporters.totals.raised, supporters.totals.currency)}</span> contributed by{' '}
+          <span data-live="backers">{supporters.totals.backers}</span> backers so far.
         </p>
         <ul class="backers">
           {

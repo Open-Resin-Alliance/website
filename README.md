@@ -1,8 +1,9 @@
 # openresin.org
 
-The website for the **Open Resin Alliance** — a mostly-static site built with
-[Astro](https://astro.build) that shows live GitHub statistics and renders its blog from
-Markdown files in this repository.
+The website for the **Open Resin Alliance** — a static site built with
+[Astro](https://astro.build) that renders its blog from Markdown files in this repository
+and its GitHub and Open Collective numbers from committed snapshots, which the browser then
+refreshes against the public APIs.
 
 Deployed to GitHub Pages at <https://openresin.org>.
 
@@ -62,7 +63,35 @@ Two workflows keep them fresh:
 | `.github/workflows/deploy.yml` | push to `main`, manual | refreshes both snapshots, builds, and deploys to GitHub Pages |
 
 `stats.yml` carries the instructions for wiring an organisation webhook to it at the
-bottom of the file.
+bottom of the file. So a commit is never required to get fresh numbers: any deploy
+refreshes them, and the cron does it once a day regardless.
+
+### Live refresh in the browser
+
+The snapshots are also the fallback. `src/lib/live.ts` is loaded on every page and, for the
+elements marked `data-live` (plus the `data-repo` scope attribute), replaces the built value
+with a freshly fetched one:
+
+| Target | Source | Cost |
+|---|---|---|
+| org totals: `repos`, `stars:compact`, `forks:compact`, `open-issues`, `active-repos` | `GET /orgs/Open-Resin-Alliance/repos` | one call |
+| per-repo `stars` / `forks` / `issues` / `pushed` / `updated` | the same payload | none |
+| the activity feed (`data-live="activity"`) | `GET /orgs/Open-Resin-Alliance/events` | one call |
+| supporters `backers` / `raised` | the collective GraphQL query | one call |
+
+Three requests per page, reused for five minutes in `sessionStorage`, no token — an
+unauthenticated browser gets 60 GitHub requests per hour per IP, which is why contributor
+totals, "projects with a tagged release" and per-release tags remain snapshot-only: each
+would cost a call per repository.
+
+The suffix after the colon picks the formatter (`compact` = `formatCompact`, otherwise
+`formatNumber`); every formatter is imported from `src/lib/format.ts`, so a refreshed value
+is formatted exactly like the built one. If a page carries live targets and the refresh
+fails — offline, blocked, rate limited, API down — nothing is written, no error is shown,
+and the elements marked `data-live-status` keep reading `Snapshot · 11 Sept 2026`. When it
+succeeds they read `Live · updated just now` (or `Partly live` if some sources answered).
+The event-to-entry mapping is shared with the build in `src/lib/activity.js`, so a
+client-rendered feed has the same shape as the one that was built.
 
 ## Local development
 
@@ -92,7 +121,9 @@ src/
   lib/
     stats.ts        typed reader for the GitHub snapshot
     supporters.ts   typed reader for the Open Collective snapshot
-    format.ts       date and number formatting
+    format.ts       date and number formatting, shared by the pages and the live refresh
+    live.ts         browser refresh of the built numbers; leaves them untouched on failure
+    activity.js     GitHub events → feed entries, shared by the build script and live.ts
   pages/            routes: /, /projects, /projects/[repo], /blog, /blog/[...id], /about, /contact, /404
   styles/global.css design tokens (including the glass set) and base styles
 scripts/

@@ -16,6 +16,7 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { mapActivity } from '../src/lib/activity.js';
 
 const ORG = 'Open-Resin-Alliance';
 const OUT = resolve(fileURLToPath(new URL('../src/data/github-stats.json', import.meta.url)));
@@ -160,56 +161,11 @@ async function collect() {
   }
   const contributorTop = [...contributors.values()].sort((a, b) => b.contributions - a.contributions);
 
-  // Org activity feed — the closest thing GitHub gives us to a webhook stream.
+  // Org activity feed — the closest thing GitHub gives us to a webhook stream. The
+  // mapping lives in src/lib/activity.js because the browser refresh re-renders the
+  // same feed from a live event list.
   const events = await apiOptional(`/orgs/${ORG}/events?per_page=100`, []);
-  const activity = events
-    .map((event) => {
-      const repo = event.repo?.name?.split('/')[1] ?? null;
-      const date = iso(event.created_at);
-      const base = { repo, date, actor: event.actor?.login ?? null, avatar: event.actor?.avatar_url ?? null };
-      switch (event.type) {
-        case 'ReleaseEvent':
-          return { ...base, kind: 'release', title: `released ${event.payload?.release?.tag_name ?? ''}`.trim(), url: event.payload?.release?.html_url ?? null };
-        case 'PushEvent': {
-          const branch = String(event.payload?.ref ?? '').replace(/^refs\/heads\//, '');
-          const count = event.payload?.size ?? event.payload?.commits?.length ?? 0;
-          const detail = count > 0 ? `${count} commit${count === 1 ? '' : 's'}` : 'commits';
-          return {
-            ...base,
-            kind: 'push',
-            title: branch ? `pushed ${detail} to ${branch}` : `pushed ${detail}`,
-            url: `https://github.com/${event.repo?.name}`,
-          };
-        }
-        case 'CreateEvent': {
-          const ref = event.payload?.ref ?? event.payload?.ref_type ?? 'reference';
-          return { ...base, kind: 'create', title: `created ${ref}`, url: `https://github.com/${event.repo?.name}` };
-        }
-        case 'PullRequestEvent':
-          return { ...base, kind: 'pull_request', title: `${event.payload?.action ?? 'updated'} pull request #${event.payload?.number ?? ''}`.trim(), url: event.payload?.pull_request?.html_url ?? null };
-        case 'IssuesEvent':
-          return { ...base, kind: 'issue', title: `${event.payload?.action ?? 'updated'} issue #${event.payload?.issue?.number ?? ''}`.trim(), url: event.payload?.issue?.html_url ?? null };
-        case 'PublicEvent':
-          return { ...base, kind: 'public', title: 'made the repository public', url: `https://github.com/${event.repo?.name}` };
-        default:
-          return null;
-      }
-    })
-    .filter((entry) => entry && entry.date)
-    .sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
-    .slice(0, 40)
-    .reduce((feed, entry) => {
-      const previous = feed.at(-1);
-      const sameRepoPush =
-        previous && previous.kind === 'push' && entry.kind === 'push' && previous.repo === entry.repo;
-      if (sameRepoPush) {
-        previous.burst = (previous.burst ?? 1) + 1;
-        return feed;
-      }
-      feed.push(entry);
-      return feed;
-    }, [])
-    .slice(0, 24);
+  const activity = mapActivity(events);
 
   const languages = {};
   for (const repo of own) {

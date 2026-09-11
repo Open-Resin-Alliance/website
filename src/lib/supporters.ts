@@ -53,17 +53,3 @@ export const supporters = snapshot as unknown as SupportersSnapshot;
 
 /** Collective URL, with a hardcoded fallback for a snapshot missing the field. */
 export const collectiveUrl = supporters.collective?.url ?? 'https://opencollective.com/openresinalliance';
-
-export function formatAmount(value: number, currency: string): string {
-  try {
-    // en-US renders USD as "$565" rather than the "US$565" that en-GB gives;
-    // currency style is more conventional than it is locale-correct here.
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency,
-      maximumFractionDigits: 0,
-    }).format(value);
-  } catch {
-    return `${value} ${currency}`;
-  }
-}

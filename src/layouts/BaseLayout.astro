@@ -158,6 +158,11 @@ const graph = [
           .forEach((block) => block.setAttribute('data-theme', theme));
       });
     </script>
+    <!-- Live refresh of the build-time snapshot. src/lib/live.ts leaves the built
+         numbers in place whenever the APIs cannot be reached. -->
+    <script>
+      import '../lib/live';
+    </script>
     <slot name="scripts" />
   </body>
 </html>

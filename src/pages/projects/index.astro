@@ -40,23 +40,23 @@ const structuredData = [
     <dl class="metrics">
       <div class="metrics__item">
         <dt>Repositories</dt>
-        <dd>{formatNumber(stats.totals.repos)}</dd>
+        <dd data-live="repos">{formatNumber(stats.totals.repos)}</dd>
       </div>
       <div class="metrics__item">
         <dt>Stars</dt>
-        <dd>{formatCompact(stats.totals.stars)}</dd>
+        <dd data-live="stars:compact">{formatCompact(stats.totals.stars)}</dd>
       </div>
       <div class="metrics__item">
         <dt>Forks</dt>
-        <dd>{formatCompact(stats.totals.forks)}</dd>
+        <dd data-live="forks:compact">{formatCompact(stats.totals.forks)}</dd>
       </div>
       <div class="metrics__item">
         <dt>Open issues</dt>
-        <dd>{formatCompact(stats.totals.openIssues)}</dd>
+        <dd data-live="open-issues:compact">{formatCompact(stats.totals.openIssues)}</dd>
       </div>
       <div class="metrics__item">
         <dt>Active in 90 days</dt>
-        <dd>{stats.totals.activeRepos}</dd>
+        <dd data-live="active-repos">{stats.totals.activeRepos}</dd>
       </div>
       <div class="metrics__item">
         <dt>Last push</dt>
@@ -122,7 +122,8 @@ const structuredData = [
         }
       </ul>
       <p class="muted languages__note">
-        Counts repos by GitHub's reported primary language. Snapshot generated {formatDate(stats.generatedAt)}.
+        Counts repos by GitHub's reported primary language.
+        <span data-live-status>Snapshot &middot; {formatDate(stats.generatedAt)}</span>.
       </p>
     </div>
   </section>

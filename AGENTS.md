@@ -33,8 +33,15 @@ There is no test suite. `npm run check` plus a real build is the gate.
   script, `src/data/projects.ts` or the pipeline instead.
 - **`Project.repo` is a join key.** It must match the GitHub repository name exactly;
   a typo silently drops the live stats for that project with no error.
-- **Pages read the snapshots only.** Do not add `fetch()` calls to pages or components.
-  All network access belongs in `scripts/`.
+- **Pages render snapshots; the browser may refresh them.** Every page is built from
+  `src/data/*.json` and has to be correct with JavaScript disabled — that rendering is the
+  fallback, not a leftover. The one place allowed to touch the network is `src/lib/live.ts`,
+  which replaces the values marked with `data-live` (and `data-repo` scope) and leaves them
+  exactly as built on any failure: offline, rate limited, blocked, API down. Do not add
+  `fetch()` to a page, a component or any other module. Wiring a new value live means the
+  attribute in the markup, the key in `textFor()` in `live.ts`, the formatter the page
+  already uses (imported from `src/lib/format.ts`), and a `data-live-status` element on the
+  page. `data-live` keys the client does not know are ignored, so markup can land first.
 - **No nested anchors.** A card that is itself an `<a>` must not contain another `<a>` —
   the HTML parser splits them and the DOM stops matching the source. Pass
   `link={false}` to `ReleaseChip` inside `ProjectCard`; that prop exists for this reason.
@@ -74,5 +81,11 @@ A change is not finished until:
    ```
 
 5. No `a > a` nesting anywhere in the built HTML.
+6. For `src/lib/live.ts` or any `data-live` markup: load the built site, confirm the numbers
+   actually change when the APIs answer (intercept a response and doctor it — a value that
+   happens to be unchanged proves nothing), then block `api.github.com` and
+   `api.opencollective.com` and confirm every rendered value is byte-identical to `dist/`,
+   the status still reads `Snapshot · …`, and no console error comes from the page itself.
+   A blocked fetch logs a network failure in the console; that is the browser, not the module.
 
 Do not run a formatter or linter over the repository — there is none configured.
