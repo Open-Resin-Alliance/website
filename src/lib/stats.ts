@@ -4,6 +4,10 @@
  * The site is fully static: every page reads this snapshot at build time, and
  * the snapshot is refreshed by .github/workflows/stats.yml (cron, webhook
  * dispatch, or manual run). Nothing here performs a network request.
+ *
+ * Per-repo counts come from one authenticated GraphQL query in that script, so
+ * `openIssues` excludes pull requests, `openPulls` is the separate PR count and
+ * `commits` is the default-branch commit count (null when unknown).
  */
 
 import snapshot from '../data/github-stats.json';
@@ -28,7 +32,12 @@ export interface RepoStats {
   license: string | null;
   stars: number;
   forks: number;
+  /** Open issues, excluding pull requests (GraphQL issues totalCount). */
   openIssues: number;
+  /** Open pull requests (GraphQL pullRequests totalCount). */
+  openPulls: number;
+  /** Commits on the default branch; null when unknown or the branch is empty. */
+  commits: number | null;
   isFork: boolean;
   archived: boolean;
   topics: string[];
@@ -79,7 +88,10 @@ export interface StatsSnapshot {
     repos: number;
     forks: number;
     stars: number;
+    /** Sum of issues-only counts; see RepoStats.openIssues. */
     openIssues: number;
+    openPulls: number;
+    commits: number;
     contributors: number;
     languages: Record<string, number>;
     activeRepos: number;

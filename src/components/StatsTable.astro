@@ -1,0 +1,248 @@
+---
+import { PROJECTS, projectPath } from '../data/projects';
+import { repoStats, stats } from '../lib/stats';
+import { formatDate, formatNumber } from '../lib/format';
+
+/**
+ * One row per published project, counted from the GitHub snapshot.
+ *
+ * A project the snapshot does not know about is skipped rather than shown as a
+ * row of zeros: we have no counts for it, and zeros would read as a real answer.
+ * A single count may also be missing — `commits` is null until the fetcher has
+ * walked the default branch — which renders as an em dash.
+ */
+type Count = number | null;
+
+interface Row {
+  name: string;
+  href: string;
+  openIssues: Count;
+  openPulls: Count;
+  commits: Count;
+}
+
+type CountKey = 'openIssues' | 'openPulls' | 'commits';
+
+/** A value is a usable count only when it is a real, finite number. */
+const asCount = (value: number | null | undefined): Count =>
+  typeof value === 'number' && Number.isFinite(value) ? value : null;
+
+const rows = PROJECTS.flatMap((project): Row[] => {
+  const snapshot = repoStats(project.repo);
+  if (!snapshot) return [];
+  return [
+    {
+      name: project.name,
+      href: projectPath(project),
+      openIssues: asCount(snapshot.openIssues),
+      openPulls: asCount(snapshot.openPulls),
+      commits: asCount(snapshot.commits),
+    },
+  ];
+});
+
+/**
+ * Commits are the only column with a magnitude worth ordering by, so they sort
+ * the table. A repo whose commit count is unknown sinks below every known
+ * count; names order the ties so the table is stable across builds.
+ */
+rows.sort((a, b) => (b.commits ?? -1) - (a.commits ?? -1) || a.name.localeCompare(b.name));
+
+/**
+ * Column totals over the rows shown. A value the snapshot does not carry is not
+ * counted as zero: a column with nothing measured stays blank rather than
+ * reporting a total part of which is invented.
+ */
+const total = (key: CountKey): Count => {
+  const values = rows.map((row) => row[key]).filter((value): value is number => value !== null);
+  return values.length > 0 ? values.reduce((sum, value) => sum + value, 0) : null;
+};
+
+/**
+ * The three numeric columns, in reading order. `PRs` is the column dropped when
+ * the copy is too narrow for four (see the 480px media query). The issues and
+ * commits titles carry what the headers cannot: issues exclude pull requests
+ * despite the PRs column next to them, and commits count the default branch.
+ */
+const COLUMNS: { key: CountKey; label: string; title: string | null; narrowHidden?: boolean }[] = [
+  { key: 'openIssues', label: 'Issues', title: 'Open issues, excluding pull requests' },
+  { key: 'openPulls', label: 'PRs', title: null, narrowHidden: true },
+  { key: 'commits', label: 'Commits', title: 'Total commits on the default branch' },
+];
+
+const cellTitle = (value: Count, title: string | null) =>
+  value === null ? 'Not reported in this snapshot' : title ?? undefined;
+
+const display = (value: Count) => (value === null ? '—' : formatNumber(value));
+---
+
+<table class="stats__table">
+  <caption class="visually-hidden">
+    Open issues, open pull requests and total commits for every project we publish.
+  </caption>
+
+  <thead>
+    <tr>
+      <th scope="col">Project</th>
+      {
+        COLUMNS.map((column) => (
+          <th scope="col" class:list={[{ stats__pulls: column.narrowHidden }]}>
+            {column.label}
+          </th>
+        ))
+      }
+    </tr>
+  </thead>
+
+  <tbody>
+    {
+      rows.map((row) => (
+        <tr>
+          <th scope="row">
+            <a href={row.href}>{row.name}</a>
+          </th>
+          {COLUMNS.map((column) => (
+            <td
+              class:list={['mono', { stats__pulls: column.narrowHidden }]}
+              title={cellTitle(row[column.key], column.title)}
+            >
+              {display(row[column.key])}
+            </td>
+          ))}
+        </tr>
+      ))
+    }
+  </tbody>
+
+  <tfoot>
+    <tr>
+      <th scope="row">All projects</th>
+      {
+        COLUMNS.map((column) => (
+          <td class:list={['mono', { stats__pulls: column.narrowHidden }]}>{display(total(column.key))}</td>
+        ))
+      }
+    </tr>
+  </tfoot>
+</table>
+
+<p class="stats__note muted">
+  Snapshot &middot; {formatDate(stats.generatedAt)} &middot; refreshed nightly and on every deploy
+</p>
+
+<style>
+  /* Auto layout with no fixed widths: the project column takes what the counts
+     leave, so the table always fits the shell instead of scrolling sideways. */
+  .stats__table {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  .stats__table th,
+  .stats__table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: baseline;
+    /* Right by default: every column but the row label is a number, and a
+       header sits over the figures it names. */
+    text-align: right;
+  }
+
+  /* Tabular figures so the columns line up, and no wrapping so a number never
+     breaks across lines. */
+  .stats__table td {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* The row label and the first header read leftward. */
+  .stats__table thead th:first-child,
+  .stats__table tbody th,
+  .stats__table tfoot th {
+    text-align: left;
+  }
+
+  .stats__table thead th {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    /* --muted, not --muted-2: this is the label a reader uses to tell the columns
+       apart, and it matches the .eyebrow micro-label elsewhere on the site. */
+    color: var(--muted);
+  }
+
+  .stats__table tbody th,
+  .stats__table tfoot th {
+    font-size: 0.9375rem;
+  }
+
+  .stats__table tbody th {
+    font-weight: 570;
+  }
+
+  .stats__table tbody th a {
+    transition: color 0.15s var(--ease);
+  }
+
+  .stats__table tbody th a:hover,
+  .stats__table tbody th a:focus-visible {
+    color: var(--brand-violet-deep);
+  }
+
+  :global(:root[data-theme='dark']) .stats__table tbody th a:hover,
+  :global(:root[data-theme='dark']) .stats__table tbody th a:focus-visible {
+    color: var(--brand-orange);
+  }
+
+  /* Same sunken wash the timeline entries use. */
+  .stats__table tbody tr {
+    transition: background-color 0.15s var(--ease);
+  }
+
+  .stats__table tbody tr:hover {
+    background: var(--bg-sunken);
+  }
+
+  /* Hairlines separate rows; the last one hands the eye to the totals rule. */
+  .stats__table tbody tr:last-child th,
+  .stats__table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Totals: a heavier rule and full-strength ink set them apart from the rows. */
+  .stats__table tfoot th,
+  .stats__table tfoot td {
+    border-top: 2px solid var(--border-strong);
+    border-bottom: none;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .stats__note {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+  }
+
+  /* Four columns cannot fit the content box of a phone: the header labels alone
+     need more width than 320px leaves after the gutter, and the table must not
+     scroll. PRs is the column to drop — its header is already the abbreviation
+     and its counts are the smallest of the three, so issues and commits stay. */
+  @media (max-width: 480px) {
+    .stats__pulls {
+      display: none;
+    }
+
+    .stats__table th,
+    .stats__table td {
+      padding-inline: 0.5rem;
+    }
+
+    /* The uppercase headers are the widest thing in a numeric column; tighter
+       tracking gives the counts room without touching the figures. */
+    .stats__table thead th {
+      letter-spacing: 0.06em;
+    }
+  }
+</style>

@@ -10,7 +10,11 @@
  *   node scripts/fetch-github-stats.mjs           # refresh the snapshot
  *   node scripts/fetch-github-stats.mjs --offline # validate what is on disk
  *
- * GITHUB_TOKEN raises the rate limit from 60 to 5000 requests/hour.
+ * GITHUB_TOKEN raises the rate limit from 60 to 5000 requests/hour and enables
+ * one org-wide GraphQL query that splits open issues from open pull requests and
+ * counts commits on each default branch. Without it those three numbers are
+ * carried from the existing snapshot, or degraded to REST's open_issues_count
+ * (which counts pull requests as issues) — either way a warning is recorded.
  */
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
@@ -21,6 +25,26 @@ import { mapActivity } from '../src/lib/activity.js';
 const ORG = 'Open-Resin-Alliance';
 const OUT = resolve(fileURLToPath(new URL('../src/data/github-stats.json', import.meta.url)));
 const API = 'https://api.github.com';
+const GRAPHQL = 'https://api.github.com/graphql';
+
+/**
+ * Issues excluding pull requests, open pull requests and default-branch commits
+ * for every public non-fork repo in the org, in a single request. REST's
+ * `open_issues_count` counts pull requests as issues, so the separate columns in
+ * the stats table have to come from here.
+ */
+const REPO_COUNTS_QUERY = `query ($login: String!) {
+  organization(login: $login) {
+    repositories(first: 100, isFork: false, privacy: PUBLIC) {
+      nodes {
+        name
+        issues(states: OPEN) { totalCount }
+        pullRequests(states: OPEN) { totalCount }
+        defaultBranchRef { target { ... on Commit { history { totalCount } } } }
+      }
+    }
+  }
+}`;
 
 /** Repos we count contributors for; keeps the API budget small and stable. */
 const CONTRIBUTOR_REPOS = ['DragonFruit', 'Orion', 'Odyssey', 'VoxelShift'];
@@ -60,6 +84,87 @@ async function apiOptional(path, fallback, { quiet404 = false } = {}) {
 
 const iso = (value) => (value ? String(value) : null);
 
+/**
+ * One authenticated GraphQL request returning a name-keyed map of repo count
+ * nodes. Returns null (after recording why) when the token is absent or the call
+ * fails; callers then degrade per repo.
+ */
+async function fetchRepoCounts() {
+  if (!process.env.GITHUB_TOKEN) return null;
+
+  try {
+    const res = await fetch(GRAPHQL, {
+      method: 'POST',
+      headers: { ...headers, 'content-type': 'application/json' },
+      body: JSON.stringify({ query: REPO_COUNTS_QUERY, variables: { login: ORG } }),
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => '');
+      throw new Error(`${res.status} ${res.statusText}${body ? ` — ${body.slice(0, 200)}` : ''}`);
+    }
+    const payload = await res.json();
+    if (payload.errors?.length) throw new Error(payload.errors.map((error) => error.message).join('; '));
+    const nodes = payload.data?.organization?.repositories?.nodes;
+    if (!Array.isArray(nodes)) throw new Error('response carried no repository nodes');
+    return new Map(nodes.map((node) => [node.name, node]));
+  } catch (error) {
+    warnings.push(`GraphQL issue/PR/commit counts failed: ${error.message ?? error}`);
+    return null;
+  }
+}
+
+/**
+ * Resolve the three per-repo counts in three falling steps per repo: the
+ * org-wide GraphQL query, then the committed snapshot, then REST's
+ * `open_issues_count` (issues and pull requests combined). Every degraded step is
+ * recorded in `warnings` so a stale number never reaches the site silently.
+ */
+async function collectRepoCounts(previous, own) {
+  const graphql = await fetchRepoCounts();
+  if (!graphql && !process.env.GITHUB_TOKEN) {
+    warnings.push(
+      'GITHUB_TOKEN is not set — issue/PR/commit counts come from the existing snapshot, or REST open_issues_count when it has none',
+    );
+  }
+
+  let carried = 0;
+  const counts = new Map();
+
+  for (const repo of own) {
+    const node = graphql?.get(repo.name);
+    if (node) {
+      counts.set(repo.name, {
+        openIssues: node.issues?.totalCount ?? 0,
+        openPulls: node.pullRequests?.totalCount ?? 0,
+        commits: node.defaultBranchRef?.target?.history?.totalCount ?? null,
+      });
+      continue;
+    }
+
+    const before = previous?.repos?.[repo.name];
+    if (before && typeof before.openPulls === 'number') {
+      counts.set(repo.name, {
+        openIssues: before.openIssues ?? repo.openIssues,
+        openPulls: before.openPulls,
+        commits: before.commits ?? null,
+      });
+      carried += 1;
+      continue;
+    }
+
+    counts.set(repo.name, { openIssues: repo.openIssues, openPulls: 0, commits: null });
+    warnings.push(
+      `no GraphQL or snapshot counts for ${repo.name} — openIssues fell back to REST open_issues_count (${repo.openIssues}, includes pull requests), openPulls 0, commits null`,
+    );
+  }
+
+  if (carried) {
+    warnings.push(`carried issue/PR/commit counts from the existing snapshot for ${carried} repo(s) without GraphQL coverage`);
+  }
+
+  return counts;
+}
+
 function normaliseRepo(repo) {
   return {
     name: repo.name,
@@ -72,6 +177,10 @@ function normaliseRepo(repo) {
     stars: repo.stargazers_count ?? 0,
     forks: repo.forks_count ?? 0,
     openIssues: repo.open_issues_count ?? 0,
+    // Replaced from GraphQL (or the snapshot) in collect(); the raw REST
+    // open_issues_count above counts pull requests as issues.
+    openPulls: 0,
+    commits: null,
     watchers: repo.subscribers_count ?? null,
     isFork: Boolean(repo.fork),
     isTemplate: Boolean(repo.is_template),
@@ -98,11 +207,19 @@ function normaliseRelease(repo, release) {
   };
 }
 
-async function collect() {
+async function collect(previous) {
   const org = await api(`/orgs/${ORG}`);
   const repos = await api(`/orgs/${ORG}/repos?per_page=100&sort=pushed&type=public`);
 
   const own = repos.filter((r) => !r.fork).map(normaliseRepo).sort((a, b) => a.name.localeCompare(b.name));
+
+  // One org-wide GraphQL call splits issues from pull requests and counts
+  // default-branch commits, instead of two REST calls per repo.
+  const repoCounts = await collectRepoCounts(previous, own);
+  for (const repo of own) {
+    const counts = repoCounts.get(repo.name);
+    if (counts) Object.assign(repo, counts);
+  }
 
   // Latest release per repo, in small concurrent batches to stay friendly.
   const releaseEntries = await Promise.all(
@@ -196,6 +313,8 @@ async function collect() {
       forks: own.reduce((sum, r) => sum + r.forks, 0),
       stars: own.reduce((sum, r) => sum + r.stars, 0),
       openIssues: own.reduce((sum, r) => sum + r.openIssues, 0),
+      openPulls: own.reduce((sum, r) => sum + r.openPulls, 0),
+      commits: own.reduce((sum, r) => sum + (r.commits ?? 0), 0),
       contributors: contributorTop.length,
       languages,
       activeRepos: own.filter((r) => r.pushedAt && Date.parse(r.pushedAt) > cutoff).length,
@@ -223,7 +342,7 @@ function printSummary(snapshot) {
   const { totals, org, activity } = snapshot;
   console.log(`snapshot generatedAt ${snapshot.generatedAt}`);
   console.log(`org      ${org.login} — ${totals.repos} repos, ${org.followers} followers`);
-  console.log(`totals   ${totals.stars} stars, ${totals.forks} forks, ${totals.openIssues} open issues, ${totals.contributors} contributors`);
+  console.log(`totals   ${totals.stars} stars, ${totals.forks} forks, ${totals.openIssues} open issues, ${totals.openPulls ?? 'n/a'} open PRs, ${totals.commits ?? 'n/a'} commits, ${totals.contributors} contributors`);
   console.log(`active   ${totals.activeRepos} repos pushed in the last 90 days`);
   console.log(`activity ${activity.length} events, latest ${activity[0]?.date ?? 'n/a'} (${activity[0]?.repo ?? 'n/a'})`);
   const stable = Object.values(snapshot.repos)
@@ -260,7 +379,7 @@ const previous = await readExisting();
 
 let snapshot;
 try {
-  snapshot = await collect();
+  snapshot = await collect(previous);
 } catch (error) {
   console.error(`stats refresh failed: ${error.message ?? error}`);
   if (previous) {

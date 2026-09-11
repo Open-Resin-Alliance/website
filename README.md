@@ -41,13 +41,18 @@ Two build-time pipelines write JSON snapshots that the pages read:
 
 | Script | Source | Output |
 |---|---|---|
-| `scripts/fetch-github-stats.mjs` | public GitHub API for the `Open-Resin-Alliance` org — repositories, releases, activity feed, contributors | `src/data/github-stats.json` |
+| `scripts/fetch-github-stats.mjs` | public GitHub API for the `Open-Resin-Alliance` org — repositories, releases, activity feed, contributors, and open issue / pull request / commit counts | `src/data/github-stats.json` |
 | `scripts/fetch-open-collective.mjs` | public Open Collective GraphQL API for `openresinalliance` — backers, amounts, recurring vs one-time, fiscal host | `src/data/supporters.json` |
 
 ```
 npm run stats           # refresh both snapshots (GITHUB_TOKEN raises the GitHub rate limit)
 npm run stats:offline   # print what is committed, no network
 ```
+
+The per-repository issue, pull request and commit counts come from one authenticated
+GraphQL query, so they need `GITHUB_TOKEN` (in CI it is the workflow's own token). Without
+it the script keeps the counts already in the snapshot and records a warning rather than
+writing zeros over them.
 
 Every page reads only those snapshots, so `astro build` never touches the network and a
 build is byte-for-byte reproducible. If a source is unreachable its script keeps the
@@ -74,15 +79,20 @@ with a freshly fetched one:
 
 | Target | Source | Cost |
 |---|---|---|
-| org totals: `repos`, `stars:compact`, `forks:compact`, `open-issues`, `active-repos` | `GET /orgs/Open-Resin-Alliance/repos` | one call |
-| per-repo `stars` / `forks` / `issues` / `pushed` / `updated` | the same payload | none |
-| the activity feed (`data-live="activity"`) | `GET /orgs/Open-Resin-Alliance/events` | one call |
+| org totals: `repos`, `stars:compact`, `forks:compact`, `active-repos` | `GET /orgs/Open-Resin-Alliance/repos` | one call |
+| per-repo `stars` / `forks` / `pushed` / `updated` | the same payload | none |
 | supporters `backers` / `raised` | the collective GraphQL query | one call |
 
-Three requests per page, reused for five minutes in `sessionStorage`, no token — an
-unauthenticated browser gets 60 GitHub requests per hour per IP, which is why contributor
-totals, "projects with a tagged release" and per-release tags remain snapshot-only: each
-would cost a call per repository.
+Two requests per page, reused for five minutes in `sessionStorage`, no token — an
+unauthenticated browser gets 60 GitHub requests per hour per IP, which is why everything
+that costs a call per repository stays snapshot-only: open issue, pull request and commit
+counts (they need GraphQL, which a browser cannot authenticate), contributor totals,
+"projects with a tagged release" and per-release tags.
+
+Issue counts are deliberately not a live target in either form. The snapshot records open
+issues *excluding* pull requests, while the REST field available to a browser
+(`open_issues_count`) includes them, so a refresh would quietly change what "issues" means
+— on the DragonFruit repository the two differ by nine.
 
 The suffix after the colon picks the formatter (`compact` = `formatCompact`, otherwise
 `formatNumber`); every formatter is imported from `src/lib/format.ts`, so a refreshed value
@@ -90,8 +100,12 @@ is formatted exactly like the built one. If a page carries live targets and the 
 fails — offline, blocked, rate limited, API down — nothing is written, no error is shown,
 and the elements marked `data-live-status` keep reading `Snapshot · 11 Sept 2026`. When it
 succeeds they read `Live · updated just now` (or `Partly live` if some sources answered).
-The event-to-entry mapping is shared with the build in `src/lib/activity.js`, so a
-client-rendered feed has the same shape as the one that was built.
+
+The org activity feed is still collected into `src/data/github-stats.json` (and its
+event-to-entry mapping lives in `src/lib/activity.js`, shared with the build script), but no
+page renders it: the home page shows the per-project stats table instead. Re-mounting it
+means restoring `src/components/ActivityFeed.astro` from git history and adding it back to
+a page.
 
 ## Local development
 
@@ -109,7 +123,7 @@ Node 22.12 or newer is required (see the `engines` field in `package.json`).
 
 ```
 src/
-  components/       header, footer, cards, activity feed, release chip, Discord icon
+  components/       header, footer, cards, stats table, release chip, Discord icon
   content/blog/     blog posts — one Markdown file per post
   content.config.ts blog collection schema
   data/
@@ -123,7 +137,7 @@ src/
     supporters.ts   typed reader for the Open Collective snapshot
     format.ts       date and number formatting, shared by the pages and the live refresh
     live.ts         browser refresh of the built numbers; leaves them untouched on failure
-    activity.js     GitHub events → feed entries, shared by the build script and live.ts
+    activity.js     GitHub events → activity entries for the build script
   pages/            routes: /, /projects, /projects/[repo], /blog, /blog/[...id], /about, /contact, /404
   styles/global.css design tokens (including the glass set) and base styles
 scripts/

@@ -55,7 +55,7 @@ const headline = live?.latestStableRelease ?? live?.latestRelease ?? null;
     {
       live && live.openIssues > 0 && (
         <span class="tag mono tag--tinted" style={`--tag:${ISSUES_COLOR}`}>
-          <span data-live="issues:compact">{formatCompact(live.openIssues)}</span> issues
+          <span>{formatCompact(live.openIssues)}</span> issues
         </span>
       )
     }

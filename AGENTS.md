@@ -42,6 +42,10 @@ There is no test suite. `npm run check` plus a real build is the gate.
   attribute in the markup, the key in `textFor()` in `live.ts`, the formatter the page
   already uses (imported from `src/lib/format.ts`), and a `data-live-status` element on the
   page. `data-live` keys the client does not know are ignored, so markup can land first.
+  Counts that need a per-repository call — open issues, pull requests, commits — are
+  deliberately snapshot-only: the snapshot's `openIssues` *excludes* pull requests, while the
+  REST field a browser can read includes them, so a live refresh would silently change what
+  the column means rather than update it.
 - **No nested anchors.** A card that is itself an `<a>` must not contain another `<a>` —
   the HTML parser splits them and the DOM stops matching the source. Pass
   `link={false}` to `ReleaseChip` inside `ProjectCard`; that prop exists for this reason.

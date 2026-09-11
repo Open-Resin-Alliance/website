@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PostCard from '../components/PostCard.astro';
-import ActivityFeed from '../components/ActivityFeed.astro';
+import StatsTable from '../components/StatsTable.astro';
 
 import DiscordIcon from '../components/DiscordIcon.astro';
 import { getCollection } from 'astro:content';
@@ -75,16 +75,17 @@ const latestPosts = posts.slice(0, 3);
   <section class="shell section">
     <div class="section-head">
       <div class="section-head__text">
-        <p class="eyebrow">Recent activity</p>
+        <p class="eyebrow">By the numbers</p>
         <h2>Built in the open</h2>
         <p class="lede">
-          Issues, pull requests and commits straight from the organisation&apos;s public GitHub activity — releases are
-          listed on each project page.
+          Open issues, pull requests and commits for every project we publish, read from the GitHub API. Counts are
+          refreshed on every deploy and nightly; the stars and push dates on the cards above refresh live in your
+          browser.
         </p>
       </div>
     </div>
 
-    <ActivityFeed entries={stats.activity} limit={5} />
+    <StatsTable />
   </section>
 
   <section class="shell section">

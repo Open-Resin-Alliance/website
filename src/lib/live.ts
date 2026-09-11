@@ -7,16 +7,14 @@
  * improves on those numbers; it never blanks one out or shows an error, so the
  * page a visitor gets is the page that was built, optionally with fresher data.
  *
- * Two GitHub calls and one Open Collective call per page, no token: an
+ * One GitHub call and one Open Collective call per page, no token: an
  * unauthenticated browser gets 60 GitHub requests per hour per IP, so anything
- * that would cost a call per repository — contributor totals, "projects with a
- * tagged release", per-release tags — stays snapshot-only, and every result is
- * reused for five minutes across pages.
+ * that costs a call per repository stays snapshot-only — open issue, pull
+ * request and commit counts, contributor totals, per-release tags — and every
+ * result is reused for five minutes across pages.
  */
 import { COLLECTIVE_SLUG, ORG } from '../data/site';
-import { mapActivity } from './activity.js';
 import { formatAmount, formatCompact, formatDate, formatNumber, formatRelative } from './format';
-import type { ActivityEntry } from './stats';
 
 const GITHUB_API = 'https://api.github.com';
 const COLLECTIVE_API = 'https://api.opencollective.com/graphql/v2';
@@ -24,19 +22,10 @@ const CACHE_KEY = 'ora.live.v1';
 const CACHE_TTL_MS = 5 * 60 * 1000;
 const ACTIVE_WINDOW_MS = 90 * 86_400_000;
 const JUST_NOW_MS = 90 * 1000;
-const DEFAULT_PER_COLUMN = 5;
-
-/** Feed columns, mirroring the markup in ActivityFeed.astro. */
-const COLUMNS: Array<{ kind: ActivityEntry['kind']; label: string }> = [
-  { kind: 'issue', label: 'Issues' },
-  { kind: 'pull_request', label: 'Pull requests' },
-  { kind: 'push', label: 'Commits' },
-];
 
 interface LiveRepo {
   stars: number;
   forks: number;
-  issues: number;
   pushedAt: string | null;
 }
 
@@ -44,7 +33,6 @@ interface LiveTotals {
   repos: number;
   stars: number;
   forks: number;
-  openIssues: number;
   activeRepos: number;
 }
 
@@ -62,7 +50,6 @@ interface LiveSupporters {
 interface Sources {
   stats?: LiveStats;
   supporters?: LiveSupporters;
-  activity?: ActivityEntry[];
 }
 
 /** One fetched payload with the moment it arrived. */
@@ -73,7 +60,6 @@ interface Cached<T> {
 
 interface Cache {
   stats?: Cached<LiveStats>;
-  activity?: Cached<ActivityEntry[]>;
   supporters?: Cached<LiveSupporters>;
 }
 
@@ -82,7 +68,6 @@ interface GitHubRepo {
   fork: boolean;
   stargazers_count: number;
   forks_count: number;
-  open_issues_count: number;
   pushed_at: string | null;
 }
 
@@ -129,7 +114,6 @@ async function loadStats(): Promise<LiveStats> {
     byName[repo.name] = {
       stars: repo.stargazers_count ?? 0,
       forks: repo.forks_count ?? 0,
-      issues: repo.open_issues_count ?? 0,
       pushedAt: repo.pushed_at ?? null,
     };
   }
@@ -140,15 +124,9 @@ async function loadStats(): Promise<LiveStats> {
       repos: own.length,
       stars: own.reduce((sum, repo) => sum + (repo.stargazers_count ?? 0), 0),
       forks: own.reduce((sum, repo) => sum + (repo.forks_count ?? 0), 0),
-      openIssues: own.reduce((sum, repo) => sum + (repo.open_issues_count ?? 0), 0),
       activeRepos: own.filter((repo) => repo.pushed_at && Date.parse(repo.pushed_at) > cutoff).length,
     },
   };
-}
-
-async function loadActivity(): Promise<ActivityEntry[]> {
-  const events = await getJson<unknown[]>(`${GITHUB_API}/orgs/${ORG}/events?per_page=100`);
-  return mapActivity(events);
 }
 
 /** Same arithmetic as scripts/fetch-open-collective.mjs: backers pay, incognito never counts. */
@@ -190,8 +168,6 @@ function textFor(
         return { text: numeric(repo.stars) };
       case 'forks':
         return { text: numeric(repo.forks) };
-      case 'issues':
-        return { text: numeric(repo.issues) };
       case 'pushed':
         return repo.pushedAt ? { text: formatDate(repo.pushedAt), stamp: iso(repo.pushedAt) } : null;
       case 'updated':
@@ -209,8 +185,6 @@ function textFor(
       return totals ? { text: numeric(totals.stars) } : null;
     case 'forks':
       return totals ? { text: numeric(totals.forks) } : null;
-    case 'open-issues':
-      return totals ? { text: numeric(totals.openIssues) } : null;
     case 'active-repos':
       return totals ? { text: numeric(totals.activeRepos) } : null;
     case 'backers':
@@ -224,70 +198,6 @@ function textFor(
   }
 }
 
-function element<K extends keyof HTMLElementTagNameMap>(
-  tag: K,
-  className: string,
-  text?: string,
-): HTMLElementTagNameMap[K] {
-  const node = document.createElement(tag);
-  node.className = className;
-  if (text !== undefined) node.textContent = text;
-  return node;
-}
-
-/** One feed row, matching the markup ActivityFeed.astro renders at build time. */
-function activityRow(entry: ActivityEntry): HTMLLIElement {
-  const item = element('li', 'feed__item');
-  const line = element('p', 'feed__line');
-
-  if (entry.url) {
-    const link = element('a', '');
-    link.href = entry.url;
-    link.rel = 'noopener noreferrer';
-    link.target = '_blank';
-    link.append(element('strong', '', entry.repo ?? ''));
-    line.append(link);
-  } else {
-    line.append(element('strong', '', entry.repo ?? ''));
-  }
-
-  line.append(document.createTextNode(' '), element('span', 'feed__title', entry.title));
-  if (entry.burst && entry.burst > 1) line.append(element('span', 'feed__burst mono', `×${entry.burst}`));
-
-  const meta = element('p', 'feed__meta mono');
-  if (entry.actor) meta.append(document.createTextNode(`${entry.actor} · `));
-  const time = element('time', '');
-  time.dateTime = iso(entry.date);
-  time.textContent = formatRelative(entry.date);
-  meta.append(time);
-
-  item.append(line, meta);
-  return item;
-}
-
-function renderActivity(container: HTMLElement, entries: ActivityEntry[], perColumn: number) {
-  const columns = COLUMNS.map(({ kind, label }) => {
-    const column = element('section', 'feed__column');
-    const heading = element('h3', 'feed__heading');
-    const dot = element('span', `feed__dot feed__dot--${kind}`);
-    dot.setAttribute('aria-hidden', 'true');
-    heading.append(dot, document.createTextNode(label));
-    column.append(heading);
-
-    const items = entries.filter((entry) => entry.kind === kind).slice(0, perColumn);
-    if (items.length === 0) {
-      column.append(element('p', 'feed__empty mono', 'Nothing recent'));
-      return column;
-    }
-
-    const list = element('ul', 'feed__list');
-    for (const entry of items) list.append(activityRow(entry));
-    column.append(list);
-    return column;
-  });
-
-  container.replaceChildren(...columns);
-}
 
 function markStatus(state: 'live' | 'partial' | 'snapshot', at: number) {
   if (state === 'snapshot') return;
@@ -322,8 +232,7 @@ async function run() {
   if (navigator.onLine === false) return;
 
   const keyOf = (node: HTMLElement) => (node.dataset.live ?? '').split(':')[0];
-  const activityNode = nodes.find((node) => keyOf(node) === 'activity') ?? null;
-  const wantsStats = nodes.some((node) => !['activity', 'backers', 'raised'].includes(keyOf(node)));
+  const wantsStats = nodes.some((node) => !['backers', 'raised'].includes(keyOf(node)));
   const wantsSupporters = nodes.some((node) => ['backers', 'raised'].includes(keyOf(node)));
 
   const cache = readCache();
@@ -372,18 +281,6 @@ async function run() {
       },
     );
   }
-  if (activityNode) {
-    load(
-      cache.activity,
-      loadActivity,
-      (value) => {
-        sources.activity = value;
-      },
-      (entry) => {
-        cache.activity = entry;
-      },
-    );
-  }
   if (wantsSupporters) {
     load(
       cache.supporters,
@@ -396,7 +293,6 @@ async function run() {
       },
     );
   }
-
   if (tasks.length > 0) {
     await Promise.all(tasks);
     writeCache(cache);
@@ -404,17 +300,11 @@ async function run() {
 
   for (const node of nodes) {
     const [key, format] = (node.dataset.live ?? '').split(':');
-    if (key === 'activity') continue;
     const scope = node.closest<HTMLElement>('[data-repo]')?.dataset.repo ?? null;
     const resolved = textFor(key, format, scope, sources);
     if (!resolved) continue;
     node.textContent = resolved.text;
     if (resolved.stamp && node instanceof HTMLTimeElement) node.dateTime = resolved.stamp;
-  }
-
-  if (activityNode && sources.activity) {
-    const perColumn = Number(activityNode.dataset.liveLimit) || DEFAULT_PER_COLUMN;
-    renderActivity(activityNode, sources.activity, perColumn);
   }
 
   const state = failed === 0 && applied > 0 ? 'live' : applied > 0 ? 'partial' : 'snapshot';

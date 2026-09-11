@@ -29,7 +29,7 @@ const facts: { label: string; value: string; live?: string }[] = [
   { label: 'Licence', value: project.license ?? 'Not declared' },
   { label: 'Stars', value: live ? formatCompact(live.stars) : '—', live: 'stars:compact' },
   { label: 'Forks', value: live ? formatCompact(live.forks) : '—', live: 'forks:compact' },
-  { label: 'Open issues', value: live ? formatCompact(live.openIssues) : '—', live: 'issues:compact' },
+  { label: 'Open issues', value: live ? formatCompact(live.openIssues) : '—' },
   { label: 'Created', value: live ? formatDate(live.createdAt) : '—' },
   { label: 'Last push', value: live ? formatDate(live.pushedAt) : '—', live: 'pushed' },
   { label: 'Default branch', value: live?.defaultBranch ?? '—' },
