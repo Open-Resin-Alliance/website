@@ -164,22 +164,26 @@ branch-based build and no Jekyll processing (`public/.nojekyll` is kept anyway s
 underscore-prefixed `_astro/` directory survives if that ever changes).
 
 The build targets the apex domain: `site: 'https://openresin.org'` with the default
-`base: '/'`. That means the artifact must be served from the root of a domain. Until the
-repository's Pages custom domain is set to `openresin.org`, the project URL
-(`https://open-resin-alliance.github.io/website/`) serves the same HTML but every
-root-relative asset 404s, because the paths in the HTML assume the root.
+`base: '/'`. That means the artifact has to be served from the root of a domain, and it is:
+the repository's Pages custom domain is `openresin.org`, with Cloudflare proxying to
+GitHub Pages (`Server: cloudflare`, `x-github-request-id` on the response). The site is
+therefore live at <https://openresin.org/> and certificate issuance is Cloudflare's, not
+GitHub's.
 
-`openresin.org` itself is currently fronted by Cloudflare, which serves the previous
-React build (unknown paths return that app's `index.html`). Deploying to Pages does not
-change what Cloudflare serves. To put this site on the apex domain, either:
+Because the HTML assumes the root, the *project* URL
+(`https://open-resin-alliance.github.io/website/`) still serves the same HTML with every
+root-relative asset 404ing. It is not a preview; use the local dev server, or Cloudflare
+Pages, whose project sites are served from a root. A `base` build does not fix it either:
+Astro prefixes the assets it emits but not author-written links, and the copy's canonical
+URLs and sitemap would then claim `openresin.org/<repo>/…`, so subpath support would need
+every internal link — Markdown links included — to go through `import.meta.env.BASE_URL`.
 
-- set the repository's Pages custom domain to `openresin.org` and point DNS at GitHub
-  Pages (A `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`,
-  AAAA `2606:50c0:8000::153` and up, or CNAME to `open-resin-alliance.github.io`, with the
-  Cloudflare proxy disabled), or
-- keep Cloudflare as the origin and connect it to this repository instead: build command
-  `npm run build`, output directory `dist`, and a `GITHUB_TOKEN` environment variable so
-  the statistics step is not rate limited.
+Two hosts are not on the new site yet, both a dashboard change rather than a code one:
+
+- `https://www.openresin.org/` still returns the previous React app (`id="root"` shell).
+  Point it at the same Pages site or redirect it to the apex.
+- `http://openresin.org/` serves the site without redirecting to HTTPS. Cloudflare's
+  "Always Use HTTPS" toggle closes that.
 
 If a non-root path is ever needed permanently, set `base` in `astro.config.mjs` **and**
 the matching `site` path, otherwise canonical URLs, the sitemap and the RSS links will
