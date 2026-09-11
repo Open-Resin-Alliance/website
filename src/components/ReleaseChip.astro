@@ -44,11 +44,11 @@ const Element = link ? 'a' : 'span';
   }
 
   a.release:hover .release__tag {
-    color: var(--brand-magenta-deep);
+    color: var(--brand-violet-deep);
   }
 
   :global(:root[data-theme='dark']) a.release:hover .release__tag {
-    color: var(--brand-amber);
+    color: var(--brand-orange);
   }
 
   .release__label {
@@ -68,7 +68,7 @@ const Element = link ? 'a' : 'span';
     padding: 0.05rem 0.4rem;
     font-size: 0.625rem;
     color: var(--accent);
-    border: 1px solid color-mix(in oklab, var(--brand-amber) 40%, var(--border));
+    border: 1px solid color-mix(in oklab, var(--brand-pink) 40%, var(--border));
     border-radius: 999px;
   }
 

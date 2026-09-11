@@ -100,7 +100,13 @@ numbers. Use `slug` when the repository name is not a good URL segment
 
 ### Design notes
 
-- One accent ramp, sampled from the ORA logo: amber `#f0991f` → magenta `#e9318a`.
+- One accent ramp, the ORA purple → pink → orange gradient: violet `#9333ea`, pink
+  `#ec4899`, orange `#f59e0b`. The wordmark and the hero heading carry it as text; block
+  rules, markers and hover states use single stops from it.
+- The logo is the real artwork. `/brand/ora-lockup.webp` is the full lockup (ORA wordmark
+  plus emblem) used on the About page; `/brand/ora-mark.webp` is the emblem cropped from
+  the same file and used in the header and footer; `favicon.png` and
+  `/brand/ora-avatar.png` are derived from it too. Nothing is redrawn.
 - Light and dark themes, both driven by `data-theme` on `<html>`; the choice is stored in
   `localStorage` and applied before first paint, so there is no flash of the wrong theme.
 - No CSS framework. Tokens and primitives live in `src/styles/global.css`, component

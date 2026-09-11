@@ -240,8 +240,10 @@ const sponsors = [
     inset-inline: 0;
     top: -40%;
     block-size: 80%;
-    background: radial-gradient(60% 60% at 22% 50%, color-mix(in oklab, var(--brand-amber) 16%, transparent), transparent 70%),
-      radial-gradient(50% 55% at 78% 40%, color-mix(in oklab, var(--brand-magenta) 14%, transparent), transparent 70%);
+    background:
+      radial-gradient(58% 60% at 20% 48%, color-mix(in oklab, var(--brand-violet) 20%, transparent), transparent 70%),
+      radial-gradient(52% 56% at 76% 34%, color-mix(in oklab, var(--brand-pink) 18%, transparent), transparent 70%),
+      radial-gradient(46% 52% at 58% 88%, color-mix(in oklab, var(--brand-orange) 15%, transparent), transparent 72%);
     pointer-events: none;
     z-index: -1;
   }
@@ -379,11 +381,11 @@ const sponsors = [
   }
 
   .release-list__item > a:hover {
-    color: var(--brand-magenta-deep);
+    color: var(--brand-violet-deep);
   }
 
   :global(:root[data-theme='dark']) .release-list__item > a:hover {
-    color: var(--brand-amber);
+    color: var(--brand-orange);
   }
 
   .release-list__note {

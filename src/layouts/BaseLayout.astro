@@ -84,7 +84,8 @@ const graph = [
     <meta name="generator" content={Astro.generator} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/brand/ora-avatar.png" />
     <link rel="alternate" type="application/rss+xml" title={`${SITE.name} blog`} href={LINKS.rss} />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -103,8 +104,8 @@ const graph = [
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImage} />
 
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ec4899" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#9333ea" media="(prefers-color-scheme: dark)" />
 
     <script is:inline>
       (() => {
