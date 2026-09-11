@@ -395,9 +395,9 @@ const structuredData = [
   }
 
   .related {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
   }
 
   .facts {

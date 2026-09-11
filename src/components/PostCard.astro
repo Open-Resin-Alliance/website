@@ -22,7 +22,7 @@ const CATEGORY_LABEL: Record<string, string> = {
 };
 ---
 
-<article class:list={['post-card', featured && 'post-card--featured']}>
+<article class:list={['card', 'post-card', featured && 'post-card--featured']}>
   <div class="post-card__meta mono">
     <time datetime={isoDate(pubDate)}>{formatDate(pubDate)}</time>
     <span class="post-card__sep" aria-hidden="true">/</span>
@@ -55,20 +55,17 @@ const CATEGORY_LABEL: Record<string, string> = {
 </article>
 
 <style>
+  /* The surface itself is `.card` (the same glass pane as the project cards);
+     this only adds what a post needs inside it. */
   .post-card {
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
+    padding: 1.35rem 1.5rem;
   }
 
   .post-card--featured {
     padding: 1.6rem 1.75rem;
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
-    box-shadow: var(--glass-shadow);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius);
   }
 
   .post-card__meta {
