@@ -104,9 +104,10 @@ numbers. Use `slug` when the repository name is not a good URL segment
   `#ec4899`, orange `#f59e0b`. The wordmark and the hero heading carry it as text; block
   rules, markers and hover states use single stops from it.
 - The logo is the real artwork. `/brand/ora-lockup.webp` is the full lockup (ORA wordmark
-  plus emblem) used on the About page; `/brand/ora-mark.webp` is the emblem cropped from
-  the same file and used in the header and footer; `favicon.png` and
-  `/brand/ora-avatar.png` are derived from it too. Nothing is redrawn.
+  plus emblem) used in the footer; `/brand/ora-mark.webp` is the emblem cropped from the
+  same file starting below the wordmark, so no sliced letter fragments remain at its top
+  edge, and is used at 40px in the header; `favicon.png` and `/brand/ora-avatar.png`
+  derive from the same file. Nothing is redrawn.
 - Light and dark themes, both driven by `data-theme` on `<html>`; the choice is stored in
   `localStorage` and applied before first paint, so there is no flash of the wrong theme.
 - No CSS framework. Tokens and primitives live in `src/styles/global.css`, component

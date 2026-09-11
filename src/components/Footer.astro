@@ -1,5 +1,4 @@
 ---
-import BrandMark from './BrandMark.astro';
 import { LINKS, SITE } from '../data/site';
 import { FEATURED_PROJECTS, projectSlug } from '../data/projects';
 import { stats } from '../lib/stats';
@@ -13,9 +12,16 @@ const generated = new Date(stats.generatedAt);
   <div class="shell">
     <div class="site-footer__grid">
       <div class="site-footer__brand">
-        <a class="brand" href="/">
-          <BrandMark size={30} />
-          <span>{SITE.name}</span>
+        <a class="brand" href="/" aria-label={`${SITE.name} home`}>
+          <img
+            class="brand__lockup"
+            src="/brand/ora-lockup.webp"
+            alt={`${SITE.name} logo`}
+            width="364"
+            height="432"
+            loading="lazy"
+            decoding="async"
+          />
         </a>
         <p class="site-footer__blurb">{SITE.description}</p>
         <p class="mono muted">Established {formatDateLong(SITE.founded)}</p>
@@ -86,10 +92,11 @@ const generated = new Date(stats.generatedAt);
 
   .brand {
     display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    font-weight: 620;
-    letter-spacing: -0.022em;
+  }
+
+  .brand__lockup {
+    block-size: 120px;
+    inline-size: auto;
   }
 
   .site-footer__blurb {

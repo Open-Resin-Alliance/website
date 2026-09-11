@@ -20,6 +20,7 @@ const principles = [
 ];
 
 const languages = Object.entries(stats.totals.languages).sort((a, b) => b[1] - a[1]);
+const established = `We are a group of hobbyists and developers from around the globe, joined in our dedication to advancing the field of resin-based 3D printing through open source collaboration. The alliance was established on ${formatDate(SITE.founded)}.`;
 ---
 
 <BaseLayout
@@ -29,18 +30,7 @@ const languages = Object.entries(stats.totals.languages).sort((a, b) => b[1] - a
   <section class="shell page-head">
     <p class="eyebrow">About</p>
     <h1>A collective for open-source resin printing</h1>
-    <p class="lede">
-      We are a group of hobbyists and developers from around the globe, joined in our dedication to advancing the
-      field of resin-based 3D printing through open source collaboration. The alliance was established on
-      {formatDate(SITE.founded)}.
-    </p>
-    <img
-      class="lockup"
-      src="/brand/ora-lockup.webp"
-      alt={`${SITE.name} logo: ORA wordmark above a resin-drip emblem`}
-      width="364"
-      height="432"
-    />
+    <p class="lede">{established}</p>
   </section>
 
   <section class="shell section">
@@ -193,11 +183,6 @@ const languages = Object.entries(stats.totals.languages).sort((a, b) => b[1] - a
     max-width: 68ch;
   }
 
-  .lockup {
-    block-size: 180px;
-    inline-size: auto;
-    margin-top: 0.75rem;
-  }
 
   .section {
     padding: 3rem 0 0;
