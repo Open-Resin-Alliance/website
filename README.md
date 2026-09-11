@@ -172,6 +172,11 @@ untinted chip.
 - The logo is the real artwork. `/brand/ora-lockup.webp` is the full lockup (ORA wordmark
   plus emblem) used at 64px in the footer; the header is a text-only wordmark. `favicon.png`
   and `/brand/ora-avatar.png` derive from the same source file. Nothing is redrawn.
+- The social card and the avatar carry the site's own page wash rather than a flat fill:
+  the brand ramp at the dark theme's 15% over `#0a0a0b`, at 135 degrees — `rgb(124 58 237)`,
+  `rgb(219 39 119)`, `rgb(234 88 12)`, the same three stops `body` uses, so the card and the
+  page agree. The lockup sits centred on it, 300px wide in the 1200×630 card and 123px in
+  the 180×180 avatar.
 - Light and dark themes, both driven by `data-theme` on `<html>`; the choice is stored in
   `localStorage` and applied before first paint, so there is no flash of the wrong theme.
 - No CSS framework. Tokens and primitives live in `src/styles/global.css`, component
