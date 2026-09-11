@@ -30,7 +30,7 @@ const structuredData = [
       headline: post.data.title,
       datePublished: post.data.pubDate.toISOString(),
       url: `https://openresin.org/blog/${post.id}`,
-      author: { '@type': 'Person', name: post.data.author },
+      author: { '@id': 'https://openresin.org/#organization' },
     })),
   },
 ];
@@ -108,8 +108,7 @@ const structuredData = [
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
-    padding: clamp(2.5rem, 2rem + 3vw, 4rem) 0 0;
-    max-width: 900px;
+    padding-block: clamp(2.5rem, 2rem + 3vw, 4rem) 0;
   }
 
   .page-head .lede {
@@ -148,7 +147,7 @@ const structuredData = [
   }
 
   .section {
-    padding: 3.5rem 0 0;
+    padding-block: 3.5rem 0;
   }
 
   .filters {

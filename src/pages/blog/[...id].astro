@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
-const { title, description, pubDate, updatedDate, author, category, tags, project, version } = post.data;
+const { title, description, pubDate, updatedDate, category, tags, project, version } = post.data;
 
 const relatedProject = project ? getProject(project) : undefined;
 const relatedStats = project ? repoStats(project) : undefined;
@@ -41,7 +41,7 @@ const structuredData = [
     description,
     datePublished: isoDate(pubDate),
     ...(updatedDate ? { dateModified: isoDate(updatedDate) } : {}),
-    author: { '@type': 'Person', name: author },
+    author: { '@id': 'https://openresin.org/#organization' },
     publisher: { '@id': 'https://openresin.org/#organization' },
     mainEntityOfPage: `https://openresin.org/blog/${post.id}`,
     url: `https://openresin.org/blog/${post.id}`,
@@ -75,8 +75,6 @@ const structuredData = [
         <span class="post__category">{category}</span>
         <span class="post__sep" aria-hidden="true">/</span>
         <time datetime={isoDate(pubDate)}>{formatDateLong(pubDate)}</time>
-        <span class="post__sep" aria-hidden="true">/</span>
-        <span>{author}</span>
         {updatedDate && (
           <>
             <span class="post__sep" aria-hidden="true">/</span>

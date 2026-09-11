@@ -2,7 +2,6 @@
 title: The DragonFruit plugin family
 description: Printer and file-format support for DragonFruit ships as eight separate MIT-licensed repositories, consumed as git submodules so the ecosystem can grow without touching the slicer itself.
 pubDate: 2026-07-15
-author: Open Resin Alliance
 category: project
 tags: [dragonfruit, plugins, architecture, rust, typescript]
 project: df-plugin-uniformation

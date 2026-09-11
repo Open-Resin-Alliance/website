@@ -14,8 +14,6 @@ const blog = defineCollection({
     description: z.string().max(400),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
-    /** Display name(s); an entry in src/data/authors.ts is optional. */
-    author: z.string().default('Open Resin Alliance'),
     category: z.enum(['release', 'project', 'community', 'engineering']).default('project'),
     tags: z.array(z.string()).default([]),
     /** Repository name from src/data/projects.ts, when the post is about one project. */

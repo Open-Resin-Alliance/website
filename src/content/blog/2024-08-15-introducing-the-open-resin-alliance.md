@@ -2,7 +2,6 @@
 title: Introducing the Open Resin Alliance
 description: The Open Resin Alliance was founded on 15 August 2024 as a home for open-source work in resin-based 3D printing. Here is what the organisation is for, and how to take part.
 pubDate: 2024-08-15
-author: Open Resin Alliance
 category: community
 tags: [announcement, community, open-source, discord]
 featured: true

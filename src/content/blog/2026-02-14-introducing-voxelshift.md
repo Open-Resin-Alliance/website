@@ -2,7 +2,6 @@
 title: Introducing VoxelShift
 description: VoxelShift converts CTB, CBDDLP and Photon resin files into NanoDLP plate archives, with a post-processor mode slicers can call directly. It is built on clean-room reverse engineering for interoperability.
 pubDate: 2026-02-14
-author: Open Resin Alliance
 category: project
 tags: [voxelshift, nanodlp, file-formats, interoperability, dart]
 project: VoxelShift

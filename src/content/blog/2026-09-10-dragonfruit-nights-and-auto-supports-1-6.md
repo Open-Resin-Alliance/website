@@ -2,7 +2,6 @@
 title: "How ORA ships: nightlies, dev builds and branch prereleases"
 description: DragonFruit nightlies are cut automatically from feature branches, dev builds come from the dev branch on the way to stable, and Orion and Odyssey publish branch prereleases with a consistent naming scheme.
 pubDate: 2026-09-10
-author: Open Resin Alliance
 category: engineering
 tags: [dragonfruit, releases, nightlies, ci, development]
 project: DragonFruit
