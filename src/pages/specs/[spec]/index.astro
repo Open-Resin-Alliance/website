@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import SpecPage from '../../../components/SpecPage.astro';
+import { groupSpecs } from '../../../lib/specs';
+
+/* `/specs/<spec>` is the first page of the specification, so the URL of a
+   format is the start of reading it rather than a table of contents. */
+export async function getStaticPaths() {
+  const groups = groupSpecs(await getCollection('specs'));
+  return [...groups.values()].map((pages) => ({
+    params: { spec: pages[0].data.spec },
+    props: { entry: pages[0], pages },
+  }));
+}
+
+const { entry, pages } = Astro.props;
+---
+
+<SpecPage entry={entry} pages={pages} />

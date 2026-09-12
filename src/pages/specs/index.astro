@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SpecCard from '../../components/SpecCard.astro';
+import { getCollection } from 'astro:content';
+import { groupSpecs } from '../../lib/specs';
+
+/* One card per specification, not per page: a card is the whole format, and its
+   first page is the entry point. */
+const specs = [...groupSpecs(await getCollection('specs')).values()]
+  .map((pages) => ({ entry: pages[0], pageCount: pages.length }))
+  .sort((a, b) => a.entry.data.order - b.entry.data.order);
+
+const structuredData = [
+  {
+    '@type': 'CollectionPage',
+    name: 'Specifications - Open Resin Alliance',
+    url: 'https://openresin.org/specs',
+    description:
+      'The file format specifications maintained by the Open Resin Alliance: the LUMEN print format and the VOXL scene container.',
+    isPartOf: { '@id': 'https://openresin.org/#website' },
+  },
+];
+---
+
+<BaseLayout
+  title="Specifications"
+  description="The Open Resin Alliance file format specifications: LUMEN for resin print jobs and VOXL for editable scenes."
+  structuredData={structuredData}
+>
+  <section class="shell page-head">
+    <p class="eyebrow">Specifications</p>
+    <h1>The formats, written to be implemented</h1>
+    <p class="lede">
+      The formats the Alliance maintains, published here so they can be read without cloning anything.
+    </p>
+  </section>
+
+  <section class="shell section">
+    <div class="section-head">
+      <div class="section-head__text">
+        <h2>Format specifications</h2>
+        <p class="lede">
+          Each one is a snapshot of a specification that lives in its own repository, stamped with the commit it
+          came from.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid--2">
+      {specs.map((spec) => <SpecCard entry={spec.entry} pageCount={spec.pageCount} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* `.page-head` and `.section` are defined per page rather than globally, so a
+     page that uses them without declaring them gets no padding at all. These are
+     the same values as the blog, projects, about and contact pages. */
+  .page-head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    padding-block: clamp(2.5rem, 2rem + 3vw, 4rem) 0;
+  }
+
+  .page-head .lede {
+    max-width: 68ch;
+  }
+
+  .section {
+    padding-block: 3.5rem 0;
+  }
+</style>

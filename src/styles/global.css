@@ -118,6 +118,12 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   scrollbar-color: var(--border-strong) transparent;
+  /* `.shell` is centred at a fixed 1160px, so the space a scrollbar takes
+     decides where every page's content sits. Without this, a page tall enough
+     to scroll is laid out ~15px narrower than one that is not, and the header,
+     sections and cards shift sideways between pages. Reserving the gutter makes
+     the horizontal geometry identical everywhere. */
+  scrollbar-gutter: stable;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -525,6 +531,10 @@ a.card:hover,
   line-height: 1.75;
   color: var(--ink-soft);
   max-width: 68ch;
+  /* A specification carries long slash-separated identifiers in ordinary text,
+     with no space to break at; without this one of them pushes the page wider
+     than the viewport. It only breaks a word that would otherwise overflow. */
+  overflow-wrap: anywhere;
 }
 
 .prose > * + * {
@@ -638,8 +648,12 @@ a.card:hover,
   color: var(--muted);
 }
 
+/* A specification is full of long identifiers, paths and URLs that carry no
+   space to break at, so inline code may break anywhere rather than pushing the
+   whole page wider than the viewport. */
 .prose :not(pre) > code {
   white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .prose pre {

@@ -28,6 +28,7 @@ export const LINKS = {
 
 export const NAV = [
   { href: '/projects', label: 'Projects' },
+  { href: '/specs', label: 'Specs' },
   { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },

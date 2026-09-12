@@ -27,4 +27,37 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+/**
+ * Format specifications live as Markdown files in src/content/specs/<spec>/, one
+ * file per page, produced by `scripts/sync-specs.mjs`. Nothing fetches at build
+ * time, so a specification that moved upstream shows up as a diff rather than as
+ * a silently stale page, and the deployed artifact can be inspected.
+ */
+const specs = defineCollection({
+  loader: glob({ base: './src/content/specs', pattern: '**/*.{md,mdx}' }),
+  schema: z.object({
+    /** Specification this page belongs to, e.g. "lumen". Also the URL segment. */
+    spec: z.string(),
+    /** Page title: the page's H1, and its label in the navigation. */
+    title: z.string().max(120),
+    /** Specification-level summary, repeated across the pages of the group. */
+    description: z.string().max(400),
+    /** Human-readable maturity, e.g. "Draft v1.0". */
+    status: z.string().max(40),
+    /** Short name for the breadcrumb, e.g. "LUMEN". */
+    shortName: z.string().max(24),
+    /** Reading order within the specification, 1-based. */
+    order: z.number(),
+    /** The page that `/specs/<spec>` resolves to. */
+    isIndex: z.boolean().default(false),
+    /** Repository name from the Open-Resin-Alliance organisation. */
+    sourceRepo: z.string(),
+    /** Path of the page inside that repository. */
+    sourcePath: z.string(),
+    /** Commit the snapshot was taken from, so drift is visible. */
+    sourceRef: z.string(),
+    syncedAt: z.coerce.date(),
+  }),
+});
+
+export const collections = { blog, specs };

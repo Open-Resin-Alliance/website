@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import SpecPage from '../../../components/SpecPage.astro';
+import { groupSpecs } from '../../../lib/specs';
+
+/* Every page after the first: `/specs/<spec>/<part>`. */
+export async function getStaticPaths() {
+  const groups = groupSpecs(await getCollection('specs'));
+  const paths = [];
+  for (const pages of groups.values()) {
+    for (const entry of pages) {
+      if (entry.data.isIndex) continue;
+      paths.push({
+        params: { spec: entry.data.spec, part: entry.id.split('/')[1] },
+        props: { entry, pages },
+      });
+    }
+  }
+  return paths;
+}
+
+const { entry, pages } = Astro.props;
+---
+
+<SpecPage entry={entry} pages={pages} />
