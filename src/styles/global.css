@@ -19,8 +19,11 @@
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Spacing / layout */
-  --shell: 1160px;
+  --shell: 1400px;
   --gutter: 1.5rem;
+  /* Longest comfortable line of ordinary prose. Wide content - tables, code, diagrams -
+     is not bound by it: it uses the column. */
+  --measure: 82ch;
   --radius-sm: 6px;
   --radius: 10px;
   --radius-lg: 16px;
@@ -118,7 +121,7 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   scrollbar-color: var(--border-strong) transparent;
-  /* `.shell` is centred at a fixed 1160px, so the space a scrollbar takes
+  /* `.shell` is centred, so the space a scrollbar takes
      decides where every page's content sits. Without this, a page tall enough
      to scroll is laid out ~15px narrower than one that is not, and the header,
      sections and cards shift sideways between pages. Reserving the gutter makes
@@ -257,6 +260,13 @@ samp {
   white-space: nowrap;
 }
 
+/* Ordinary prose keeps a readable line length even though its container is the full
+   column, so the wide tables and code in a specification can use the space that text
+   does not need. */
+.prose :is(p, li, dd, dt, blockquote) {
+  max-width: var(--measure);
+}
+
 /* --------------------------------------------------------------------------
    Layout primitives
    -------------------------------------------------------------------------- */
@@ -273,7 +283,7 @@ samp {
 }
 
 .shell--wide {
-  max-width: 1320px;
+  max-width: 1600px;
 }
 
 main {
@@ -332,7 +342,7 @@ section {
   font-size: 1.0625rem;
   line-height: 1.7;
   color: var(--muted);
-  max-width: 62ch;
+  max-width: var(--measure);
 }
 
 .section-head {
@@ -530,7 +540,11 @@ a.card:hover,
   font-size: 1.0625rem;
   line-height: 1.75;
   color: var(--ink-soft);
-  max-width: 68ch;
+  /* The column, not a character measure, bounds this block: a specification is mostly
+     wide tables and code, which should use the space. Ordinary prose takes the measure
+     below, which is also what the article heads use, so a title rule ends where the
+     text does. */
+  max-width: none;
   /* A specification carries long slash-separated identifiers in ordinary text,
      with no space to break at; without this one of them pushes the page wider
      than the viewport. It only breaks a word that would otherwise overflow. */
