@@ -8,7 +8,7 @@ order: 7
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/07-scene-chunks.md"
-sourceRef: "bbd5cc0"
+sourceRef: "a3f8d22"
 syncedAt: "2026-09-12"
 ---
 
@@ -29,6 +29,13 @@ as if the file had never been closed.
 **Payload:** The raw bytes of a VOXL file (see `DragonFruit/docs/dev/voxl-format-spec.md`).
 V2 binary chunk format is the current target; V1 JSON is also valid. The VOXL carries its
 own internal version field for format detection.
+
+LUMEN treats the payload as opaque. A scene is copied in on save and handed back
+unchanged on re-open, so nothing in this specification requires a reader to parse VOXL
+beyond recognizing which generation it is ([§11.2](/specs/lumen/validation#112-semantic-validation)).
+A slicer that re-opens the file decodes the VOXL itself, under VOXL's rules, and may then
+check that the scene agrees with this file's `HDR` fields - but a printer never needs to,
+and a print reader that skips the chunk entirely is conforming.
 
 **Workflow:**
 
@@ -56,8 +63,6 @@ own internal version field for format detection.
 **Relationship to other chunks:**
 - `HDR.display_width_px` etc. should match the VOXL scene's intended printer.
 - `META.materials` / `PROF.materials` should match the resin(s) used in the VOXL scene.
-- A reader can validate consistency between the VOXL scene metadata and the
-  LUMEN print parameters (strict mode).
 
 ### 4.13 EXTD - Extension Chunk
 
