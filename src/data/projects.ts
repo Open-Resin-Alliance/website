@@ -64,6 +64,7 @@ export const PROJECTS: Project[] = [
       'A plugin architecture - printer and file-format support ships as separate MIT-licensed plugins',
     ],
     website: LINKS.dragonfruitSite,
+    image: '/projects/dragonfruit.webp',
   },
   {
     name: 'Orion',
