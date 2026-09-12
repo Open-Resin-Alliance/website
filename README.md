@@ -35,6 +35,20 @@ themselves. The filename becomes the URL (`/blog/<filename>`); name it
 The frontmatter schema lives in [`src/content.config.ts`](src/content.config.ts). A
 malformed post fails the build with the field name.
 
+Photographs go in `public/media/` as WebP and are referenced from the post with a
+`<figure>` so they carry a caption and explicit dimensions:
+
+```html
+<figure>
+  <img src="/media/3dprintopia-2024.webp" alt="..." width="1600" height="1200" loading="lazy" decoding="async" />
+  <figcaption>On the 3DPrintopia floor, 28 and 29 September 2024.</figcaption>
+</figure>
+```
+
+`width` and `height` are the intrinsic size, which is what stops the paragraph below
+from jumping when the image arrives. Everything in `public/` ships verbatim, so a file
+added there has to be referenced by a page.
+
 ## How the statistics and supporters work
 
 Two build-time pipelines write JSON snapshots that the pages read:
