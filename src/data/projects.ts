@@ -115,6 +115,7 @@ export const PROJECTS: Project[] = [
       'Clean-room reverse engineering for interoperability, building on findings from UVTools',
       'Windows, macOS and Linux desktop builds',
     ],
+    image: '/projects/voxelshift.webp',
   },
 
   {
