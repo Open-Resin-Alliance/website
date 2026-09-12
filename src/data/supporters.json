@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-09-11T21:15:54.448Z",
+  "generatedAt": "2026-09-12T10:53:23.264Z",
   "source": "https://api.opencollective.com/graphql/v2",
   "collective": {
     "name": "Open Resin Alliance",
     "slug": "openresinalliance",
-    "imageUrl": "https://images.opencollective.com/openresinalliance/36cc6b3/logo.png",
+    "imageUrl": "https://images.opencollective.com/openresinalliance/879f0f1/logo.png",
     "website": null,
     "url": "https://opencollective.com/openresinalliance",
     "totalFinancialContributors": 10
