@@ -2,17 +2,19 @@
 spec: "lumen"
 title: "LUMEN Format Specification"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
-status: "Draft v1.0"
+status: "v1.0, published 2026-09-12"
 shortName: "LUMEN"
 order: 1
 isIndex: true
 sourceRepo: "LumenFormat"
 sourcePath: "spec/01-overview.md"
-sourceRef: "9e1b346"
+sourceRef: "d1f388c"
 syncedAt: "2026-09-12"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
+
+**Version 1.0** — published 2026-09-12 — MIT licensed.
 
 ## Abstract
 

@@ -2,13 +2,13 @@
 spec: "lumen"
 title: "Example file layout"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
-status: "Draft v1.0"
+status: "v1.0, published 2026-09-12"
 shortName: "LUMEN"
 order: 16
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/16-appendix-a-example.md"
-sourceRef: "9e1b346"
+sourceRef: "d1f388c"
 syncedAt: "2026-09-12"
 ---
 

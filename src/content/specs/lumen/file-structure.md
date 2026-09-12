@@ -2,13 +2,13 @@
 spec: "lumen"
 title: "File structure"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
-status: "Draft v1.0"
+status: "v1.0, published 2026-09-12"
 shortName: "LUMEN"
 order: 2
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/02-file-structure.md"
-sourceRef: "9e1b346"
+sourceRef: "d1f388c"
 syncedAt: "2026-09-12"
 ---
 
@@ -99,13 +99,16 @@ encryption - in which case the on-disk length is `size_uncompressed`.
 chunk type, not of `size_compressed` ([§6.3](/specs/lumen/compression#63-per-chunk-compression-policy)). For a compressed chunk the payload is a
 zstd frame that decompresses to `size_uncompressed` bytes; for an uncompressed chunk
 the payload bytes are the chunk data itself. This matters for chunks that are stored
-uncompressed but may still be encrypted (`ZDIC`, `PREV`): their `size_compressed` is
+uncompressed but may still be encrypted (`LAYR`, `ZDIC`, `PREV`): their `size_compressed` is
 non-zero yet there is no zstd layer to undo.
 
-**Encryption:** if the `ENCRYPTED` flag (bit 4) is set in the chunk descriptor's `flags`
-field, the payload (on-disk bytes, i.e. the zstd frame) is encrypted. See [§9](/specs/lumen/encryption#9-encryption-model).
-This is per-chunk encryption, distinct from the file-level `ENCRYPTED` flag
-(header bit 3) which signals the presence of an `AUTH` chunk.
+**Encryption:** if the `ENCRYPTED` flag (bit 4) is set in the chunk descriptor's
+`flags` field, the payload is encrypted as described in
+[§9.3](/specs/lumen/encryption#93-encryption-format): for most chunks the whole payload is
+one sealed unit, while `LAYR` keeps its header and block table plaintext and seals
+each block frame separately. This is per-chunk encryption, distinct from the
+file-level `ENCRYPTED` flag (header bit 3) which signals the presence of an `AUTH`
+chunk.
 
 **Null descriptors** (`offset == 0`) are ignored. Writers may pre-allocate directory
 space with null descriptors.

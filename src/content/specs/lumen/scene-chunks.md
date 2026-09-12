@@ -2,13 +2,13 @@
 spec: "lumen"
 title: "Scene and extension chunks"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
-status: "Draft v1.0"
+status: "v1.0, published 2026-09-12"
 shortName: "LUMEN"
 order: 7
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/07-scene-chunks.md"
-sourceRef: "9e1b346"
+sourceRef: "d1f388c"
 syncedAt: "2026-09-12"
 ---
 
@@ -26,7 +26,7 @@ never loses the source. Any compatible slicer can extract the VOXL, restore the
 full scene (models, supports, modifiers, hollowing state), and continue editing
 as if the file had never been closed.
 
-**Payload:** The raw bytes of a VOXL file (see `docs/dev/voxl-format-spec.md`).
+**Payload:** The raw bytes of a VOXL file (see `DragonFruit/docs/dev/voxl-format-spec.md`).
 V2 binary chunk format is the current target; V1 JSON is also valid. The VOXL carries its
 own internal version field for format detection.
 

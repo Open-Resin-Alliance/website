@@ -2,13 +2,13 @@
 spec: "lumen"
 title: "Authentication chunk"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
-status: "Draft v1.0"
+status: "v1.0, published 2026-09-12"
 shortName: "LUMEN"
 order: 4
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/04-chunk-auth.md"
-sourceRef: "9e1b346"
+sourceRef: "d1f388c"
 syncedAt: "2026-09-12"
 ---
 
@@ -25,7 +25,7 @@ metadata needed to derive or unwrap the session key.
 
 | Offset | Size | Type | Field | Description |
 |--------|------|------|-------|-------------|
-| 0 | 4 | `[u8; 4]` | `cipher_id` | ASCII. `A256G` = AES-256-GCM, `C20P1` = ChaCha20-Poly1305. |
+| 0 | 4 | `[u8; 4]` | `cipher_id` | ASCII. `A256` = AES-256-GCM, `C20P` = ChaCha20-Poly1305. |
 | 4 | 4 | `u32` | `auth_version` | Layout version. `1` for this spec. |
 | 8 | 4 | `u32` | `mode` | Bitfield: bit 0 = password, bit 1 = machine-binding. |
 | 12 | 4 | `u32` | `password_section_len` | Byte length of password section. 0 if not used. |

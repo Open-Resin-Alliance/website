@@ -2,13 +2,13 @@
 spec: "lumen"
 title: "Encryption model"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
-status: "Draft v1.0"
+status: "v1.0, published 2026-09-12"
 shortName: "LUMEN"
 order: 12
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/12-encryption.md"
-sourceRef: "9e1b346"
+sourceRef: "d1f388c"
 syncedAt: "2026-09-12"
 ---
 
@@ -41,8 +41,8 @@ Two options, identified in the AUTH chunk:
 
 | `cipher_id` | Algorithm | Nonce size | Tag size | Notes |
 |-------------|-----------|------------|----------|-------|
-| `A256G` | AES-256-GCM | 12 bytes | 16 bytes | Hardware-accelerated on x86 (AES-NI) and ARM (AES extensions). |
-| `C20P1` | ChaCha20-Poly1305 | 12 bytes | 16 bytes | Faster in software; constant-time on all platforms. |
+| `A256` | AES-256-GCM | 12 bytes | 16 bytes | Hardware-accelerated on x86 (AES-NI) and ARM (AES extensions). |
+| `C20P` | ChaCha20-Poly1305 | 12 bytes | 16 bytes | Faster in software; constant-time on all platforms. |
 
 ### 9.3 Encryption Format
 

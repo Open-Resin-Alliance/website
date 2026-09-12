@@ -2,13 +2,13 @@
 spec: "lumen"
 title: "Compression strategy"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
-status: "Draft v1.0"
+status: "v1.0, published 2026-09-12"
 shortName: "LUMEN"
 order: 9
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/09-compression.md"
-sourceRef: "9e1b346"
+sourceRef: "d1f388c"
 syncedAt: "2026-09-12"
 ---
 
@@ -78,6 +78,7 @@ reader whether a chunk payload carries a zstd frame. The levels are recommendati
 | HDR | None | Tiny (~50 bytes); read before decompressor init. |
 | AUTH | None | Tiny (~few hundred bytes); read before decompressor init. |
 | META | zstd level 3 | Small payload; speed matters. |
+| PROF | zstd level 3 | Reusable profile; small payload. |
 | SECT | zstd level 3 | Small payload. |
 | LROV | zstd level 3 | Small payload. |
 | PREV | None | PNG is already compressed. |

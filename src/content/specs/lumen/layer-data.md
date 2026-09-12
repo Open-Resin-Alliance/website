@@ -2,13 +2,13 @@
 spec: "lumen"
 title: "Layer data chunks"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
-status: "Draft v1.0"
+status: "v1.0, published 2026-09-12"
 shortName: "LUMEN"
 order: 6
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/06-layer-data.md"
-sourceRef: "9e1b346"
+sourceRef: "d1f388c"
 syncedAt: "2026-09-12"
 ---
 
@@ -38,7 +38,7 @@ that contains the target layer.
 | 0 | 8 | `u64` | `data_offset` | Byte offset from the start of the decompressed output of block `block_index`. |
 | 8 | 4 | `u32` | `block_index` | Index into the LAYR block table ([§4.10](#410-layr---layer-data-chunk)) of the block containing this layer. |
 | 12 | 4 | `u32` | `data_size` | Byte size of this layer's REE data within its block. |
-| 16 | 4 | `u32` | `sector_count` | Sectors active on this layer. 0 = empty layer (all black). |
+| 16 | 4 | `u32` | `sector_count` | Sectors active on this layer. 0 = empty layer (all black); in single-sector mode a non-empty layer has exactly `1`. |
 
 ### 4.9 ZDIC - Zstd Dictionary Chunk
 
@@ -109,10 +109,11 @@ block_region:
   [block_0_frame] [block_1_frame] ... [block_{block_count-1}_frame]
 ```
 
-The chunk descriptor for `LAYR` stores the container uncompressed: `size_compressed`
-is `0` and `size_uncompressed` is the container's byte length. The `ENCRYPTED` chunk
-flag still applies - it selects whether the block frames inside the container are
-sealed ([§9.3](/specs/lumen/encryption#93-encryption-format)).
+The chunk descriptor for `LAYR` stores the container uncompressed, but
+`size_compressed` depends on whether the block frames are sealed: `0` when they are
+not, and the stored container length - including the 28 bytes of AEAD framing per
+sealed block frame ([§9.3](/specs/lumen/encryption#93-encryption-format)) - when they are. `size_uncompressed` is the
+container's byte length either way.
 
 **Block table entry (v1, 24 bytes):**
 

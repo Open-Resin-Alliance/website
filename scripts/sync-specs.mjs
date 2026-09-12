@@ -37,7 +37,7 @@ const SPECS = [
     title: 'LUMEN Format Specification',
     description:
       'The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption.',
-    status: 'Draft v1.0',
+    status: 'v1.0, published 2026-09-12',
     shortName: 'LUMEN',
     repo: 'LumenFormat',
     defaultDir: '../LumenFormat',

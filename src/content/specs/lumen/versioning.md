@@ -2,13 +2,13 @@
 spec: "lumen"
 title: "Versioning and compatibility"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
-status: "Draft v1.0"
+status: "v1.0, published 2026-09-12"
 shortName: "LUMEN"
 order: 13
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/13-versioning.md"
-sourceRef: "9e1b346"
+sourceRef: "d1f388c"
 syncedAt: "2026-09-12"
 ---
 
@@ -28,6 +28,11 @@ syncedAt: "2026-09-12"
 | LAYR chunk | `layr_version` | Changes to the block framing layout. |
 | ZDIC chunk | `zdic_version` | Changes to the dictionary chunk layout. |
 | EXTD chunk | `ext_version` | Per-extension versioning. |
+
+`header.version` is the container version, not the version of this document: LUMEN
+v1.0 is carried by `header.version = 1`. A revision that changes the container
+layout bumps `header.version`; one that only adds fields bumps that field's own
+sub-version.
 
 ### 10.2 Forward Compatibility Mechanisms
 

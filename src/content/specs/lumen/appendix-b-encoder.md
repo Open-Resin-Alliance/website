@@ -2,13 +2,13 @@
 spec: "lumen"
 title: "Reference encoder integration"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
-status: "Draft v1.0"
+status: "v1.0, published 2026-09-12"
 shortName: "LUMEN"
 order: 17
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/17-appendix-b-encoder.md"
-sourceRef: "9e1b346"
+sourceRef: "d1f388c"
 syncedAt: "2026-09-12"
 ---
 
@@ -16,7 +16,12 @@ syncedAt: "2026-09-12"
 
 ## Appendix B: Reference Encoder Integration
 
-The LUMEN encoder follows the existing plugin pattern (`FormatEncoder` +
+This appendix is informative. It describes how a reference encoder for a slicer
+using the plugin pattern below is expected to integrate; it is not a description of
+shipped code, and a conforming implementation is free to structure itself
+differently.
+
+Such an encoder would follow the plugin pattern (`FormatEncoder` +
 `RleStreamEncoder` traits defined in
 `rust/dragonfruit-slicing-engine/src/encoders/mod.rs`):
 
