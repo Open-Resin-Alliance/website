@@ -8,7 +8,7 @@ order: 3
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/03-chunks.md"
-sourceRef: "f373475"
+sourceRef: "236a31a"
 syncedAt: "2026-09-12"
 ---
 
@@ -238,6 +238,9 @@ When a LUMEN-capable printer receives a file with a `PROF` chunk, it may:
 - Use the file's META settings directly (the default).
 - Import the PROF profile into its local profile store for future use.
 - Apply a printer-side override profile instead of either.
+
+A file carries at most one `PROF` chunk; if more than one is present, readers use the
+first.
 
 **PROF JSON schema:**
 

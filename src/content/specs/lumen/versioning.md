@@ -8,7 +8,7 @@ order: 13
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/13-versioning.md"
-sourceRef: "f373475"
+sourceRef: "236a31a"
 syncedAt: "2026-09-12"
 ---
 
