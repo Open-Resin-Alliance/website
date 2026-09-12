@@ -8,7 +8,7 @@ order: 3
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/03-chunks.md"
-sourceRef: "75de01d"
+sourceRef: "bbd5cc0"
 syncedAt: "2026-09-12"
 ---
 
