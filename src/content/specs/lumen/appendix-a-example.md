@@ -8,7 +8,7 @@ order: 16
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/16-appendix-a-example.md"
-sourceRef: "00a063a"
+sourceRef: "75de01d"
 syncedAt: "2026-09-12"
 ---
 

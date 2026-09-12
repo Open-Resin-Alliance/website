@@ -8,7 +8,7 @@ order: 6
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/06-layer-data.md"
-sourceRef: "00a063a"
+sourceRef: "75de01d"
 syncedAt: "2026-09-12"
 ---
 

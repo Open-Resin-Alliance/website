@@ -8,7 +8,7 @@ order: 5
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/05-print-control.md"
-sourceRef: "00a063a"
+sourceRef: "75de01d"
 syncedAt: "2026-09-12"
 ---
 
