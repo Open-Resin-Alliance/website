@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "stop": "astro dev stop",
     "preview": "astro preview",
     "check": "astro check",
     "stats": "node scripts/fetch-github-stats.mjs && node scripts/fetch-open-collective.mjs",
