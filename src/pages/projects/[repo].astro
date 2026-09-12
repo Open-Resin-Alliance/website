@@ -138,19 +138,6 @@ const structuredData = [
             </section>
           )
         }
-
-        {
-          posts.length > 0 && (
-            <section class="block">
-              <h2>Related posts</h2>
-              <div class="related">
-                {posts.map((post) => (
-                  <PostCard post={post} />
-                ))}
-              </div>
-            </section>
-          )
-        }
       </div>
 
       <aside class="page__aside">
@@ -210,6 +197,19 @@ const structuredData = [
         }
       </aside>
     </div>
+
+    {
+      posts.length > 0 && (
+        <section class="block related-block">
+          <h2>Related posts</h2>
+          <div class={posts.length >= 3 ? 'grid grid--3' : 'grid grid--2'}>
+            {posts.map((post) => (
+              <PostCard post={post} />
+            ))}
+          </div>
+        </section>
+      )
+    }
   </article>
 </BaseLayout>
 
@@ -403,10 +403,10 @@ const structuredData = [
     white-space: nowrap;
   }
 
-  .related {
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  /* Related posts close the page and span both columns: inside the body column
+     the cards were narrower than the space the aside leaves free below it. */
+  .related-block {
+    margin-top: 3.5rem;
   }
 
   .facts {
