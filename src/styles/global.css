@@ -19,11 +19,11 @@
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Spacing / layout */
-  --shell: 1400px;
+  --shell: 1600px;
   --gutter: 1.5rem;
   /* Longest comfortable line of ordinary prose. Wide content - tables, code, diagrams -
      is not bound by it: it uses the column. */
-  --measure: 82ch;
+  --measure: 92ch;
   --radius-sm: 6px;
   --radius: 10px;
   --radius-lg: 16px;
@@ -283,7 +283,7 @@ samp {
 }
 
 .shell--wide {
-  max-width: 1600px;
+  max-width: 1840px;
 }
 
 main {
