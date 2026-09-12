@@ -203,7 +203,9 @@ const structuredData = [
     grid-template-columns: minmax(0, 1fr) 18rem;
     gap: 3rem;
     align-items: start;
-    padding-top: 2.5rem;
+    /* The head's own border is the separator, so the grid does not need the
+       generous lead-in the post grid uses. */
+    padding-top: 1.5rem;
   }
 
   /* The parts list is the only navigation, so it gets the whole rail: at a normal

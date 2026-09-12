@@ -541,6 +541,16 @@ a.card:hover,
   margin-top: 1.15em;
 }
 
+/* A prose block that opens with a heading sits directly under a page head, whose
+   own bottom border is already the separator. Without this the heading stacks its
+   section rule and lead-in margin under that border - two rules and about 130px
+   before the first word. */
+.prose > :first-child:is(h2, h3, h4) {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
 .prose h2,
 .prose h3,
 .prose h4 {
