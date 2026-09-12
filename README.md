@@ -98,7 +98,7 @@ The suffix after the colon picks the formatter (`compact` = `formatCompact`, oth
 is formatted exactly like the built one. If a page carries live targets and the refresh
 fails - offline, blocked, rate limited, API down - nothing is written, no error is shown,
 and the elements marked `data-live-status` keep reading `Snapshot · 11 Sept 2026`. When it
-succeeds they read `Live · updated just now`.
+succeeds they read `updated just now`.
 
 The org activity feed is still collected into `src/data/github-stats.json` (and its
 event-to-entry mapping lives in `src/lib/activity.js`, shared with the build script), but no

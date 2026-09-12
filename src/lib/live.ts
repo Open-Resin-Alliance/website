@@ -131,12 +131,15 @@ function textFor(
   }
 }
 
-/** Stamp the status line after a successful refresh; failure leaves the built text. */
+/**
+ * Stamp the status line after a successful refresh; failure leaves the built text
+ * in place. The words are deliberately bare - "updated just now" next to the
+ * footer's GitHub link, not a badge announcing itself.
+ */
 function markStatus(at: number) {
   const age = Date.now() - at < JUST_NOW_MS ? 'just now' : formatRelative(new Date(at));
   for (const node of document.querySelectorAll<HTMLElement>('[data-live-status]')) {
-    node.dataset.state = 'live';
-    node.textContent = `Live · updated ${age}`;
+    node.textContent = `updated ${age}`;
   }
 }
 
