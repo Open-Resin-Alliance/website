@@ -35,6 +35,15 @@ const facts: { label: string; value: string; live?: string }[] = [
   { label: 'Default branch', value: live?.defaultBranch ?? '-' },
 ];
 
+/**
+ * Nightlies are cut automatically from feature branches, so they are not what
+ * someone looking for a release wants to read: the tag says so, and they are
+ * dropped here rather than listed as if they were versions.
+ */
+const releases = (live?.recentReleases ?? []).filter(
+  (release) => !release.tag.toLowerCase().startsWith('nightly'),
+);
+
 const structuredData = [
   {
     '@type': 'SoftwareSourceCode',
@@ -131,31 +140,6 @@ const structuredData = [
         }
 
         {
-          live && live.recentReleases.length > 0 && (
-            <section class="block">
-              <h2>Recent releases</h2>
-              <ul class="releases">
-                {live.recentReleases.map((release) => (
-                  <li>
-                    <a href={release.url} rel="noopener noreferrer" target="_blank">
-                      <span class="releases__name">{release.name}</span>
-                      <span class="mono releases__tag">{release.tag}</span>
-                    </a>
-                    <span class="mono releases__meta">
-                      {formatDate(release.publishedAt)}
-                      {release.prerelease ? ' · pre-release' : ''}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              {live.latestStableRelease && (
-                <ReleaseChip release={live.latestStableRelease} label="Latest stable" />
-              )}
-            </section>
-          )
-        }
-
-        {
           posts.length > 0 && (
             <section class="block">
               <h2>Related posts</h2>
@@ -199,6 +183,31 @@ const structuredData = [
           <a href={`${repository}/pulls`} rel="noopener noreferrer" target="_blank">Pull requests</a>
           <a href={`${repository}/releases`} rel="noopener noreferrer" target="_blank">All releases</a>
         </div>
+
+        {
+          releases.length > 0 && (
+            <section class="aside-releases">
+              <h2 class="aside-releases__title mono">Recent releases</h2>
+              <ul class="releases">
+                {releases.map((release) => (
+                  <li>
+                    <a href={release.url} rel="noopener noreferrer" target="_blank">
+                      <span class="releases__name">{release.name}</span>
+                      <span class="mono releases__tag">{release.tag}</span>
+                    </a>
+                    <span class="mono releases__meta">
+                      {formatDate(release.publishedAt)}
+                      {release.prerelease ? ' · pre-release' : ''}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              {live?.latestStableRelease && (
+                <ReleaseChip release={live.latestStableRelease} label="Latest stable" />
+              )}
+            </section>
+          )
+        }
       </aside>
     </div>
   </article>
@@ -442,7 +451,8 @@ const structuredData = [
     margin-top: 1.5rem;
   }
 
-  .topics__title {
+  .topics__title,
+  .aside-releases__title {
     font-size: 0.6875rem;
     font-weight: 500;
     text-transform: uppercase;
@@ -473,6 +483,14 @@ const structuredData = [
 
   .aside-links a:hover {
     color: var(--ink);
+  }
+
+  /* The release list sits under the links: the aside was mostly empty below them,
+     and the list is short enough for a narrow column. */
+  .aside-releases {
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
   }
 
   @media (max-width: 900px) {
