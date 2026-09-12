@@ -10,7 +10,6 @@ import { FEATURED_PROJECTS, PLUGIN_PROJECTS, projectSlug } from '../data/project
 import { LINKS, SITE } from '../data/site';
 import { stats } from '../lib/stats';
 import { collectiveUrl, supporters } from '../lib/supporters';
-import { formatAmount } from '../lib/format';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -104,48 +103,38 @@ const latestPosts = posts.slice(0, 3);
   </section>
 
   <section class="shell section">
-    <div class="supporters">
-      <p class="eyebrow">Supporters</p>
+    <div class="section-head">
+      <div class="section-head__text">
+        <p class="eyebrow">Supporters</p>
         <h2>Open Collective backers</h2>
         <p class="muted">
-          Fiscally hosted by {supporters.host?.name ?? 'Open Source Collective'}.{' '}
-          <span data-live="raised">{formatAmount(supporters.totals.raised, supporters.totals.currency)}</span> contributed by{' '}
-          <span data-live="backers">{supporters.totals.backers}</span> backers so far.
+          Fiscally hosted by{' '}
+          <a href={supporters.host?.url ?? collectiveUrl} rel="noopener noreferrer" target="_blank">
+            {supporters.host?.name ?? 'Open Source Collective'}
+          </a>.
         </p>
-        <ul class="backers">
-          {
-            supporters.backers.map((backer) => (
-              <li>
-                <a href={backer.url ?? collectiveUrl} rel="noopener noreferrer" target="_blank">
-                  {backer.imageUrl && (
-                    <img src={backer.imageUrl} alt="" width="32" height="32" loading="lazy" decoding="async" />
-                  )}
-                  <span>
-                    <strong>{backer.name}</strong>
-                    <span class="muted">
-                      {backer.recurring && backer.recurringAmount
-                        ? `Monthly · ${formatAmount(backer.recurringAmount, backer.currency)}/mo`
-                        : `One-time · ${formatAmount(backer.amount, backer.currency)}`}
-                    </span>
-                  </span>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-        <div class="btn-row">
-          <a class="btn btn--ghost btn--sm" href={collectiveUrl} rel="noopener noreferrer" target="_blank">
-            Become a backer
-          </a>
-          {
-            supporters.host && (
-              <a class="btn btn--ghost btn--sm" href={supporters.host.url ?? collectiveUrl} rel="noopener noreferrer" target="_blank">
-                {supporters.host.name}
-              </a>
-            )
-          }
-        </div>
+      </div>
+      <a class="btn btn--ghost btn--sm" href={collectiveUrl} rel="noopener noreferrer" target="_blank">
+        Become a backer
+      </a>
     </div>
+
+    <ul class="backers">
+      {
+        supporters.backers.map((backer) => (
+          <li>
+            <a href={backer.url ?? collectiveUrl} rel="noopener noreferrer" target="_blank">
+              {backer.imageUrl && (
+                <img src={backer.imageUrl} alt="" width="32" height="32" loading="lazy" decoding="async" />
+              )}
+              <span>
+                <strong>{backer.name}</strong>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 
   <section class="shell section">
@@ -242,22 +231,7 @@ const latestPosts = posts.slice(0, 3);
     color: var(--ink);
   }
 
-
-
-
-
-
-
-
-  /* Supporters block: eyebrow, copy, backer cards, actions. */
-  .supporters {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  /* Backer cards: avatar, name, and how they contribute. */
+  /* Supporters block: backer cards under the section head. */
   .backers {
     list-style: none;
     margin: 0;
@@ -297,9 +271,11 @@ const latestPosts = posts.slice(0, 3);
     flex: 0 0 auto;
   }
 
+  /* The text box next to the avatar. A flex item needs overflow-based or
+     explicit min-inline-size so a long name ellipsises instead of pushing the
+     card wider. */
   .backers span {
     display: flex;
-    flex-direction: column;
     min-inline-size: 0;
     font-size: 0.875rem;
     line-height: 1.4;
@@ -309,10 +285,6 @@ const latestPosts = posts.slice(0, 3);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  .backers .muted {
-    font-size: 0.75rem;
   }
 
   .cta {

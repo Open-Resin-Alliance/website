@@ -35,9 +35,3 @@ export const NAV = [
 
 /** External GitHub org coordinates used by the stats pipeline. */
 export const ORG = 'Open-Resin-Alliance';
-
-/**
- * Open Collective slug. The supporters script carries its own copy because a
- * Node script cannot import a `.ts` module; keep the two in step.
- */
-export const COLLECTIVE_SLUG = 'openresinalliance';

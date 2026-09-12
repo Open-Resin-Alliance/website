@@ -40,23 +40,6 @@ export const formatNumber = (value: number) => NUMBER.format(value);
 
 export const formatCompact = (value: number) => (value < 1000 ? NUMBER.format(value) : COMPACT.format(value));
 
-/**
- * Currency amount for the supporters totals. en-US renders USD as "$565" rather
- * than the "US$565" that en-GB gives; currency style is more conventional than
- * it is locale-correct here.
- */
-export function formatAmount(value: number, currency: string): string {
-  try {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency,
-      maximumFractionDigits: 0,
-    }).format(value);
-  } catch {
-    return `${value} ${currency}`;
-  }
-}
-
 /** Machine-readable timestamp for <time datetime>. */
 export const isoDate = (value: string | Date) => asDate(value).toISOString();
 

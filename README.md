@@ -2,8 +2,8 @@
 
 The website for the **Open Resin Alliance** - a static site built with
 [Astro](https://astro.build) that renders its blog from Markdown files in this repository
-and its GitHub and Open Collective numbers from committed snapshots, which the browser then
-refreshes against the public APIs.
+and its GitHub and Open Collective data from committed snapshots; the browser refreshes the
+GitHub numbers against the public API.
 
 Deployed to GitHub Pages at <https://openresin.org>.
 
@@ -81,9 +81,8 @@ with a freshly fetched one:
 |---|---|---|
 | org totals: `repos`, `stars:compact`, `forks:compact`, `active-repos` | `GET /orgs/Open-Resin-Alliance/repos` | one call |
 | per-repo `stars` / `forks` / `pushed` / `updated` | the same payload | none |
-| supporters `backers` / `raised` | the collective GraphQL query | one call |
 
-Two requests per page, reused for five minutes in `sessionStorage`, no token - an
+One request per page, reused for five minutes in `sessionStorage`, no token - an
 unauthenticated browser gets 60 GitHub requests per hour per IP, which is why everything
 that costs a call per repository stays snapshot-only: open issue, pull request and commit
 counts (they need GraphQL, which a browser cannot authenticate), contributor totals,
@@ -99,7 +98,7 @@ The suffix after the colon picks the formatter (`compact` = `formatCompact`, oth
 is formatted exactly like the built one. If a page carries live targets and the refresh
 fails - offline, blocked, rate limited, API down - nothing is written, no error is shown,
 and the elements marked `data-live-status` keep reading `Snapshot · 11 Sept 2026`. When it
-succeeds they read `Live · updated just now` (or `Partly live` if some sources answered).
+succeeds they read `Live · updated just now`.
 
 The org activity feed is still collected into `src/data/github-stats.json` (and its
 event-to-entry mapping lives in `src/lib/activity.js`, shared with the build script), but no
