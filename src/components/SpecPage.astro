@@ -171,6 +171,16 @@ const structuredData = [
     border-bottom: 1px solid var(--border);
   }
 
+  /* Above the two-column breakpoint the head sits over the grid rather than in the
+     body column, so its rule has to stop where the body column does. Otherwise the
+     title underline and every section rule below it are different widths, and the
+     page reads as two mismatched blocks. */
+  @media (min-width: 961px) {
+    .spec__head {
+      max-width: calc(100% - 18rem - 3rem);
+    }
+  }
+
   .spec__meta {
     display: flex;
     flex-wrap: wrap;
@@ -245,10 +255,14 @@ const structuredData = [
     grid-template-columns: 1.7rem minmax(0, 1fr);
     align-items: baseline;
     gap: 0.15rem;
-    /* Left padding is zero so the number lines up with "All parts"; the right
-       padding stops the row highlight short of nothing - the row runs to the
-       rail's edge because the container has no right padding. */
-    padding: 0.4rem 0.5rem 0.4rem 0;
+    /* The row bleeds into the rail's own left padding, so the highlight gets an
+       inset on the left without moving the number off "All parts"' alignment. The
+       bleed stays inside the container's 0.5rem padding, so nothing hangs out of the
+       scroll box and the rail never grows a horizontal scrollbar. The right padding
+       stops the row highlight short of nothing - the row runs to the rail's edge
+       because the container has no right padding. */
+    margin-inline-start: -0.35rem;
+    padding: 0.4rem 0.5rem 0.4rem 0.35rem;
     border-radius: var(--radius-sm);
     line-height: 1.4;
     color: var(--muted);

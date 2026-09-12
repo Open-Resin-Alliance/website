@@ -565,6 +565,14 @@ a.card:hover,
   border-top: 0;
 }
 
+/* A part that opens with a line of frontmatter - the version and licence statement -
+   puts that line between the head's rule and the first section rule. The section's
+   usual lead-in then reads as a gap twice the size of the one above it, with a single
+   line of text stranded in between, so it takes the block's own lead-in instead. */
+.prose > p:first-child + :is(h2, h3, h4) {
+  margin-top: 1.5rem;
+}
+
 .prose h2,
 .prose h3,
 .prose h4 {
