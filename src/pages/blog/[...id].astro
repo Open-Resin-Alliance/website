@@ -114,15 +114,46 @@ const structuredData = [
 
       {
         toc.length > 1 && (
-          <aside class="post__toc">
-            <h2 class="post__toc-title mono">On this page</h2>
-            <ul>
+          <aside class="post__toc rail">
+            <h2 class="rail__title mono">On this page</h2>
+            <ul class="rail__list">
               {toc.map((heading) => (
-                <li class:list={[`post__toc-item--h${heading.depth}`]}>
-                  <a href={`#${heading.slug}`}>{heading.text}</a>
+                <li>
+                  <a
+                    class:list={['rail__row', heading.depth === 3 && 'rail__row--sub']}
+                    href={`#${heading.slug}`}
+                    data-toc-link={heading.slug}>{heading.text}</a>
                 </li>
               ))}
             </ul>
+            <script>
+              // The rail highlights the current row, so a table of contents has to know
+              // which section the reader is in: the last heading to pass under the header
+              // is the one being read. Runs only in the browser, on pages that have one.
+              const links = [...document.querySelectorAll('a[data-toc-link]')];
+              const targets = links
+                .map((link) => ({ link, section: document.getElementById(link.dataset.tocLink) }))
+                .filter((target) => target.section);
+
+              if (targets.length) {
+                let queued = 0;
+                const sync = () => {
+                  queued = 0;
+                  let current = targets[0];
+                  for (const target of targets) {
+                    if (target.section.getBoundingClientRect().top <= 96) current = target;
+                  }
+                  for (const target of targets) {
+                    if (target === current) target.link.setAttribute('aria-current', 'location');
+                    else target.link.removeAttribute('aria-current');
+                  }
+                };
+                addEventListener('scroll', () => {
+                  if (!queued) queued = requestAnimationFrame(sync);
+                }, { passive: true });
+                sync();
+              }
+            </script>
           </aside>
         )
       }
@@ -225,50 +256,6 @@ const structuredData = [
 
   .post__body {
     min-width: 0;
-  }
-
-  .post__toc {
-    position: sticky;
-    top: 5.5rem;
-    font-size: 0.8125rem;
-  }
-
-  .post__toc-title {
-    font-size: 0.625rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--muted-2);
-    margin-bottom: 0.75rem;
-  }
-
-  .post__toc ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-    border-left: 1px solid var(--border);
-  }
-
-  .post__toc li {
-    padding-left: 0.85rem;
-    line-height: 1.45;
-  }
-
-  .post__toc li a {
-    color: var(--muted);
-    transition: color 0.15s var(--ease);
-  }
-
-  .post__toc li a:hover {
-    color: var(--ink);
-  }
-
-  .post__toc-item--h3 {
-    padding-left: 1.55rem;
-    font-size: 0.75rem;
   }
 
   .post__related {
