@@ -8,7 +8,7 @@ order: 1
 isIndex: true
 sourceRepo: "LumenFormat"
 sourcePath: "spec/01-overview.md"
-sourceRef: "948ee22"
+sourceRef: "9e1b346"
 syncedAt: "2026-09-12"
 ---
 
@@ -118,7 +118,7 @@ To avoid confusion with other parts of the ORA ecosystem, LUMEN is explicitly
 | Property | Value |
 |----------|-------|
 | Extension | `.lumen` |
-| Media type | `application/vnd.openresin.lumen` (vendor tree; see [Appendix D](/specs/lumen/appendix-d-media-type#appendix-d-media-type-registration)) |
+| Media type | `application/vnd.openresin.lumen` (vendor tree) |
 | Magic bytes | `LUMN` (`0x4C 0x55 0x4D 0x4E`) |
 | Endianness | Little-endian (all multi-byte integers) |
 | Coordinate basis | Right-handed, Z-up |

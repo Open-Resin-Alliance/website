@@ -4,11 +4,11 @@ title: "License and governance"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
 status: "Draft v1.0"
 shortName: "LUMEN"
-order: 20
+order: 19
 isIndex: false
 sourceRepo: "LumenFormat"
-sourcePath: "spec/20-license.md"
-sourceRef: "948ee22"
+sourcePath: "spec/19-license.md"
+sourceRef: "9e1b346"
 syncedAt: "2026-09-12"
 ---
 
