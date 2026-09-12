@@ -1,7 +1,7 @@
 ---
 title: Introducing the Open Resin Alliance
 description: The Open Resin Alliance was founded on 15 August 2024 as a home for open-source work in resin-based 3D printing. Here is what the organisation is for, and how to take part.
-pubDate: 2024-08-15
+pubDate: 2024-10-01
 category: community
 tags: [announcement, community, open-source, discord]
 featured: true
@@ -19,7 +19,7 @@ The belief behind the alliance is equally direct. By sharing knowledge and resou
 
 Two of the projects now hosted here are older than the organisation itself. Odyssey, the engine for processing Prusa SL1 slicer files for the Apollo series of control boards, was created on 3 January 2023. Orion, the frontend designed to control it, followed on 13 January 2023 and is tailored to run on a wide variety of devices, primarily Linux single-board computers.
 
-Both began life under TheContrappostoShop. The organisation's profile notes that "Some of these projects have grown and moved from TheContrappostoShop to the ORA, to better serve the community at large." That move reflects what the alliance is for: giving long-running open-source projects a stable, collaborative home, and giving users a single place to follow them.
+Both began life under TheContrappostoShop, the name that was on our stand at 3DPrintopia in September, with the Prometheus mSLA and the Prometheus Mini. The organisation's profile notes that "Some of these projects have grown and moved from TheContrappostoShop to the ORA, to better serve the community at large." That move reflects what the alliance is for: giving long-running open-source projects a stable, collaborative home, and giving users a single place to follow them.
 
 ## What open source means here
 
