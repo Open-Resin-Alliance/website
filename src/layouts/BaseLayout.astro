@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
@@ -108,23 +109,38 @@ const graph = [
     <meta name="theme-color" content="#9333ea" media="(prefers-color-scheme: dark)" />
 
     <script is:inline>
+      // Theme bootstrap: applied before the first paint, and written onto the
+      // incoming document before every swap. A navigation copies the new
+      // document's <html> attributes over the live ones, and the built page
+      // carries no theme attribute, so without the second half every navigation
+      // would land in the light theme.
       (() => {
-        try {
-          const stored = localStorage.getItem('ora-theme');
-          const theme =
-            stored === 'light' || stored === 'dark'
-              ? stored
-              : window.matchMedia('(prefers-color-scheme: dark)').matches
-                ? 'dark'
-                : 'light';
-          document.documentElement.dataset.theme = theme;
-        } catch {
-          document.documentElement.dataset.theme = 'light';
-        }
+        const preferred = () => {
+          try {
+            const stored = localStorage.getItem('ora-theme');
+            if (stored === 'light' || stored === 'dark') return stored;
+          } catch {
+            /* storage unavailable - fall back to the system preference */
+          }
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        };
+
+        document.documentElement.dataset.theme = preferred();
+
+        document.addEventListener('astro:before-swap', (event) => {
+          event.newDocument.documentElement.dataset.theme = preferred();
+        });
       })();
     </script>
 
     <script is:inline type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} />
+
+    <!-- Navigations swap the document inside a view transition instead of
+         reloading it: the animation itself is in global.css, and every script on
+         the site has to assume it may be running against a document that was
+         swapped in (see the page-load notes in Header.astro and lib/live.ts).
+         Without JavaScript the links are ordinary links. -->
+    <ClientRouter />
     <slot name="head" />
   </head>
   <body>
@@ -136,26 +152,21 @@ const graph = [
     <Footer />
 
     <script is:inline>
-      (() => {
-        const toggle = document.querySelector('[data-theme-toggle]');
-        if (!toggle) return;
-        toggle.addEventListener('click', () => {
-          const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-          document.documentElement.dataset.theme = next;
-          try {
-            localStorage.setItem('ora-theme', next);
-          } catch {
-            /* storage unavailable - theme applies for this page view only */
-          }
-          document.dispatchEvent(new CustomEvent('ora:theme', { detail: next }));
-        });
-      })();
+      // Delegated from document rather than bound to the button: the header is
+      // replaced on every navigation, so a listener on the element would die with
+      // it. The theme itself lives on <html>, which the router does not replace.
+      document.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!(target instanceof Element) || !target.closest('[data-theme-toggle]')) return;
 
-      document.addEventListener('ora:theme', (event) => {
-        const theme = event.detail;
-        document
-          .querySelectorAll('.astro-code')
-          .forEach((block) => block.setAttribute('data-theme', theme));
+        const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem('ora-theme', next);
+        } catch {
+          /* storage unavailable - theme applies for this page view only */
+        }
+        document.dispatchEvent(new CustomEvent('ora:theme', { detail: next }));
       });
     </script>
     <!-- Live refresh of the build-time snapshot. src/lib/live.ts leaves the built

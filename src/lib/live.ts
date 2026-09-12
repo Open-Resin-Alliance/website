@@ -193,8 +193,26 @@ async function run() {
   if (live) markStatus(latest);
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => void run(), { once: true });
-} else {
+/**
+ * The router fires `astro:page-load` on the first load and after every swap, so
+ * that is what re-runs the refresh: a swapped-in page is built HTML whose numbers
+ * have not been looked up yet. The DOMContentLoaded branch is the fallback for a
+ * router that never started, and `started` keys on the URL so the first load,
+ * which both triggers can reach, fetches once.
+ */
+let started = '';
+
+const boot = () => {
+  const here = `${location.pathname}${location.search}`;
+  if (started === here) return;
+  started = here;
   void run();
+};
+
+document.addEventListener('astro:page-load', boot);
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot, { once: true });
+} else {
+  boot();
 }

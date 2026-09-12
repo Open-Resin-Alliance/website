@@ -131,7 +131,20 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  /* `*` does not reach the view-transition pseudo-elements, so the page
+     transition is switched off here by name. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
 }
+
+/*
+ * Page transitions. Navigations swap the document inside a view transition and
+ * the browser's own root cross-fade is the animation: a fade with no movement,
+ * which is what the sticky header wants. Adding a translate here moves the whole
+ * page, header included, and reads as a jump rather than a change of page.
+ */
 
 body {
   background-color: var(--bg);

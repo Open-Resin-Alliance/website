@@ -53,28 +53,38 @@ const githubIcon = 'M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4
 </header>
 
 <script is:inline>
+  // Everything is delegated from document, because a navigation replaces the
+  // header: the listeners outlive the element they act on, and each handler
+  // resolves the current one when it fires. The page-load hook is what re-reads
+  // the scroll state for the document that just arrived.
   (() => {
-    const header = document.querySelector('[data-site-header]');
-    const toggle = header?.querySelector('[data-nav-toggle]');
-    const nav = header?.querySelector('[data-site-nav]');
-    if (!header || !toggle || !nav) return;
+    const header = () => document.querySelector('[data-site-header]');
 
     const setOpen = (open) => {
-      header.toggleAttribute('data-open', open);
-      toggle.setAttribute('aria-expanded', String(open));
+      const element = header();
+      if (!element) return;
+      element.toggleAttribute('data-open', open);
+      element.querySelector('[data-nav-toggle]')?.setAttribute('aria-expanded', String(open));
     };
 
-    toggle.addEventListener('click', () => setOpen(!header.hasAttribute('data-open')));
-    nav.addEventListener('click', (event) => {
-      if (event.target instanceof HTMLAnchorElement) setOpen(false);
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.closest('[data-nav-toggle]')) {
+        setOpen(!header()?.hasAttribute('data-open'));
+        return;
+      }
+      if (target.closest('[data-site-nav] a')) setOpen(false);
     });
+
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') setOpen(false);
     });
 
-    const scrolled = () => header.toggleAttribute('data-scrolled', window.scrollY > 8);
-    scrolled();
+    const scrolled = () => header()?.toggleAttribute('data-scrolled', window.scrollY > 8);
+    document.addEventListener('astro:page-load', scrolled);
     window.addEventListener('scroll', scrolled, { passive: true });
+    scrolled();
   })();
 </script>
 
