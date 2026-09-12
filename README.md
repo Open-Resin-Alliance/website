@@ -3,7 +3,7 @@
 The website for the **Open Resin Alliance** - a static site built with
 [Astro](https://astro.build) that renders its blog from Markdown files in this repository
 and its GitHub and Open Collective data from committed snapshots; the browser refreshes the
-GitHub numbers against the public API.
+GitHub numbers and the backer list against the public APIs.
 
 Deployed to GitHub Pages at <https://openresin.org>.
 
@@ -95,8 +95,14 @@ with a freshly fetched one:
 |---|---|---|
 | org totals: `repos`, `stars:compact`, `forks:compact`, `active-repos` | `GET /orgs/Open-Resin-Alliance/repos` | one call |
 | per-repo `stars` / `forks` / `pushed` / `updated` | the same payload | none |
+| backer cards: `data-live-list="backers"` | the collective GraphQL query | one call |
 
-One request per page, reused for five minutes in `sessionStorage`, no token - an
+A list is not a text swap, so it has its own attribute: the client rebuilds the `<li>`s from
+the payload with the same markup the page was built from, and leaves the built list alone if
+the fetch fails or comes back empty - a blank supporters block would read as "no backers".
+
+One GitHub call per page, plus one collective call on pages that list backers, reused for
+five minutes in `sessionStorage`, no token - an
 unauthenticated browser gets 60 GitHub requests per hour per IP, which is why everything
 that costs a call per repository stays snapshot-only: open issue, pull request and commit
 counts (they need GraphQL, which a browser cannot authenticate), contributor totals,
