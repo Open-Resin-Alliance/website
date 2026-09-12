@@ -354,7 +354,7 @@ section {
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background-color 0.16s var(--ease), border-color 0.16s var(--ease),
-    color 0.16s var(--ease), transform 0.16s var(--ease);
+    color 0.16s var(--ease), box-shadow 0.16s var(--ease), transform 0.16s var(--ease);
 }
 
 .btn:hover {
@@ -392,9 +392,20 @@ section {
   --btn-border: #4752c4;
 }
 
+/* Ghost buttons are the same pane as the glass cards: an outlined button sitting
+   on a tinted band reads as a surface rather than a hole punched in the page.
+   The custom properties only work because `.btn` paints from them. */
+.btn--ghost {
+  --btn-bg: var(--glass-bg);
+  --btn-border: var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+}
+
 .btn--ghost:hover {
-  --btn-bg: var(--bg-inset);
   --btn-border: var(--border-strong);
+  box-shadow: var(--glass-shadow), var(--shadow);
 }
 
 .btn--sm {
@@ -526,21 +537,27 @@ a.card:hover,
 }
 
 /*
- * Body links are carried by colour, not a resting underline. That trades away
- * the one cue a reader who cannot separate these hues would rely on: no accent
- * in this palette reaches the 3:1 against the body text that WCAG 1.4.1 wants
- * for colour alone (violet-deep is 1.5:1 against --ink-soft), which is exactly
- * what the underline used to provide. The underline comes back on hover and on
- * keyboard focus, so the cue exists the moment a pointer or caret is on it.
+ * Hyperlink colour: accent at rest, underline on hover and keyboard focus.
+ * Shared by body copy (`.prose a`) and the inline text links outside it
+ * (`.link`, currently the fiscal-host credit). Lists of names opt out - the
+ * plugin strip and the backer cards are read as a set of parts, so they keep the
+ * muted and ink they were built with, as do navigation, cards, buttons and
+ * chips. Colour alone is not a sufficient cue: no accent in this palette reaches
+ * the 3:1 against the body text that WCAG 1.4.1 wants (violet-deep is 1.5:1
+ * against --ink-soft), so the underline comes back the moment a pointer or caret
+ * is on the link.
  */
-.prose a {
+.prose a,
+.link {
   color: var(--accent);
   text-decoration: none;
   transition: color 0.15s var(--ease);
 }
 
 .prose a:hover,
-.prose a:focus-visible {
+.prose a:focus-visible,
+.link:hover,
+.link:focus-visible {
   color: var(--accent-hover);
   text-decoration: underline;
   text-decoration-color: color-mix(in oklab, currentColor 60%, transparent);

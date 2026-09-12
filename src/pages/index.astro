@@ -109,7 +109,7 @@ const latestPosts = posts.slice(0, 3);
         <h2>Open Collective backers</h2>
         <p class="muted">
           Fiscally hosted by{' '}
-          <a href={supporters.host?.url ?? collectiveUrl} rel="noopener noreferrer" target="_blank">
+          <a class="link" href={supporters.host?.url ?? collectiveUrl} rel="noopener noreferrer" target="_blank">
             {supporters.host?.name ?? 'Open Source Collective'}
           </a>.
         </p>
@@ -148,7 +148,7 @@ const latestPosts = posts.slice(0, 3);
       </div>
       <div class="btn-row">
         <a class="btn btn--discord" href={LINKS.discord} rel="noopener noreferrer" target="_blank"><DiscordIcon size={16} />Join the Discord</a>
-        <a class="btn btn--ghost" href="/contact">Contact us</a>
+        <a class="btn btn--primary" href="/contact">Contact us</a>
       </div>
     </div>
   </section>
@@ -222,6 +222,8 @@ const latestPosts = posts.slice(0, 3);
     font-size: 0.9375rem;
   }
 
+  /* Plugin names read as a list of parts, not as prose: muted at rest, ink on
+     hover, and deliberately not the accent a hyperlink wears. */
   .plugin-strip__list a {
     color: var(--muted);
     transition: color 0.15s var(--ease);
