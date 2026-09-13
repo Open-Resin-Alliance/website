@@ -13,7 +13,7 @@ interface Props {
 
 const { entry, pages } = Astro.props;
 const { Content } = await render(entry);
-const { title, description, status, shortName, spec, isIndex, sourceRepo, sourcePath, sourceRef, syncedAt } =
+const { title, description, status, maturity, license, shortName, spec, isIndex, sourceRepo, sourcePath, sourceRef, syncedAt } =
   entry.data;
 
 const sourceUrl = `https://github.com/Open-Resin-Alliance/${sourceRepo}/blob/${sourceRef}/${sourcePath}`;
@@ -65,19 +65,17 @@ const structuredData = [
 
     <header class="spec__head">
       <div class="spec__meta mono">
-        <span class="spec__status">{status}</span>
+        <span class:list={['spec__status', maturity === 'draft' && 'spec__status--draft']}>{status}</span>
         <span class="spec__sep" aria-hidden="true">/</span>
-        <span>synced {formatDateLong(syncedAt)}</span>
-        <span class="spec__sep" aria-hidden="true">/</span>
-        <a href={sourceUrl}>{sourceRepo}@{sourceRef}</a>
         {
-          pages.length > 1 && (
+          license && (
             <>
+              <span>{license} licensed</span>
               <span class="spec__sep" aria-hidden="true">/</span>
-              <span>{pages.length} parts</span>
             </>
           )
         }
+        <span>{pages.length} {pages.length === 1 ? 'part' : 'parts'}</span>
       </div>
 
       <h1>{title}</h1>
@@ -133,6 +131,9 @@ const structuredData = [
         </nav>
       )
     }
+    <p class="spec__revision mono">
+      Source <a href={sourceUrl}>{sourceRepo}@{sourceRef}</a> · synced {formatDateLong(syncedAt)}
+    </p>
   </article>
 </BaseLayout>
 
@@ -193,7 +194,23 @@ const structuredData = [
   }
 
   .spec__status {
+    color: var(--ink);
+  }
+
+  /* A draft is not a contract yet, so it is the one thing in the header that raises its
+     voice; a published revision states itself plainly. */
+  .spec__status--draft {
     color: var(--accent);
+  }
+
+  .spec__revision {
+    margin-top: 1.5rem;
+    font-size: 0.6875rem;
+    color: var(--muted-2);
+  }
+
+  .spec__revision a {
+    color: inherit;
   }
 
   .spec__sep {

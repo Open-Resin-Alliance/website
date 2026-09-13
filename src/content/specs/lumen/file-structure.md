@@ -2,7 +2,9 @@
 spec: "lumen"
 title: "File structure"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
-status: "v1.0, published 2026-09-12"
+status: "v1.0, draft"
+maturity: "draft"
+license: "MIT"
 shortName: "LUMEN"
 order: 2
 isIndex: false

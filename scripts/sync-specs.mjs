@@ -113,9 +113,12 @@ const markAnswers = (body) =>
 function frontmatter(fields) {
   // JSON string literals are valid YAML scalars, which keeps colons, quotes and
   // apostrophes in a description from turning into a mapping.
-  const lines = Object.entries(fields).map(
-    ([key, value]) => `${key}: ${typeof value === 'string' ? JSON.stringify(value) : value}`,
-  );
+  const lines = Object.entries(fields)
+    // A field a specification does not have is left out rather than written as
+    // `undefined`: the content schema validates what is there, and a literal
+    // "undefined" is not a value any of them accepts.
+    .filter(([, value]) => value !== undefined && value !== null)
+    .map(([key, value]) => `${key}: ${typeof value === 'string' ? JSON.stringify(value) : value}`);
   return `---\n${lines.join('\n')}\n---\n\n`;
 }
 
@@ -123,17 +126,47 @@ function frontmatter(fields) {
 const slugOf = (file, group, indexFile) =>
   file === indexFile ? `/specs/${group}` : `/specs/${group}/${file.replace(/^\d+-/, '').replace(/\.md$/, '')}`;
 
+/**
+ * The revision a repository is on, as its own `status.json` declares it. A repository
+ * without one is published as its working tree, which is what VOXL does.
+ */
+function readStatus(repoDir) {
+  try {
+    return JSON.parse(readFileSync(join(repoDir, 'status.json'), 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+/** "v1.0, draft", or "v1.0, published 2026-09-12" once there is a date. */
+function statusLine(status, fallback) {
+  if (!status) return fallback;
+  return `v${status.version}, ${[status.status, status.published].filter(Boolean).join(' ')}`;
+}
+
 rmSync(OUT_DIR, { recursive: true, force: true });
 
 let pagesWritten = 0;
 
 for (const spec of SPECS) {
   const repoDir = resolve(ROOT, argValue(`--${spec.id}`) ?? spec.defaultDir);
-  const ref = head(repoDir);
+  const status = readStatus(repoDir);
+  // The published revision wins over the working tree. A draft in progress must not
+  // become the published specification by being pushed; until a first release names one,
+  // the tree is the only revision there is.
+  const publishedRef = status?.stable ?? null;
+  const ref = publishedRef ?? head(repoDir);
+
+  const listParts = (dir) =>
+    publishedRef
+      ? execFileSync('git', ['-C', repoDir, 'ls-tree', '--name-only', `${publishedRef}:${dir}`], { encoding: 'utf8' })
+          .split('\n')
+          .filter(Boolean)
+      : readdirSync(join(repoDir, dir));
 
   const parts = spec.sourceFiles
     ? spec.sourceFiles.map((f) => ({ file: f, path: f }))
-    : readdirSync(join(repoDir, spec.sourceDir))
+    : listParts(spec.sourceDir)
         .filter((f) => f.endsWith('.md'))
         .sort()
         .map((f) => ({ file: f, path: `${spec.sourceDir}/${f}` }));
@@ -142,7 +175,9 @@ for (const spec of SPECS) {
   const urls = new Map(parts.map((p) => [p.file, slugOf(p.file, spec.id, indexFile)]));
 
   for (const [order, part] of parts.entries()) {
-    const raw = readFileSync(join(repoDir, part.path), 'utf8');
+    const raw = publishedRef
+      ? execFileSync('git', ['-C', repoDir, 'show', `${publishedRef}:${part.path}`], { encoding: 'utf8' })
+      : readFileSync(join(repoDir, part.path), 'utf8');
     const titleLine = /^#\s+(.*)$/m.exec(raw);
     const title = titleLine ? stripInline(titleLine[1]) : spec.title;
 
@@ -173,7 +208,9 @@ for (const spec of SPECS) {
         spec: spec.id,
         title: part.file === indexFile ? spec.title : title,
         description: spec.description,
-        status: spec.status,
+        status: statusLine(status, spec.status),
+        maturity: status?.status,
+        license: status?.license,
         shortName: spec.shortName,
         order: order + 1,
         isIndex: part.file === indexFile,

@@ -42,8 +42,12 @@ const specs = defineCollection({
     title: z.string().max(120),
     /** Specification-level summary, repeated across the pages of the group. */
     description: z.string().max(400),
-    /** Human-readable maturity, e.g. "Draft v1.0". */
+    /** Human-readable maturity, e.g. "v1.0, draft". */
     status: z.string().max(40),
+    /** `draft` while the revision can still change, `published` once it is a contract. */
+    maturity: z.enum(['draft', 'published']).optional(),
+    /** Licence the specification is published under. */
+    license: z.string().max(40).optional(),
     /** Short name for the breadcrumb, e.g. "LUMEN". */
     shortName: z.string().max(24),
     /** Reading order within the specification, 1-based. */
