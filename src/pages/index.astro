@@ -6,7 +6,7 @@ import StatsTable from '../components/StatsTable.astro';
 
 import DiscordIcon from '../components/DiscordIcon.astro';
 import { getCollection } from 'astro:content';
-import { FEATURED_PROJECTS, PLUGIN_PROJECTS, projectSlug } from '../data/projects';
+import { PLUGIN_PROJECTS, PRIME_PROJECTS, projectSlug } from '../data/projects';
 import { LINKS, SITE } from '../data/site';
 import { stats } from '../lib/stats';
 import { collectiveUrl, supporters } from '../lib/supporters';
@@ -53,8 +53,8 @@ const latestPosts = posts.slice(0, 3);
       <a class="btn btn--ghost btn--sm" href="/projects">All <span data-live="repos">{stats.totals.repos}</span> repositories</a>
     </div>
 
-    <div class="grid grid--2">
-      {FEATURED_PROJECTS.map((project) => <ProjectCard project={project} />)}
+    <div class="grid grid--3">
+      {PRIME_PROJECTS.map((project) => <ProjectCard project={project} />)}
     </div>
 
     <div class="plugin-strip">
