@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-12T10:53:23.264Z",
+  "generatedAt": "2026-09-13T11:58:19.389Z",
   "source": "https://api.opencollective.com/graphql/v2",
   "collective": {
     "name": "Open Resin Alliance",
@@ -7,7 +7,7 @@
     "imageUrl": "https://images.opencollective.com/openresinalliance/879f0f1/logo.png",
     "website": null,
     "url": "https://opencollective.com/openresinalliance",
-    "totalFinancialContributors": 10
+    "totalFinancialContributors": 12
   },
   "host": {
     "name": "Open Source Collective",
@@ -17,9 +17,9 @@
     "url": "https://oscollective.org/"
   },
   "totals": {
-    "backers": 10,
-    "contributors": 14,
-    "raised": 565,
+    "backers": 12,
+    "contributors": 15,
+    "raised": 571,
     "currency": "USD"
   },
   "backers": [
@@ -122,6 +122,20 @@
       "recurringAmount": 5.75
     },
     {
+      "name": "Tom",
+      "slug": "tomb94",
+      "type": "INDIVIDUAL",
+      "imageUrl": "https://images.opencollective.com/tomb94/438272c/avatar.png",
+      "url": "https://opencollective.com/tomb94",
+      "since": "2026-09-12T17:25:21.024Z",
+      "amount": 5,
+      "currency": "USD",
+      "recurring": true,
+      "frequency": "MONTHLY",
+      "frequencyLabel": "Monthly",
+      "recurringAmount": 5
+    },
+    {
       "name": "Gobbledygook Games",
       "slug": "gggames",
       "type": "ORGANIZATION",
@@ -157,6 +171,20 @@
       "url": "https://opencollective.com/guest-b4a05279",
       "since": "2026-08-27T23:18:06.426Z",
       "amount": 20,
+      "currency": "USD",
+      "recurring": false,
+      "frequency": "ONE_TIME",
+      "frequencyLabel": "One-time",
+      "recurringAmount": null
+    },
+    {
+      "name": "Sin",
+      "slug": "sinxv",
+      "type": "INDIVIDUAL",
+      "imageUrl": "https://images.opencollective.com/sinxv/878d7c0/avatar.png",
+      "url": "https://opencollective.com/sinxv",
+      "since": "2026-07-24T22:00:00.000Z",
+      "amount": 1,
       "currency": "USD",
       "recurring": false,
       "frequency": "ONE_TIME",
