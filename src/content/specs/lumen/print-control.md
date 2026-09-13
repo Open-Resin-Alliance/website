@@ -10,7 +10,7 @@ order: 5
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/05-print-control.md"
-sourceRef: "236a31a"
+sourceRef: "4b66c23"
 syncedAt: "2026-09-13"
 ---
 
@@ -67,7 +67,7 @@ than one is present, readers use the first.
     {
       "layer": 100,
       "normal_exposure_sec": 2.8,
-      "lift_distance_mm": 6.0
+      "lift_distance_um": 6000
     },
     {
       "layer_range": [200, 250],

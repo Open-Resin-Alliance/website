@@ -10,7 +10,7 @@ order: 8
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/08-layer-encoding.md"
-sourceRef: "236a31a"
+sourceRef: "4b66c23"
 syncedAt: "2026-09-13"
 ---
 
@@ -368,7 +368,7 @@ Where:
   appropriate for the given layer height.
 
   **Adaptive layer height is not available in v1.** It needs per-layer heights in the
-  file, and v1 has nowhere to put them: `HDR.layer_height_mm` is a single default, and
+  file, and v1 has nowhere to put them: `HDR.layer_height_um` is a single default, and
   the `VLYR` extension is non-critical ([§4.13](/specs/lumen/scene-chunks#413-extd---extension-chunk)), so a conforming reader may skip it and
   print at the wrong Z. A future core mechanism - most likely an `LTBL` field - is
   required first. Until then encoders MUST NOT emit variable-height `.lumen` files, and
