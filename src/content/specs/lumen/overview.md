@@ -10,7 +10,7 @@ order: 1
 isIndex: true
 sourceRepo: "LumenFormat"
 sourcePath: "spec/01-overview.md"
-sourceRef: "f735b0c"
+sourceRef: "3247df6"
 syncedAt: "2026-09-13"
 ---
 
