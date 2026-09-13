@@ -81,6 +81,35 @@ const head = (dir) =>
 
 const stripInline = (s) => s.replace(/`/g, '').replace(/\*\*/g, '').trim();
 
+/**
+ * A table cell that answers a yes/no question renders as a coloured mark, so a column of
+ * them can be scanned rather than read. The specifications keep saying "Yes" and "No" -
+ * that is what belongs in a format document, and what the source repository renders - so
+ * the swap happens here, with the word travelling alongside the mark as visually-hidden
+ * text, which screen readers and anything copying a cell out still get.
+ *
+ * Only the leading word of a cell is touched: "No*" keeps its footnote marker, and
+ * "Yes (chamber + vat, Celsius)" keeps its detail.
+ */
+/** A cell anywhere in a table row, not just the first: `| Yes |`, `| No* |`, `| No (…)|`. */
+const ANSWER_CELL = /(\|\s*)(Yes|No)(?=$|[\s*(|])/g;
+
+const markAnswers = (body) =>
+  body
+    .split('\n')
+    .map((line) =>
+      line.startsWith('|')
+        ? line.replace(
+            ANSWER_CELL,
+            (_whole, lead, answer) =>
+              `${lead}<span class="mark mark--${answer.toLowerCase()}" aria-hidden="true">${
+                answer === 'Yes' ? '✓' : '✗'
+              }</span><span class="visually-hidden">${answer}</span>`,
+          )
+        : line,
+    )
+    .join('\n');
+
 function frontmatter(fields) {
   // JSON string literals are valid YAML scalars, which keeps colons, quotes and
   // apostrophes in a description from turning into a mapping.
@@ -132,6 +161,8 @@ for (const spec of SPECS) {
     });
 
     for (const { from, to } of spec.rewrites) body = body.replace(from, to);
+
+    body = markAnswers(body);
 
     const rel = `${spec.id}/${part.file === indexFile ? 'overview' : part.file.replace(/^\d+-/, '').replace(/\.md$/, '')}.md`;
     const file = join(OUT_DIR, rel);

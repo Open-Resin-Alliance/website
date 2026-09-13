@@ -9,7 +9,7 @@ isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/08-layer-encoding.md"
 sourceRef: "236a31a"
-syncedAt: "2026-09-12"
+syncedAt: "2026-09-13"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -30,7 +30,7 @@ prepended to each layer's mask data within its block's decompressed output:
 
 | Tag | Encoding | Use case |
 |-----|----------|----------|
-| `0x00` | Binary REE ([§5.3](#53-binary-ree-no-anti-aliasing)) | No anti-aliasing - every pixel is 0 or 255. |
+| `0x00` | Binary REE ([§5.3](#53-binary-ree-no-anti-aliasing)) | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> anti-aliasing - every pixel is 0 or 255. |
 | `0x01` | Grayscale REE ([§5.4](#54-grayscale-ree-anti-aliased)) | Anti-aliased - full 8-bit per pixel. |
 | `0x02` | Split REE + sparse AA ([§5.5](#55-split-encoding-binary-ree--sparse-aa-overlay-tag-0x02)) | Anti-aliased, but most pixels are solid 0/255. Bulk of layer encoded as binary REE; edge AA pixels stored as a sparse overlay. |
 
@@ -282,7 +282,7 @@ complexity, AA settings, and zstd dictionary effectiveness.
 
 | Encoding | Per-layer REE overhead | Compressed LAYR (projected) | Notes |
 |----------|------------------------|------------------------------|-------|
-| Binary REE | Minimal (end positions only) | Small | No AA information at all. |
+| Binary REE | Minimal (end positions only) | Small | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> AA information at all. |
 | Grayscale REE | Per-run value byte overhead | Larger | Every pixel carries a u8 run value. |
 | Split REE + sparse AA | Binary REE + sparse overlay | Substantially smaller than grayscale | Bulk as binary REE, edges as sparse overlay. |
 

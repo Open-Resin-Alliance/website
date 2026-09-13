@@ -9,7 +9,7 @@ isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/19-license.md"
 sourceRef: "236a31a"
-syncedAt: "2026-09-12"
+syncedAt: "2026-09-13"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->

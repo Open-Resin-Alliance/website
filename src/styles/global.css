@@ -60,6 +60,9 @@
      token because the prose link rule is theme-agnostic. */
   --accent-hover: var(--brand-pink-deep);
   --focus: var(--brand-violet);
+  /* A table column of answers reads at a glance as marks rather than words. */
+  --yes: #15803d;
+  --no: #b91c1c;
   --shadow-sm: 0 1px 2px rgb(24 24 27 / 0.06);
   --shadow: 0 1px 2px rgb(24 24 27 / 0.05), 0 8px 24px -12px rgb(24 24 27 / 0.14);
   --code-bg: #fafaf9;
@@ -88,6 +91,8 @@
   --accent-ink: #0a0a0b;
   --accent-hover: var(--brand-pink);
   --focus: var(--brand-pink);
+  --yes: #4ade80;
+  --no: #f87171;
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
   --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -16px rgb(0 0 0 / 0.7);
   --code-bg: #141417;
@@ -803,6 +808,20 @@ a.card:hover,
 /* --------------------------------------------------------------------------
    Utilities
    -------------------------------------------------------------------------- */
+
+/* The mark for a yes/no table cell: the word it stands for is in the markup as
+   visually-hidden text, so copying a cell still yields "Yes" or "No". */
+.mark {
+  font-weight: 600;
+}
+
+.mark--yes {
+  color: var(--yes);
+}
+
+.mark--no {
+  color: var(--no);
+}
 
 .visually-hidden {
   position: absolute !important;

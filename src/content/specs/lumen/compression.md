@@ -9,7 +9,7 @@ isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/09-compression.md"
 sourceRef: "236a31a"
-syncedAt: "2026-09-12"
+syncedAt: "2026-09-13"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -37,7 +37,7 @@ change in compressed file sizes.
 | Decompression speed | Baseline | Significantly faster (see zstd benchmarks) |
 | Compression speed | Baseline | Significantly faster at default levels |
 | Dictionary support | raw deflate only | First-class training API |
-| Streaming API | Yes | Yes |
+| Streaming API | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> |
 
 Benchmark data is published by the zstd project (RFC 8878). The key design
 decision is that zstd's combination of higher ratio, faster decompression, and

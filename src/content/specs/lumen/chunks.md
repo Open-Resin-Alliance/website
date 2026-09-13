@@ -9,7 +9,7 @@ isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/03-chunks.md"
 sourceRef: "236a31a"
-syncedAt: "2026-09-12"
+syncedAt: "2026-09-13"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -22,19 +22,19 @@ the file's capabilities at a glance; detailed binary layouts follow.
 
 | Tag | Name | Required | Encrypted | Purpose |
 |-----|------|----------|-----------|---------|
-| `HDR\0` | Header | Yes | No | Display dimensions, layer count, encoder identity |
-| `META` | Metadata | Yes | Yes | Print parameters as JSON (exposure, lift, motion) |
-| `PROF` | Print Profile | No | Yes | Named, versioned, reusable profile for Odyssey import |
-| `AUTH` | Authentication | No | No | Encryption metadata, key wrapping, machine binding |
-| `SECT` | Sector Definition | No* | Yes | Per-material exposure groups for multi-material printing |
-| `LROV` | Layer Override | No | Yes | Per-layer or per-range timing overrides |
-| `PREV` | Preview Image | No | Optional | PNG preview images, multiple roles supported |
-| `LTBL` | Layer Table | Yes | No | Per-layer block index and byte offsets for random access |
-| `ZDIC` | Zstd Dictionary | No | Yes | Trained dictionary shared by all LAYR block frames |
-| `LAYR` | Layer Data | Yes | Yes | Layer masks as independent zstd block frames |
-| `LHAS` | Layer Hashes | No | No | SHA-256 Merkle tree for integrity verification |
-| `VOXL` | Embedded Scene | No | Yes | Complete VOXL scene file for round-trip re-editing |
-| `EXTD` | Extension | No | Per-extension | Vendor-specific or future standard extensions |
+| `HDR\0` | Header | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Display dimensions, layer count, encoder identity |
+| `META` | Metadata | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Print parameters as JSON (exposure, lift, motion) |
+| `PROF` | Print Profile | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Named, versioned, reusable profile for Odyssey import |
+| `AUTH` | Authentication | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Encryption metadata, key wrapping, machine binding |
+| `SECT` | Sector Definition | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span>* | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Per-material exposure groups for multi-material printing |
+| `LROV` | Layer Override | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Per-layer or per-range timing overrides |
+| `PREV` | Preview Image | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Optional | PNG preview images, multiple roles supported |
+| `LTBL` | Layer Table | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Per-layer block index and byte offsets for random access |
+| `ZDIC` | Zstd Dictionary | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Trained dictionary shared by all LAYR block frames |
+| `LAYR` | Layer Data | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Layer masks as independent zstd block frames |
+| `LHAS` | Layer Hashes | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | SHA-256 Merkle tree for integrity verification |
+| `VOXL` | Embedded Scene | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Complete VOXL scene file for round-trip re-editing |
+| `EXTD` | Extension | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Per-extension | Vendor-specific or future standard extensions |
 
 \* Required when `MULTI_SECTOR` flag is set.
 
