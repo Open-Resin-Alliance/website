@@ -748,6 +748,16 @@ a.card:hover,
   color: var(--muted);
 }
 
+/* A table cell may not shrink to a single character. The prose block sets
+   `overflow-wrap: anywhere` for the specification's long identifiers, and inside a table
+   that lets a column collapse to its narrowest possible width: "Correction" breaks across
+   three lines while the column beside it has room to spare. `break-word` breaks a word only
+   when the line would overflow, so each column keeps its longest word and the table's own
+   layout gives the space to the column that needs it. */
+.prose table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
 .prose table {
   width: 100%;
   border-collapse: collapse;
