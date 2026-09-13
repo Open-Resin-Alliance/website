@@ -1,0 +1,88 @@
+name: Sync specifications
+
+# The specification repositories are separate checkouts, so the site carries committed
+# snapshots of them and builds offline. This keeps those snapshots current: it pulls each
+# specification, rebuilds, and commits what changed. Same shape as the statistics refresh,
+# and for the same reason - the site is static, so a hook can refresh a committed snapshot,
+# never serve live content.
+#
+# What gets published is decided upstream, not here. A specification's status.json names the
+# git ref of its published revision, and the sync renders that ref instead of the working
+# tree, so a draft in progress produces no diff and cannot reach the site by being pushed.
+# While a specification has no published revision the tree is the only one there is, and its
+# page says it is a draft.
+#
+# To react to a push rather than wait for the schedule, point an organisation webhook at this
+# repository's dispatches endpoint with event_type "specs" - the wiring is documented in
+# stats.yml, and needs a fine-grained PAT because repository_dispatch rejects read-only
+# tokens. The schedule below covers it until that exists.
+
+on:
+  schedule:
+    - cron: '43 6 * * *'
+  repository_dispatch:
+    types: [specs]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Checkout LumenFormat
+        uses: actions/checkout@v7
+        with:
+          repository: Open-Resin-Alliance/LumenFormat
+          path: LumenFormat
+
+      - name: Checkout DragonFruit
+        uses: actions/checkout@v7
+        with:
+          repository: Open-Resin-Alliance/DragonFruit
+          path: DragonFruit
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync the specifications
+        run: node scripts/sync-specs.mjs --lumen ./LumenFormat --voxl ./DragonFruit
+
+      # The snapshot is only worth committing if the site still builds from it.
+      - name: Build
+        run: npm run build
+
+      - name: Commit the snapshots if they changed
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/content/specs
+          if git diff --staged --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "specs: sync from LumenFormat@$(git -C LumenFormat rev-parse --short HEAD) and DragonFruit@$(git -C DragonFruit rev-parse --short HEAD)"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # A push made with the workflow token does not start another workflow, so the deploy
+      # is asked for explicitly rather than left to the push.
+      - name: Deploy
+        if: steps.commit.outputs.changed == 'true'
+        run: gh workflow run deploy.yml --ref ${{ github.event.repository.default_branch }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
