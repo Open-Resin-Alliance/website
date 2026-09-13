@@ -69,10 +69,10 @@ const structuredData = [
     <div class="section-head">
       <div class="section-head__text">
         <h2>Core projects</h2>
-        <p class="lede">The four projects most people will meet first.</p>
+        <p class="lede">The three projects most people will meet first.</p>
       </div>
     </div>
-    <div class="grid grid--2">
+    <div class="grid grid--3">
       {FEATURED_PROJECTS.map((project) => <ProjectCard project={project} detailed />)}
     </div>
   </section>
@@ -99,7 +99,9 @@ const structuredData = [
     <div class="section-head">
       <div class="section-head__text">
         <h2>Organisation and tooling</h2>
-        <p class="lede">Governance, documentation and the website you are reading.</p>
+        <p class="lede">
+          Governance, documentation, the website you are reading, and the conversion tooling for other ecosystems.
+        </p>
       </div>
     </div>
     <div class="grid grid--3">

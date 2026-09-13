@@ -26,9 +26,6 @@ export interface Project {
   license: string | null;
   group: ProjectGroup;
   /** What the project actually does - quoted from its README. */
-  /** Shown in the home page grid: the projects a visitor should meet first. */
-  prime?: boolean;
-
   capabilities: string[];
   /** Optional hero image under /public. */
   image?: string;
@@ -67,7 +64,6 @@ export const PROJECTS: Project[] = [
       'A plugin architecture - printer and file-format support ships as separate MIT-licensed plugins',
     ],
     website: LINKS.dragonfruitSite,
-    prime: true,
     image: '/projects/dragonfruit.webp',
   },
   {
@@ -85,7 +81,6 @@ export const PROJECTS: Project[] = [
       'Ships for aarch64, armv7 and x64 Linux targets',
       'PrometheusOS is an all-in-one solution that includes both Odyssey and Orion',
     ],
-    prime: true,
     image: '/projects/orion.webp',
   },
   {
@@ -103,7 +98,6 @@ export const PROJECTS: Project[] = [
       'Configurable through a single odyssey.yaml file',
       'Temporary Mainsail integration for Klipper while the Orion UI matures',
     ],
-    prime: true,
     image: '/projects/odyssey.webp',
   },
   {
@@ -114,7 +108,7 @@ export const PROJECTS: Project[] = [
       'VoxelShift is a desktop utility for converting resin slicer files into NanoDLP-ready plate files. It includes a streamlined post-processor mode for slicers, automatic material selection, and optional upload/start-print workflows for NanoDLP devices.',
     language: 'Dart',
     license: 'Apache-2.0',
-    group: 'featured',
+    group: 'infrastructure',
     capabilities: [
       'Converts CTB/CBDDLP/Photon resin files into .nanodlp plate archives that NanoDLP can import directly',
       'Post-processor mode that slicers can call to convert, upload, and optionally start prints',
@@ -229,8 +223,6 @@ export const PROJECTS: Project[] = [
 ];
 
 export const FEATURED_PROJECTS = PROJECTS.filter((p) => p.group === 'featured');
-/** The home page shows the core three and nothing else: DragonFruit, Orion, Odyssey. */
-export const PRIME_PROJECTS = PROJECTS.filter((p) => p.prime);
 export const PLUGIN_PROJECTS = PROJECTS.filter((p) => p.group === 'plugin');
 export const INFRA_PROJECTS = PROJECTS.filter((p) => p.group === 'infrastructure');
 
