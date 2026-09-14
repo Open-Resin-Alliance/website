@@ -59,12 +59,14 @@ const WASH_ALPHA = 0.15;
 const LOCKUP_WIDTH = 300;
 
 /**
- * A title is two lines at this width and size, three at a push; a summary is two.
- * Both are what fits the card rather than what the page says, so they are cut on a
- * word rather than left to overflow - satori has no line clamping to fall back on.
+ * A title is two lines at this width and size, three at a push. A summary is allowed
+ * three, which at 28px is about 210 characters - and the longest description on the site
+ * is 206, so nothing is cut off in practice: these are a backstop against a fourth line,
+ * which would reach the footer, not something the writing has to fit. Titles are cut at
+ * 90. satori has no line clamping, so an overlong card would overlap rather than clip.
  */
 const TITLE_CHARS = 90;
-const SUMMARY_CHARS = 150;
+const SUMMARY_CHARS = 210;
 
 const flat = (value) => (value ?? '').replace(/\s+/g, ' ').trim();
 

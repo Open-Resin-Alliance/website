@@ -13,7 +13,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
 import { LINKS, SITE } from '../data/site';
-import { OG_HEIGHT, OG_WIDTH, ogImagePath } from '../lib/og';
+import { OG_HEIGHT, OG_WIDTH, ogImagePath, shortSummary } from '../lib/og';
 
 export interface Props {
   title?: string;
@@ -25,9 +25,6 @@ export interface Props {
   socialMeta?: string;
   /** What the card calls this page, when the page's own title is not it. */
   cardTitle?: string;
-  /** What the card says this page is, when the description is not what belongs on a
-   *  card that will outlive the build - project pages put live counts in theirs. */
-  cardSummary?: string;
   type?: 'website' | 'article';
   publishedTime?: string;
   modifiedTime?: string;
@@ -44,7 +41,6 @@ const {
   modifiedTime,
   socialMeta,
   cardTitle,
-  cardSummary,
   noindex = false,
   structuredData = [],
 } = Astro.props;
@@ -52,6 +48,10 @@ const {
 const pageTitle = title ? `${title} - ${SITE.name}` : `${SITE.name} - ${SITE.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
 const socialImage = new URL(image ?? ogImagePath(Astro.url.pathname), Astro.site ?? SITE.url).href;
+
+/* Meta descriptions are read at a glance - a search result, a link preview - so they get
+   the short form, and the card gets the whole sentence. */
+const shortDescription = shortSummary(description);
 
 const organisation = {
   '@type': 'Organization',
@@ -99,7 +99,7 @@ const graph = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={shortDescription} />
     <link rel="canonical" href={canonical} />
     <meta name="generator" content={Astro.generator} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
@@ -113,7 +113,7 @@ const graph = [
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={shortDescription} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImage} />
     <meta property="og:image:alt" content={pageTitle} />
@@ -125,18 +125,21 @@ const graph = [
         already says that in its footer. This is the only thing on the page that is
         not in a tag the build can read for itself. */}
     <meta name="card:title" content={cardTitle ?? title ?? SITE.tagline} />
-    {cardSummary && <meta name="card:summary" content={cardSummary} />}
+    {/* The line the card shows under its title: the description in full, since a card has
+        room for it and a meta tag does not. */}
+    <meta name="card:summary" content={description} />
     {socialMeta && <meta name="card:meta" content={socialMeta} />}
     {publishedTime && <meta property="article:published_time" content={publishedTime} />}
     {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={shortDescription} />
     <meta name="twitter:image" content={socialImage} />
     <meta name="twitter:image:alt" content={pageTitle} />
 
-    <meta name="theme-color" content="#ec4899" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#9333ea" media="(prefers-color-scheme: dark)" />
+    {/* The brand's pink, in both themes. The dark theme's violet was too loud against a
+        near-black page for a bar that is chrome rather than content. */}
+    <meta name="theme-color" content="#ec4899" />
 
     <script is:inline>
       // Theme bootstrap: applied before the first paint, and written onto the

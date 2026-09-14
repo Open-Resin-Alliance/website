@@ -144,6 +144,15 @@ it gets a page: nothing to register, no list to keep in step. A route endpoint w
 its own list of slugs, and a list that drifts from the pages fails silently as a 404 image.
 Forwarding stubs (`/specs/<spec>/<part>`) carry no social tags at all and get no card.
 
+The card carries the page's description in full, and nothing is cut off: the longest one
+on the site is 206 characters, three lines at the card's size. Every meta description
+carries the *short* form instead - `shortSummary()` in `src/lib/og.ts` cuts at the colon a
+specification or a project introduces itself with, or at the end of the first sentence -
+because a search result and a link preview are read at a glance. LUMEN's meta says "The
+chunked, zstd-compressed print format for resin printers" where its card says the whole
+sentence. One description, then, in three places: short in the meta tags, whole on the card,
+and whole again in the structured data.
+
 The front page is the exception, and deliberately so: no words, the lockup centred on the
 wash at 300px, the way a card for the organisation rather than for one page should read.
 

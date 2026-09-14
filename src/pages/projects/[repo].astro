@@ -21,12 +21,13 @@ const live = repoStats(project.repo);
 const repository = repoUrl(project.repo);
 
 /**
- * What the social card says this project is: the repository's own description, the same
- * rule the project cards follow. Not the meta description below, which carries the
- * stars and open-issue counts - a shared card outlives the build that rendered it, and
- * those numbers would be wrong within a week.
+ * What this project is, in its own words: the repository's description, the same rule the
+ * project cards follow, falling back to the catalogue's summary where a repository has
+ * none. One description serves the search snippet, the link preview and the social card,
+ * so they cannot say different things - and it holds no counts, which go stale in all
+ * three places and are noise in a search result. The numbers live in the page's facts.
  */
-const cardSummary = live?.description ?? project.summary;
+const description = live?.description ?? project.summary;
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft && data.project === project.repo)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -56,7 +57,7 @@ const structuredData = [
   {
     '@type': 'SoftwareSourceCode',
     name: project.name,
-    description: project.summary,
+    description,
     codeRepository: repository,
     programmingLanguage: live?.language ?? project.language,
     license: project.license ? `https://spdx.org/licenses/${project.license}.html` : undefined,
@@ -69,8 +70,7 @@ const structuredData = [
 <BaseLayout
   socialMeta={project.repo}
   title={project.name}
-  description={`${project.blurb} ${live ? `${formatCompact(live.stars)} stars, ${formatCompact(live.openIssues)} open issues.` : ''}`.trim()}
-  cardSummary={cardSummary}
+  description={description}
   type="article"
   structuredData={structuredData}
 >
