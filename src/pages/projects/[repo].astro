@@ -20,6 +20,14 @@ const { project } = Astro.props;
 const live = repoStats(project.repo);
 const repository = repoUrl(project.repo);
 
+/**
+ * What the social card says this project is: the repository's own description, the same
+ * rule the project cards follow. Not the meta description below, which carries the
+ * stars and open-issue counts - a shared card outlives the build that rendered it, and
+ * those numbers would be wrong within a week.
+ */
+const cardSummary = live?.description ?? project.summary;
+
 const posts = (await getCollection('blog', ({ data }) => !data.draft && data.project === project.repo)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
@@ -59,8 +67,10 @@ const structuredData = [
 ---
 
 <BaseLayout
+  socialMeta={project.repo}
   title={project.name}
   description={`${project.blurb} ${live ? `${formatCompact(live.stars)} stars, ${formatCompact(live.openIssues)} open issues.` : ''}`.trim()}
+  cardSummary={cardSummary}
   type="article"
   structuredData={structuredData}
 >

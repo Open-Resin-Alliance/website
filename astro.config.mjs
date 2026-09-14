@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import socialCards from './src/og/integration.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,6 +10,9 @@ export default defineConfig({
   trailingSlash: 'ignore',
   integrations: [
     mdx(),
+    /* Every page gets a social card, rendered from the page itself once the site is
+       built. See src/og/. */
+    socialCards(),
     sitemap({
       /* `/specs/<spec>/<part>` only forwards to the part's section of the
          specification document, so it is not a page anyone should land on from a

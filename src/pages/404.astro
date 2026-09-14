@@ -2,10 +2,20 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { LINKS } from '../data/site';
 import { FEATURED_PROJECTS, projectSlug } from '../data/projects';
+
+/**
+ * The 404 is the one card that gets to be funny, and only if you print: a layer that did
+ * not cure is what ruins a print, and a page that is not there is a layer that did not
+ * cure. It goes in the title, where it is the first thing anyone reads, and the line under
+ * it stays the page's own - the joke says nothing about what to do next, which is what the
+ * summary is for. The page itself is unchanged.
+ */
+const cardTitle = 'Layer 404: nothing cured here';
 ---
 
 <BaseLayout
   title="Page not found"
+  cardTitle={cardTitle}
   description="That page does not exist. Try the projects, the blog, or the organisation overview."
   noindex
 >

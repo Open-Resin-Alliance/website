@@ -126,6 +126,77 @@ page renders it: the home page shows the per-project stats table instead. Re-mou
 means restoring `src/components/ActivityFeed.astro` from git history and adding it back to
 a page.
 
+## Social cards
+
+Every page has one, at the path it is built to: `/blog/foo/` is `/og/blog/foo.png`, the front
+page is `/og/home.png`. Pages point at themselves through `ogImagePath()` in `src/lib/og.ts`;
+nothing sets an image by hand.
+
+The card is rendered after the build by `src/og/integration.mjs`, from what the page says
+about itself on three `card:` tags: what it calls itself, what it says it is, and its
+micro-label. A page that needs to differ from its own metadata sets them - the 404 calls
+itself "404 - Page not found", a spec adds "v1.0, draft · 13 parts", and a project page
+hands over the repository's description instead of its meta description, which carries
+stars and open-issue counts that would be wrong within a week on a card someone shared.
+
+Because it works from the built pages, a new post or specification gets a card the moment
+it gets a page: nothing to register, no list to keep in step. A route endpoint would need
+its own list of slugs, and a list that drifts from the pages fails silently as a 404 image.
+Forwarding stubs (`/specs/<spec>/<part>`) carry no social tags at all and get no card.
+
+The front page is the exception, and deliberately so: no words, the lockup centred on the
+wash at 300px, the way a card for the organisation rather than for one page should read.
+
+`src/og/render.mjs` holds the layout: 1200×630, the page wash over the ink background, the
+brand ramp as the top rule, Atkinson Hyperlegible Next for the title and summary, JetBrains
+Mono for the section label and the footer. Titles are cut to 90 characters and summaries to
+150, on a word boundary, because satori has no line clamping to fall back on: a three-line
+title over a two-line summary is what still clears the footer with room to spare.
+
+satori lays the markup out and hands it to resvg, which rasterises a PNG - an SVG `og:image`
+is not read. The top rule and the wash are *not* drawn by that rasteriser, though: they are
+computed at full precision in `src/og/render.mjs` and quantised once, through Floyd-Steinberg
+error diffusion, with the type and the lockup composited over the result.
+
+The reason is that the dark theme's wash spans about sixteen levels of red across the card,
+so a rasteriser drawing it truthfully puts a visible step every thirty pixels - banding, and
+no amount of rendering resolution fixes it, because the step is one level of colour and the
+output is 8-bit. Error diffusion keeps the local average within a quarter of a level of the
+ramp it should be; half a level is where a step starts to show. It costs size, not quality:
+the dithered background is what a PNG stores least efficiently, and cards come out around
+370KB each.
+
+`src/og/fonts/` holds static instances of the five weights used, each with its
+OFL licence, and `src/og/brand/lockup.png` is the footer lockup converted from the WebP for
+the same reason. satori can read neither woff2 nor the `fvar` table of a variable font, so
+the instances are generated once from the same woff2 files the site ships:
+
+```
+pip install brotli fonttools
+python - <<'PY'
+from fontTools.ttLib import TTFont
+from fontTools.varLib import instancer
+src = 'node_modules/@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-wght-normal.woff2'
+f = TTFont(src)
+f.flavor = None
+f.save('/tmp/source.ttf')
+instancer.instantiateVariableFont(TTFont('/tmp/source.ttf'), {'wght': 700}, updateFontNames=False).save('src/og/fonts/atkinson-hyperlegible-next-700.ttf')
+PY
+```
+
+Rendering adds twenty seconds or so to a build, most of it satori. To look at the cards,
+build and serve `dist/` however you like:
+
+```
+npm run build
+node scripts/og-preview.mjs        # writes dist/_og-preview.html: every card on one page
+python -m http.server 4400 --directory dist
+```
+
+A change here is not finished until every `og:image` in `dist/` resolves to a 1200x630 PNG.
+Markup and artifact are written from the same rule, and a disagreement between them is
+silent on the deployed site: the crawler shows no image, and nothing logs a 404.
+
 ## Local development
 
 ```
@@ -157,11 +228,14 @@ src/
     format.ts       date and number formatting, shared by the pages and the live refresh
     live.ts         browser refresh of the built numbers; leaves them untouched on failure
     activity.js     GitHub events → activity entries for the build script
+    og.ts           where a page's generated social card lives
+  og/               social cards: the renderer, the fonts and lockup it embeds, the build hook
   pages/            routes: /, /projects, /projects/[repo], /blog, /blog/[...id], /about, /contact, /404
   styles/global.css design tokens (including the glass set) and base styles
 scripts/
   fetch-github-stats.mjs
   fetch-open-collective.mjs
+  og-preview.mjs    writes dist/_og-preview.html, every card on one page
 public/             CNAME, robots.txt, favicon, brand and project images
 ```
 
@@ -191,11 +265,11 @@ untinted chip.
 - The logo is the real artwork. `/brand/ora-lockup.webp` is the full lockup (ORA wordmark
   plus emblem) used at 64px in the footer; the header is a text-only wordmark. `favicon.png`
   and `/brand/ora-avatar.png` derive from the same source file. Nothing is redrawn.
-- The social card and the avatar carry the site's own page wash rather than a flat fill:
-  the brand ramp at the dark theme's 15% over `#0a0a0b`, at 135 degrees - `rgb(124 58 237)`,
-  `rgb(219 39 119)`, `rgb(234 88 12)`, the same three stops `body` uses, so the card and the
-  page agree. The lockup sits centred on it, 300px wide in the 1200×630 card and 123px in
-  the 180×180 avatar.
+- The avatar carries the site's own page wash rather than a flat fill: the brand ramp at
+  the dark theme's 15% over `#0a0a0b`, at 135 degrees - `rgb(124 58 237)`, `rgb(219 39 119)`,
+  `rgb(234 88 12)`, the same three stops `body` uses - with the lockup centred on it, 123px
+  wide in the 180×180 frame. Social cards are generated from the same wash rather than drawn
+  by hand; see "Social cards".
 - Light and dark themes, both driven by `data-theme` on `<html>`; the choice is stored in
   `localStorage` and applied before first paint, so there is no flash of the wrong theme.
 - No CSS framework. Tokens and primitives live in `src/styles/global.css`, component

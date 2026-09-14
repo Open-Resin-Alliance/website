@@ -35,7 +35,14 @@ const structuredData = [
 ];
 ---
 
-<BaseLayout title={title} description={description} type="article" modifiedTime={isoDate(new Date(syncedLatest))} structuredData={structuredData}>
+<BaseLayout
+  title={title}
+  description={description}
+  type="article"
+  modifiedTime={isoDate(new Date(syncedLatest))}
+  socialMeta={`${status} \u00b7 ${pages.length} ${pages.length === 1 ? 'part' : 'parts'}`}
+  structuredData={structuredData}
+>
   <article class:list={['shell', 'spec', pages.length === 1 && 'spec--single']} id={partSlug(head)}>
     <nav class="crumbs mono" aria-label="Breadcrumb">
       <a href="/">Home</a>
