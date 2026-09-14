@@ -1,0 +1,521 @@
+---
+import type { SpecEntry } from '../lib/specs';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { partHtml, partSlug, specUrl } from '../lib/specs';
+import { formatDateLong, isoDate } from '../lib/format';
+
+interface Props {
+  /** Every part of the specification, in reading order. The first is the head. */
+  pages: SpecEntry[];
+}
+
+const { pages } = Astro.props;
+const head = pages[0];
+const { title, description, status, maturity, license, shortName } = head.data;
+
+const syncedLatest = pages.map((page) => page.data.syncedAt.valueOf()).reduce((a, b) => Math.max(a, b));
+/** Repository and commit the document is a snapshot of, one entry per source. */
+const sources = [...new Set(pages.map((page) => `${page.data.sourceRepo}@${page.data.sourceRef}`))].map((key) => {
+  const [repo, ref] = key.split('@');
+  return { repo, ref };
+});
+
+const structuredData = [
+  {
+    '@type': 'TechArticle',
+    headline: title,
+    description,
+    url: `https://openresin.org${specUrl(head)}`,
+    dateModified: isoDate(new Date(syncedLatest)),
+    author: { '@id': 'https://openresin.org/#organization' },
+    publisher: { '@id': 'https://openresin.org/#organization' },
+    isPartOf: { '@id': 'https://openresin.org/#website' },
+    inLanguage: 'en',
+  },
+];
+---
+
+<BaseLayout title={title} description={description} type="article" modifiedTime={isoDate(new Date(syncedLatest))} structuredData={structuredData}>
+  <article class:list={['shell', 'spec', pages.length === 1 && 'spec--single']} id={partSlug(head)}>
+    <nav class="crumbs mono" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="/specs">Specs</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{shortName}</span>
+    </nav>
+
+    <header class="spec__head">
+      <div class="spec__meta mono">
+        <span class:list={['spec__status', maturity === 'draft' && 'spec__status--draft']}>{status}</span>
+        <span class="spec__sep" aria-hidden="true">/</span>
+        {
+          license && (
+            <>
+              <span>{license} licensed</span>
+              <span class="spec__sep" aria-hidden="true">/</span>
+            </>
+          )
+        }
+        <span>{pages.length} {pages.length === 1 ? 'part' : 'parts'}</span>
+      </div>
+
+      <h1>{title}</h1>
+      <p class="lede">{description}</p>
+    </header>
+
+    <div class:list={['spec__grid', pages.length === 1 && 'spec__grid--single']}>
+      <div class="spec__body prose">
+        {/* The head part is the document's own opening; the rest are sections of
+            it, each announced by its own heading. */}
+        {
+          pages.map((page) => (
+            <section class="part" id={page.data.isIndex ? undefined : partSlug(page)} data-spec-part>
+              {!page.data.isIndex && (
+                <header class="part__head">
+                  <h2 class="part__title">{page.data.title}</h2>
+                </header>
+              )}
+              <div class="part__body prose" set:html={partHtml(page)} />
+            </section>
+          ))
+        }
+      </div>
+
+      {
+        pages.length > 1 && (
+          <aside class="spec__side rail">
+            <nav aria-label="Parts">
+              <h2 class="rail__title mono">All parts</h2>
+              <ol class="rail__list">
+                {
+                  pages.map((page) => (
+                    <li>
+                      <a
+                        class="rail__row rail__row--numbered"
+                        href={`#${partSlug(page)}`}
+                        data-toc-link={partSlug(page)}
+                      >
+                        <span class="rail__num mono">{String(page.data.order).padStart(2, '0')}</span>
+                        <span>{page.data.isIndex ? 'Overview' : page.data.title}</span>
+                      </a>
+                    </li>
+                  ))
+                }
+              </ol>
+              </nav>
+          </aside>
+        )
+      }
+    </div>
+
+    <p class="spec__revision mono">
+      Snapshot of{' '}
+      {
+        sources.map((source, index) => (
+          <>
+            {index > 0 && ', '}
+            <a
+              href={`https://github.com/Open-Resin-Alliance/${source.repo}/tree/${source.ref}`}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {source.repo}@{source.ref}
+            </a>
+          </>
+        ))
+      }{' '}
+      · latest sync <time datetime={isoDate(new Date(syncedLatest))}>{formatDateLong(new Date(syncedLatest))}</time>
+    </p>
+  </article>
+</BaseLayout>
+
+<script>
+  // Two things a specification document needs in the browser, and both are
+  // enhancement: the rail says which part is being read, and a part says when it
+  // has been arrived at.
+  //
+  // Arriving is marked with a pulse of colour on the heading - when a boundary is
+  // scrolled across, and when a link lands on a part. Nothing moves: the pulse
+  // only colours a heading the reader is already looking at, and with no script the
+  // document is simply a long, plain, correct one.
+  //
+  // The rail is read from the document in hand on every page load rather than once
+  // when this script evaluates. A navigation here is a Router swap, and a script
+  // that ran while the previous document was still in place would hold an empty
+  // list of parts and quietly track nothing - which only a reload would fix. The
+  // state lives on the window so that whichever evaluation gets there first, every
+  // navigation is looking at the same one.
+  const EYE_LINE = 0.78;
+  const SETTLE_MS = 160;
+
+  interface Row {
+    link: HTMLAnchorElement;
+    part: HTMLElement;
+  }
+
+  interface Doc {
+    /** The rail and the sections it points at, as read from the current document. */
+    rows: Row[];
+    /** URL the page state was built for. */
+    page: string;
+    /** Scroll position at the last look, for telling a scroll down from a scroll up. */
+    last: number;
+    /** A link has landed somewhere: pulse once the page stops moving. */
+    arriving: boolean;
+    quiet: number;
+    /** The listeners belong to the document, not to a page. */
+    wired: boolean;
+  }
+
+  const GLOBALS = window as unknown as { __oraSpecDoc?: Doc };
+  const doc: Doc = (GLOBALS.__oraSpecDoc ??= { rows: [], page: '', last: 0, arriving: false, quiet: 0, wired: false });
+
+  function collect() {
+    doc.rows = [...document.querySelectorAll<HTMLAnchorElement>('a[data-toc-link]')]
+      .map((link) => ({ link, part: document.getElementById(link.dataset.tocLink ?? '') }))
+      .filter((row): row is Row => row.part !== null);
+  }
+
+  /**
+   * The part the reader is in: the one holding most of the screen. Two parts usually
+   * fit in one viewport, and the one being read is the one with more of itself in
+   * view - not the one whose heading has most recently appeared at the bottom, which
+   * would hand the rail to a part the reader has not reached yet. A part runs from
+   * its own heading to the next one, so the head part is bounded by the section
+   * after it even though it shares the article with the whole document.
+   */
+  function reached() {
+    const header = document.querySelector('[data-site-header]');
+    const y = window.scrollY;
+    const from = y + (header ? header.getBoundingClientRect().bottom : 0);
+    const to = y + window.innerHeight;
+
+    let found: Row | null = null;
+    let most = 0;
+    doc.rows.forEach((row, index) => {
+      const top = row.part.getBoundingClientRect().top + y;
+      const next = doc.rows[index + 1];
+      const end = next ? next.part.getBoundingClientRect().top + y : document.documentElement.scrollHeight;
+      const visible = Math.min(end, to) - Math.max(top, from);
+      // Strictly more, so a boundary at the middle of the screen leaves the rail
+      // where it is rather than flickering between the two.
+      if (visible > most) {
+        most = visible;
+        found = row;
+      }
+    });
+    return found;
+  }
+
+  function sync() {
+    const line = window.innerHeight * EYE_LINE;
+    const y = window.scrollY;
+    const down = y > doc.last;
+    doc.last = y;
+
+    const current = reached();
+    if (!current) return;
+    for (const row of doc.rows) {
+      if (row === current) row.link.setAttribute('aria-current', 'location');
+      else row.link.removeAttribute('aria-current');
+    }
+
+    // A part pulses as its boundary is crossed going down, and is un-marked when it
+    // goes back above the line, so crossing it again pulses again. A part that opens
+    // already past the line - a deep link, a reload - is marked without animating:
+    // the reader did not scroll into it.
+    for (const row of doc.rows) {
+      const top = row.part.getBoundingClientRect().top;
+      if (top <= line) {
+        // A jump that skips parts is handled as an arrival below, so a part the
+        // reader never scrolled through is marked without animating.
+        if (down && !doc.arriving && !row.part.hasAttribute('data-snap')) pulse(row);
+      } else {
+        row.part.removeAttribute('data-snap');
+      }
+    }
+  }
+
+  /**
+   * Mark a part as just arrived at. The attribute is what the animation runs on, so
+   * it is cleared and re-set to restart the pulse when the same part is reached
+   * twice.
+   */
+  function pulse(row: Row) {
+    row.part.removeAttribute('data-snap');
+    void row.part.offsetWidth;
+    row.part.setAttribute('data-snap', '');
+  }
+
+  /**
+   * A link that lands on a part - the rail, a `§`-reference from another part - is
+   * an arrival like any other, and what it lights up is the part holding the screen
+   * once the page stops moving. Waiting for that matters: an anchor jump across a
+   * document this long is a smooth scroll of several seconds, and a pulse that
+   * started when the URL changed would play out somewhere the reader is not looking
+   * yet.
+   */
+  function pulseArrival() {
+    // The parts a jump went over were never scrolled through, so they are left
+    // unmarked: scrolling back down into one of them is an arrival of its own.
+    for (const row of doc.rows) row.part.removeAttribute('data-snap');
+    const landed = reached();
+    if (landed) pulse(landed);
+  }
+
+  /**
+   * Finish an arrival once the page has stopped moving: move the rail to the part
+   * landed in and pulse it. Both happen here rather than on the next scroll, because
+   * a jump does not have to produce one - and while `arriving` is still set, the
+   * crossing rule leaves the rail alone and lets the arrival place it.
+   */
+  function settle() {
+    if (!doc.arriving) return;
+    clearTimeout(doc.quiet);
+    doc.quiet = window.setTimeout(() => {
+      sync();
+      pulseArrival();
+      doc.arriving = false;
+    }, SETTLE_MS);
+  }
+
+  function wire() {
+    if (doc.wired) return;
+    doc.wired = true;
+
+    window.addEventListener('scroll', () => {
+      sync();
+      settle();
+    }, { passive: true });
+    window.addEventListener('resize', sync);
+
+    // A link into the document is an arrival, not a scroll through everything it
+    // passes: marking it on the click, rather than on the `hashchange` that follows
+    // the jump, is what keeps the parts it skips over unmarked.
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (!target.closest('a[href^="#"]')) return;
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      doc.arriving = true;
+      settle();
+    });
+
+    document.addEventListener('hashchange', () => {
+      doc.arriving = true;
+      settle();
+    });
+  }
+
+  /**
+   * The router fires `astro:page-load` on the first load and after every swap, so
+   * that is what re-reads the document; collecting is cheap and unconditional,
+   * because which of the two ran first is not something this script can know.
+   */
+  function boot() {
+    collect();
+    if (doc.rows.length === 0) return;
+
+    const here = location.pathname;
+    if (doc.page !== here) {
+      doc.page = here;
+      doc.last = window.scrollY;
+      doc.arriving = false;
+    }
+    sync();
+  }
+
+  wire();
+
+  document.addEventListener('astro:page-load', boot);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    boot();
+  }
+</script>
+
+<style>
+  .spec {
+    padding-top: 2.5rem;
+  }
+
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-2);
+    margin-bottom: 1.75rem;
+  }
+
+  .crumbs a:hover {
+    color: var(--ink);
+  }
+
+  .crumbs span[aria-current] {
+    color: var(--muted);
+  }
+
+  .spec__head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* The head and the source note sit above and below the grid rather than in the
+     body column, so their rules have to stop where the body column does: otherwise
+     they are the lines on the page that are a different width from the section
+     rules between them. The head's words keep to the measure, which is shorter than
+     the column. */
+  @media (min-width: 961px) {
+    .spec:not(.spec--single) .spec__head,
+    .spec:not(.spec--single) .spec__revision {
+      max-width: calc(100% - 18rem - 3rem);
+    }
+  }
+
+  .spec__head > * {
+    max-width: var(--measure);
+  }
+
+  .spec__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-2);
+  }
+
+  .spec__status {
+    color: var(--ink);
+  }
+
+  /* A draft is not a contract yet, so it is the one thing in the header that raises its
+     voice; a published revision states itself plainly. */
+  .spec__status--draft {
+    color: var(--accent);
+  }
+
+  .spec__sep {
+    color: var(--border-strong);
+  }
+
+  .spec__head h1 {
+    font-size: clamp(1.9rem, 1.4rem + 2.2vw, 2.8rem);
+  }
+
+  /* Explicit tracks at both sizes, like the post grid: an implicit `auto` column
+     sizes to the widest content, and a specification is mostly wide tables. */
+  .spec__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 18rem;
+    gap: 3rem;
+    align-items: start;
+    padding-top: 1.5rem;
+  }
+
+  /* A specification of one part has nothing to navigate, so the text takes the
+     column the rail would have had. */
+  .spec__grid--single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .spec__revision a {
+    color: inherit;
+  }
+
+  .spec__revision a:hover {
+    color: var(--ink);
+  }
+
+  .spec__revision {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.6875rem;
+    color: var(--muted-2);
+  }
+
+  /* A part is a section of this document. The space above it is what tells the
+     reader one finished and the next began; the heading carries the name and the
+     commit, and it is the thing that snaps when the boundary is crossed. */
+  .part + .part {
+    margin-top: 4.5rem;
+  }
+
+  .part__head {
+    max-width: var(--measure);
+    margin-bottom: 2rem;
+  }
+
+  .part__title {
+    font-size: clamp(1.5rem, 1.15rem + 1.5vw, 2.1rem);
+    /* No rule over a part title. The rules in this document mark sections, and a
+       part is a section whose name is the title; the one the prose styles add here
+       was also the only rule in the page that did not run the width of the column. */
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  /* Arriving at a part: the heading takes the link colour for a moment and gives it
+     back. It is the one cue that survives a jump - a heading that moved would read
+     as the page shifting under the reader - and it costs no layout. Reduced motion
+     is handled once, globally, by `animation-duration: 0.01ms` in global.css. */
+  .part[data-snap] .part__title,
+  /* The head part is the document's own opening, so the heading it pulses is the h1. */
+  .spec[data-snap] .spec__head h1 {
+    animation: part-pulse 1100ms var(--ease) both;
+  }
+
+  /* The demoted headings: a part's own top level reads as the section level of the
+     document it now belongs to, which is what the prose styles are written for. */
+  .spec__body :global(.part__body > h3) {
+    font-size: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .spec__body :global(.part__body > h4) {
+    font-size: 1.1875rem;
+  }
+
+  @keyframes part-pulse {
+    0%,
+    100% {
+      color: var(--ink);
+    }
+    25%,
+    65% {
+      color: var(--accent);
+    }
+  }
+
+  @media (max-width: 960px) {
+    .spec__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2.5rem;
+    }
+
+    .spec__side {
+      position: static;
+      /* Twenty parts before the article is a lot of scrolling on a phone, so the
+         navigation scrolls in place instead. */
+      max-height: 15rem;
+      order: -1;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+  }
+</style>

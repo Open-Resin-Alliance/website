@@ -757,6 +757,12 @@ a.card:hover,
    layout gives the space to the column that needs it. */
 .prose table :is(th, td) {
   overflow-wrap: break-word;
+  /* A cell is the containing block for what is in it - including the absolutely
+     positioned text a mark column puts beside its glyph for a screen reader.
+     Without this that helper belongs to the page instead, and its static position
+     is deep inside a row wider than the viewport, so the whole document scrolls
+     sideways to reach a 1px box that is clipped anyway. */
+  position: relative;
 }
 
 .prose table {

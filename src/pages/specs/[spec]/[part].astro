@@ -1,25 +1,58 @@
 ---
 import { getCollection } from 'astro:content';
-import SpecPage from '../../../components/SpecPage.astro';
-import { groupSpecs } from '../../../lib/specs';
+import { groupSpecs, partSlug } from '../../../lib/specs';
+import { SITE } from '../../../data/site';
 
-/* Every page after the first: `/specs/<spec>/<part>`. */
+/* A part used to be a page of its own. It is a section of the specification
+   document now, so this route exists only to forward the reader - and the search
+   engine, and every `§`-link written before the document was one page - to the
+   place that section has moved to. */
 export async function getStaticPaths() {
   const groups = groupSpecs(await getCollection('specs'));
   const paths = [];
   for (const pages of groups.values()) {
     for (const entry of pages) {
       if (entry.data.isIndex) continue;
-      paths.push({
-        params: { spec: entry.data.spec, part: entry.id.split('/')[1] },
-        props: { entry, pages },
-      });
+      paths.push({ params: { spec: entry.data.spec, part: partSlug(entry) }, props: { entry } });
     }
   }
   return paths;
 }
 
-const { entry, pages } = Astro.props;
+const { entry } = Astro.props;
+const { spec, title, shortName } = entry.data;
+const target = `/specs/${spec}#${partSlug(entry)}`;
 ---
 
-<SpecPage entry={entry} pages={pages} />
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} - {shortName} specification - {SITE.name}</title>
+    <link rel="canonical" href={new URL(target, SITE.url).href} />
+    <meta name="robots" content="noindex, follow" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    {/* The refresh knows the section but not the anchor the reader arrived with, so
+        the script forwards the one they asked for when there is one. */}
+    <script is:inline set:html={`location.replace('/specs/${spec}' + (location.hash || '#${partSlug(entry)}'));`} />
+    <style>
+      body {
+        margin: 0;
+        padding: 3rem 1.5rem;
+        font-family: system-ui, sans-serif;
+        line-height: 1.6;
+        color: #1f1a24;
+      }
+      a {
+        color: #7c3aed;
+      }
+    </style>
+  </head>
+  <body>
+    <p>
+      This part of the {shortName} specification is read as one document now.
+      <a href={target}>Continue to {title}</a>.
+    </p>
+  </body>
+</html>

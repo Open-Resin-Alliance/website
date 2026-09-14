@@ -10,7 +10,10 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      filter: (page) => !page.includes('/404'),
+      /* `/specs/<spec>/<part>` only forwards to the part's section of the
+         specification document, so it is not a page anyone should land on from a
+         search result. Everything else is public. */
+      filter: (page) => !page.includes('/404') && !/\/specs\/[^/]+\/[^/]+\/?$/.test(page),
     }),
   ],
   markdown: {

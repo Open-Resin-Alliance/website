@@ -10,9 +10,11 @@
  * inspected.
  *
  * Links between parts are rewritten to site paths, because a part no longer sits
- * next to the file it links to once it is a page. Every page records the
- * repository, path and commit it came from, so a specification that has moved
- * upstream shows up as a diff instead of a silently stale page.
+ * next to the file it links to once it is a page - and the site renders the parts
+ * of a specification as one document, where those paths become jumps inside that
+ * page (`src/lib/specs.ts`). Every page records the repository, path and commit it
+ * came from, so a specification that has moved upstream shows up as a diff instead
+ * of as a silently stale page.
  *
  * Usage:
  *   node scripts/sync-specs.mjs

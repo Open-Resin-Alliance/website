@@ -1,7 +1,7 @@
 ---
 import type { SpecEntry } from '../lib/specs';
 import { formatDate } from '../lib/format';
-import { specPageUrl } from '../lib/specs';
+import { specUrl } from '../lib/specs';
 
 interface Props {
   /** The specification's first page: the card describes the whole of it. */
@@ -22,9 +22,12 @@ const { title, description, status, syncedAt, sourceRepo, sourceRef } = entry.da
     <span>synced {formatDate(syncedAt)}</span>
   </div>
 
-  <h3 class="spec-card__title">
-    <a href={specPageUrl(entry)}>{title}</a>
-  </h3>
+  {/* The card is the top level of its page - the specifications index has no
+      section heading above it - so its title is an h2, not the h3 the cards in
+      the body of another page's section use. */}
+  <h2 class="spec-card__title">
+    <a href={specUrl(entry)}>{title}</a>
+  </h2>
 
   <p class="spec-card__description">{description}</p>
 

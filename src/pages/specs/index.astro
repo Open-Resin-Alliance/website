@@ -3,12 +3,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import SpecCard from '../../components/SpecCard.astro';
 import { getCollection } from 'astro:content';
 import { groupSpecs } from '../../lib/specs';
+import { LINKS } from '../../data/site';
 
 /* One card per specification, not per page: a card is the whole format, and its
    first page is the entry point. */
 const specs = [...groupSpecs(await getCollection('specs')).values()]
   .map((pages) => ({ entry: pages[0], pageCount: pages.length }))
   .sort((a, b) => a.entry.data.order - b.entry.data.order);
+
+/** Pages across every format, for the count in the page head. */
+const totalParts = specs.reduce((total, spec) => total + spec.pageCount, 0);
 
 const structuredData = [
   {
@@ -31,21 +35,21 @@ const structuredData = [
     <p class="eyebrow">Specifications</p>
     <h1>The formats, written to be implemented</h1>
     <p class="lede">
-      The formats the Alliance maintains, published here so they can be read without cloning anything.
+      The formats the Alliance maintains, published here so they can be read without cloning anything. Each one is a
+      snapshot of a specification that lives in its own repository, stamped with the commit it came from.
     </p>
+    <div class="page-head__meta mono">
+      <span>{specs.length} formats</span>
+      <span class="page-head__sep" aria-hidden="true">/</span>
+      <span>{totalParts} parts</span>
+      <span class="page-head__sep" aria-hidden="true">/</span>
+      <a href={LINKS.github} rel="noopener noreferrer" target="_blank">GitHub</a>
+    </div>
   </section>
 
-  <section class="shell section">
-    <div class="section-head">
-      <div class="section-head__text">
-        <h2>Format specifications</h2>
-        <p class="lede">
-          Each one is a snapshot of a specification that lives in its own repository, stamped with the commit it
-          came from.
-        </p>
-      </div>
-    </div>
-
+  {/* The head is the only header: a section label would restate the page title,
+      and the cards already carry the size and provenance of each format. */}
+  <section class="shell formats">
     <div class="grid grid--2">
       {specs.map((spec) => <SpecCard entry={spec.entry} pageCount={spec.pageCount} />)}
     </div>
@@ -53,9 +57,9 @@ const structuredData = [
 </BaseLayout>
 
 <style>
-  /* `.page-head` and `.section` are defined per page rather than globally, so a
-     page that uses them without declaring them gets no padding at all. These are
-     the same values as the blog, projects, about and contact pages. */
+  /* `.page-head` is defined per page rather than globally, so a page that uses
+     it without declaring it gets no padding at all. These are the same values as
+     the blog, projects, about and contact pages. */
   .page-head {
     display: flex;
     flex-direction: column;
@@ -68,7 +72,30 @@ const structuredData = [
     max-width: var(--measure);
   }
 
-  .section {
-    padding-block: 3.5rem 0;
+  .page-head__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    color: var(--muted-2);
+  }
+
+  .page-head__meta a {
+    color: var(--muted);
+  }
+
+  .page-head__meta a:hover {
+    color: var(--ink);
+  }
+
+  .page-head__sep {
+    color: var(--border-strong);
+  }
+
+  /* Cards sit directly under the head, as they do on the blog, rather than at
+     the distance sections are spaced apart. */
+  .formats {
+    padding-block: 2.5rem 0;
   }
 </style>
