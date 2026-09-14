@@ -10,8 +10,8 @@ order: 11
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/11-layer-timing.md"
-sourceRef: "3247df6"
-syncedAt: "2026-09-13"
+sourceRef: "d22542b"
+syncedAt: "2026-09-14"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
