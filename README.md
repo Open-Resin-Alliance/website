@@ -206,6 +206,18 @@ A change here is not finished until every `og:image` in `dist/` resolves to a 12
 Markup and artifact are written from the same rule, and a disagreement between them is
 silent on the deployed site: the crawler shows no image, and nothing logs a 404.
 
+Cards are 1200x630, which is what Facebook asks for ("at least 1200 x 630 pixels", "as close
+to 1.91:1 aspect ratio as possible"), and the three `og:image` dimension tags are declared so
+a crawler can render the card without downloading it first. 1.91:1 exactly is 1200x628 - the
+figure quoted for ad images - and the 2px difference is scaled away by every platform.
+
+One consequence of a stable URL: Facebook caches an image by its address and, in its own
+words, replacing an image at the same URL will not update it. Cards change when the text
+behind them does - a project whose repository description was edited, for instance - and
+those shares can keep the old preview until the cache expires. Running the page through
+Facebook's Sharing Debugger forces a re-scrape. There is nothing to pre-empt at build time:
+a crawler cannot be told a card changed before it looks at it.
+
 ## Local development
 
 ```
