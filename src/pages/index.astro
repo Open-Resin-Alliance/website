@@ -19,7 +19,7 @@ const latestPosts = posts.slice(0, 3);
 ---
 
 <BaseLayout description={SITE.description}>
-  <section class="hero">
+  <section class="hero" data-hero>
     <div class="shell">
       <div class="hero__copy">
         <h1>
@@ -38,6 +38,15 @@ const latestPosts = posts.slice(0, 3);
         </div>
       </div>
     </div>
+
+    {/* Says what the page does next rather than being content of it: the hero
+        holds the first screen, and scrolling is how the rest arrives. */}
+    <p class="hero__hint mono" aria-hidden="true">
+      <span>Scroll</span>
+      <svg class="hero__chevron" viewBox="0 0 24 15" focusable="false">
+        <path d="M2 2l10 10L22 2" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </p>
   </section>
 
   <section class="shell section">
@@ -154,19 +163,227 @@ const latestPosts = posts.slice(0, 3);
   </section>
 </BaseLayout>
 
-<style>
-  .hero {
-    /* The hero is the one band that does not follow the section rhythm: the space
-       above its content and the space below it to the projects section are the
-       same size, so the opening reads as balanced rather than lopsided.
-       The first section after it starts flush (see below) - otherwise the
-       section's own padding-top would add 3.5rem underneath and break that. */
-    --hero-gap: max(3.5rem, clamp(2.5rem, 1.9rem + 3vw, 5rem));
-    padding-block: var(--hero-gap);
+<script>
+  // The hero holds the first screen and gives it back: as the reader scrolls, the
+  // hero rises and fades while the page after it comes up into the space, which is
+  // what turns a long page into one that opens. It is an enhancement in both
+  // directions - without a script the hero is a full-height opening band that
+  // scrolls away like any other, and under `prefers-reduced-motion` it stays that
+  // way too, because that preference is about the reader's eyes, not about whether
+  // scripts run.
+  //
+  // The element is looked up on every pass rather than held: the Router swaps the
+  // document, and this script can outlive the hero it started with.
+  const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)');
+  /** How far the reader scrolls, as a fraction of the hero's own height, to finish. */
+  const HERO_TRAVEL = 0.7;
+  /** How long a jump swallows the rest of the gesture that started it. */
+  const JUMP_MS = 900;
+  let heroHeight = 0;
+  let swallowUntil = 0;
+
+  function hero(): HTMLElement | null {
+    return document.querySelector<HTMLElement>('[data-hero]');
   }
 
-  .hero + .section {
-    padding-block-start: 0;
+  function apply() {
+    const element = hero();
+    if (!element) return;
+
+    if (REDUCED.matches) {
+      document.documentElement.removeAttribute('data-hero-pinned');
+      element.style.removeProperty('--hero-recede');
+      element.removeAttribute('data-hidden');
+      return;
+    }
+
+    document.documentElement.setAttribute('data-hero-pinned', '');
+    const travel = heroHeight * HERO_TRAVEL;
+    const recede = travel > 0 ? Math.min(1, Math.max(0, window.scrollY / travel)) : 0;
+    element.style.setProperty('--hero-recede', recede.toFixed(3));
+    // Once it is more than half gone the hero is a ghost: it keeps its links out of
+    // the way of the content that has arrived on top of it.
+    element.toggleAttribute('data-hidden', recede > 0.5);
+  }
+
+  function measure() {
+    const element = hero();
+    // The layout height, not the painted one: the transform must not change how
+    // long the hero is pinned for.
+    heroHeight = element ? element.offsetHeight : 0;
+    apply();
+  }
+
+  /**
+   * Where the opening rests, and where the reader is asking to be when they leave
+   * the hero: the content's own top, less the height of the header it has to clear.
+   *
+   * The document's `scroll-padding-top` is not used here, and that is deliberate: it
+   * is sized for landing *on a heading*, which has no space of its own above it. A
+   * section does - it opens with its own padding - so clearing the header is the
+   * whole of what this jump owes, and the air under the heading is the rhythm the
+   * rest of the page already has.
+   *
+   * Measured from the content rather than from the hero, because the hero is sticky
+   * while this runs and a sticky element reports where it is being held, not where it
+   * sits in the page.
+   */
+  function stops(): { top: number; land: number } | null {
+    const element = hero();
+    const content = element?.nextElementSibling;
+    if (!element || !content) return null;
+    const top = Math.round(content.getBoundingClientRect().top + window.scrollY);
+    if (top <= 0) return null;
+    const header = document.querySelector('[data-site-header]');
+    const clear = header ? header.getBoundingClientRect().height : 0;
+    return { top, land: Math.max(0, top - Math.round(clear)) };
+  }
+
+  function jumpTo(target: number) {
+    swallowUntil = performance.now() + JUMP_MS;
+    window.scrollTo(0, target);
+  }
+
+  /**
+   * The opening has two places to be - the hero, and the page under it - and no
+   * useful in-between, so a gesture that would leave one for the other is spent on
+   * the whole of the move. Which way it goes is the reader's: below the landing
+   * point a scroll down carries them into the content, above it a scroll up puts
+   * the hero back. Everything else scrolls as it always did.
+   */
+  function away(direction: 'forward' | 'back'): boolean {
+    const at = stops();
+    if (!at || REDUCED.matches) return false;
+    const y = window.scrollY;
+    if (direction === 'forward' && y < at.land - 1) {
+      jumpTo(at.land);
+      return true;
+    }
+    if (direction === 'back' && y > 1 && y <= at.land + 1) {
+      jumpTo(0);
+      return true;
+    }
+    return false;
+  }
+
+  /* A wheel event is the gesture itself, so it is the one place where saying "no" is
+     what makes the jump land where the reader expects: the rest of the same flick is
+     swallowed, and the page travels in one movement rather than two. */
+  window.addEventListener(
+    'wheel',
+    (event) => {
+      if (event.deltaY === 0) return;
+      if (performance.now() < swallowUntil) {
+        event.preventDefault();
+        return;
+      }
+      if (away(event.deltaY > 0 ? 'forward' : 'back')) event.preventDefault();
+    },
+    { passive: false },
+  );
+
+  document.addEventListener('keydown', (event) => {
+    const target = event.target;
+    // Space and Enter are how a focused button is pressed; that is not a scroll.
+    if (target instanceof Element && target.closest('a, button, input, textarea, select, [contenteditable]')) return;
+    const forward = ['ArrowDown', 'PageDown', ' '].includes(event.key);
+    const back = ['ArrowUp', 'PageUp'].includes(event.key);
+    if (!forward && !back) return;
+    if (away(forward ? 'forward' : 'back')) event.preventDefault();
+  });
+
+  /* Touch scrolls naturally - a finger on the glass is not a gesture to interrupt -
+     and the page settles onto whichever side the finger was heading for when it
+     lifts, unless the drag had already carried past the opening. */
+  let touchedAt = 0;
+
+  window.addEventListener(
+    'touchstart',
+    () => {
+      touchedAt = window.scrollY;
+    },
+    { passive: true },
+  );
+
+  window.addEventListener('touchend', () => {
+    const moved = window.scrollY - touchedAt;
+    if (moved > 0 && away('forward')) return;
+    if (moved < 0) away('back');
+  });
+
+  window.addEventListener('scroll', apply, { passive: true });
+  window.addEventListener('resize', measure);
+  REDUCED.addEventListener('change', measure);
+  document.addEventListener('astro:page-load', measure);
+  measure();
+</script>
+
+<style>
+  /* The opening screen: the hero is as tall as the viewport and its copy sits in
+     the middle of it, so the page starts with one thing rather than with the top
+     of five. `--hero-recede` is written by the script above; at 0 it does nothing
+     at all, which is the whole of the no-script and reduced-motion state. */
+  .hero {
+    --hero-recede: 0;
+    position: relative;
+    display: grid;
+    align-content: center;
+    /* One screen, less the header that sits above it in flow: the hero's own bottom
+       edge is the fold, so the hint at its foot is on screen and the next section
+       is not. */
+    min-block-size: calc(100svh - var(--header-block-size));
+    opacity: calc(1 - var(--hero-recede) * 1.15);
+    transform: translateY(calc(var(--hero-recede) * -55%)) scale(calc(1 - var(--hero-recede) * 0.06));
+  }
+
+  /* Pinned to the top of the viewport while the page comes up over it. Sticky
+     rather than fixed so it stays in flow: the sections below keep their place,
+     and the pin ends with the hero's own box. */
+  :global(html[data-hero-pinned]) .hero {
+    position: sticky;
+    top: 0;
+  }
+
+  .hero[data-hidden] {
+    pointer-events: none;
+  }
+
+  .hero__hint {
+    position: absolute;
+    inset-inline: 0;
+    bottom: clamp(1.75rem, 4.5vh, 3.25rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    /* Gone in the first third of the scroll, before it can be in the way of the
+       content arriving underneath it. */
+    opacity: clamp(0, calc(1 - var(--hero-recede, 0) * 3), 1);
+  }
+
+  /* The chevron is the part that has to be noticed, so it carries the accent and
+     the motion: a pulse downwards, in place, rather than a drift. */
+  .hero__chevron {
+    inline-size: 1.5rem;
+    block-size: 0.9375rem;
+    color: var(--accent);
+    animation: hero-hint 1.9s ease-in-out infinite;
+  }
+
+  @keyframes hero-hint {
+    0%,
+    100% {
+      transform: translateY(-2px) scale(0.94);
+      opacity: 0.5;
+    }
+    50% {
+      transform: translateY(3px) scale(1.06);
+      opacity: 1;
+    }
   }
 
   .hero__copy {

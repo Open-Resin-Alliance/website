@@ -71,7 +71,10 @@ const generated = new Date(stats.generatedAt);
 <style>
   .site-footer {
     margin-top: 5rem;
-    padding: 3.5rem 0 2rem;
+    /* The deep bottom is room for the back-to-top control, which floats over this
+       corner: without it the button sits on the last line of the footer, which is
+       where the GitHub source link is. */
+    padding: 3.5rem 0 5rem;
     border-top: 1px solid var(--border);
     background: transparent;
     font-size: 0.9375rem;

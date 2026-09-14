@@ -13,10 +13,14 @@
   --brand-orange: #f59e0b;
   --brand-orange-deep: #d97706;
   --brand-gradient: linear-gradient(100deg, var(--brand-violet) 0%, var(--brand-pink) 52%, var(--brand-orange) 100%);
+  /* The sticky header's height. The header is in flow at the top of the page, so
+     anything sized to one screen has to subtract it: a full-height opening band
+     would otherwise start below the header and end 65px past the fold. */
+  --header-block-size: 4rem;
 
   /* Typography */
   --font-sans: "Atkinson Hyperlegible Next Variable", "Atkinson Hyperlegible Next", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "Atkinson Hyperlegible Mono Variable", "Atkinson Hyperlegible Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Spacing / layout */
   --shell: 1600px;
@@ -151,9 +155,13 @@ html {
     transition-duration: 0.01ms !important;
   }
   /* `*` does not reach the view-transition pseudo-elements, so the page
-     transition is switched off here by name. */
+     transition is switched off here by name - including the nav mark, which is a
+     named element and is animated by the browser rather than by `*`. */
   ::view-transition-old(root),
-  ::view-transition-new(root) {
+  ::view-transition-new(root),
+  ::view-transition-group(nav-mark),
+  ::view-transition-old(nav-mark),
+  ::view-transition-new(nav-mark) {
     animation: none !important;
   }
 }
@@ -164,6 +172,24 @@ html {
  * which is what the sticky header wants. Adding a translate here moves the whole
  * page, header included, and reads as a jump rather than a change of page.
  */
+
+/*
+ * The exception is the mark under the current tab in the header. It is the same
+ * element on both sides of a navigation - same name, different tab - so the
+ * browser can do what a tab bar's sliding underline does: the group's box travels
+ * from where the mark was to where it is now, and the two snapshots inside it
+ * cross-fade quickly enough to read as one bar moving rather than two bars
+ * swapping. The easing is the site's, so it arrives the way everything else does.
+ */
+::view-transition-group(nav-mark) {
+  animation-duration: 340ms;
+  animation-timing-function: var(--ease);
+}
+
+::view-transition-old(nav-mark),
+::view-transition-new(nav-mark) {
+  animation-duration: 170ms;
+}
 
 
 body {
@@ -887,6 +913,26 @@ a.card:hover,
 
 .text-brand {
   background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/*
+ * A quieter cut of the same gradient, for the header mark: the brand colours mixed
+ * a little over halfway into the ink, so the wordmark is tinted rather than
+ * announced, at 60% of the loud one. Not only taste - the brand orange is about
+ * 2:1 on the light background and this is 16px text - and 60 is the ceiling: at
+ * 70% the orange end drops to 3.8:1 on white. A louder mark than this needs the
+ * gradient to stop before orange.
+ */
+.text-brand--quiet {
+  background: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--brand-violet) 60%, var(--ink)) 0%,
+    color-mix(in oklab, var(--brand-pink) 60%, var(--ink)) 52%,
+    color-mix(in oklab, var(--brand-orange) 60%, var(--ink)) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
