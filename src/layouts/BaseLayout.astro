@@ -1,8 +1,13 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
-import '@fontsource-variable/inter';
-import '@fontsource-variable/jetbrains-mono';
+/* The whole site is set in Atkinson Hyperlegible Next, italics included; the mono
+   is the same family's monospaced sibling, for labels, code and the counted
+   columns. Both are variable, so the fractional weights in global.css are real. */
+import '@fontsource-variable/atkinson-hyperlegible-next';
+import '@fontsource-variable/atkinson-hyperlegible-next/wght-italic.css';
+import '@fontsource-variable/atkinson-hyperlegible-mono';
+import '@fontsource-variable/atkinson-hyperlegible-mono/wght-italic.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { LINKS, SITE } from '../data/site';
