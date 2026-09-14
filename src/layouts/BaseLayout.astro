@@ -13,7 +13,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
 import { LINKS, SITE } from '../data/site';
-import { OG_HEIGHT, OG_WIDTH, ogImagePath, shortSummary } from '../lib/og';
+import { OG_HEIGHT, OG_WIDTH, cardFingerprint, ogImagePath, shortSummary } from '../lib/og';
 
 export interface Props {
   title?: string;
@@ -47,7 +47,19 @@ const {
 
 const pageTitle = title ? `${title} - ${SITE.name}` : `${SITE.name} - ${SITE.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
-const socialImage = new URL(image ?? ogImagePath(Astro.url.pathname), Astro.site ?? SITE.url).href;
+/* The card's URL carries a digest of what the card says, so a crawler that has already
+   cached this page's preview fetches the new one when the text changes, while the path it
+   was cached under goes on working. */
+const socialImage = new URL(
+  image ??
+    `${ogImagePath(Astro.url.pathname)}?v=${cardFingerprint({
+      pathname: Astro.url.pathname,
+      title: cardTitle ?? title ?? SITE.tagline,
+      summary: description,
+      meta: socialMeta,
+    })}`,
+  Astro.site ?? SITE.url,
+).href;
 
 /* Meta descriptions are read at a glance - a search result, a link preview - so they get
    the short form, and the card gets the whole sentence. */

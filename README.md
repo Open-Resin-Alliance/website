@@ -211,12 +211,17 @@ to 1.91:1 aspect ratio as possible"), and the three `og:image` dimension tags ar
 a crawler can render the card without downloading it first. 1.91:1 exactly is 1200x628 - the
 figure quoted for ad images - and the 2px difference is scaled away by every platform.
 
-One consequence of a stable URL: Facebook caches an image by its address and, in its own
-words, replacing an image at the same URL will not update it. Cards change when the text
-behind them does - a project whose repository description was edited, for instance - and
-those shares can keep the old preview until the cache expires. Running the page through
-Facebook's Sharing Debugger forces a re-scrape. There is nothing to pre-empt at build time:
-a crawler cannot be told a card changed before it looks at it.
+What keeps a preview from going stale is the digest on the card's URL, from
+`cardFingerprint()` in `src/lib/og.ts`: a crawler caches an image by its address, so a card
+whose text changed would otherwise keep its old preview, and Facebook asks for a new URL for
+a new image. The digest is taken over what the card *says* rather than over the build, so a
+statistics refresh that changes nothing moves nothing - a rebuild produces identical URLs for
+all 32 cards - while an edited description or a new specification part moves exactly the one
+card that changed. It goes in the query string rather than the file name, because the path a
+share already points at then goes on resolving, which is the other half of what Facebook
+asks for: "don't remove old images, as there may be existing stories that reference the old
+image". A crawler cannot be told a card changed before it looks, so there is nothing to
+pre-empt at build time.
 
 ## Local development
 
