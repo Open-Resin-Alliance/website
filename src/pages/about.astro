@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { LINKS, SITE } from '../data/site';
-import { FEATURED_PROJECTS, PROJECTS } from '../data/projects';
+import { SITE } from '../data/site';
 import { stats } from '../lib/stats';
 import { formatDate, formatCompact, formatNumber } from '../lib/format';
 
@@ -23,17 +22,6 @@ const principles = [
 const languages = Object.entries(stats.totals.languages).sort((a, b) => b[1] - a[1]);
 const established = `We are a group of hobbyists and developers from around the globe, joined in our dedication to advancing the field of resin-based 3D printing through open source collaboration. The alliance was established on ${formatDate(SITE.founded)}.`;
 
-/** Reads "A, B, C and D" rather than a comma list. */
-const listFormat = new Intl.ListFormat('en-GB', { style: 'long', type: 'conjunction' });
-
-/** Names only - the sentence around them stays in the template. */
-const coreProjects = listFormat.format(FEATURED_PROJECTS.map((project) => project.name));
-
-/** Projects whose repository was created before the alliance existed. */
-const predating = PROJECTS.filter((project) => {
-  const createdAt = stats.repos[project.repo]?.createdAt;
-  return Boolean(createdAt && Date.parse(createdAt) < Date.parse(SITE.founded));
-});
 ---
 
 <BaseLayout
@@ -47,31 +35,6 @@ const predating = PROJECTS.filter((project) => {
   </section>
 
   <section class="shell section">
-    <div class="panel">
-      <div class="panel__block">
-        <h2>What we do</h2>
-        <p>
-          All of our projects, primarily software and reference designs for open-source resin 3D printing, are hosted
-          on GitHub: {coreProjects}, plus the plugins and tooling that support them.
-        </p>
-        {
-          predating.length > 0 && (
-            <p>
-              Some of these projects grew elsewhere before moving to the alliance.{' '}
-              {listFormat.format(predating.map((project) => project.name))} predate the organisation itself and were
-              built for the Apollo control board series and the Prometheus MSLA printer.
-            </p>
-          )
-        }
-        <div class="btn-row">
-          <a class="btn btn--primary btn--sm" href="/projects">Browse projects</a>
-          <a class="btn btn--ghost btn--sm" href={LINKS.githubRepos} rel="noopener noreferrer" target="_blank">
-            <span data-live="repos">{stats.totals.repos}</span> repositories on GitHub
-          </a>
-        </div>
-      </div>
-    </div>
-
     <dl class="stats">
       <div class="stats__item">
         <dt class="stats__value" data-live="repos">{formatNumber(stats.totals.repos)}</dt>
@@ -105,21 +68,16 @@ const predating = PROJECTS.filter((project) => {
   </section>
 
   <section class="shell section">
-    <div class="section-head">
-      <div class="section-head__text">
-        <h2>What we believe</h2>
-      </div>
-    </div>
-    <div class="grid grid--3">
+    <ul class="grid grid--3 principles" aria-label="What we believe">
       {
         principles.map((principle) => (
-          <div class="card principle">
-            <h3>{principle.title}</h3>
+          <li class="card principle">
+            <h2>{principle.title}</h2>
             <p>{principle.body}</p>
-          </div>
+          </li>
         ))
       }
-    </div>
+    </ul>
   </section>
 
   <section class="shell section">
@@ -134,7 +92,7 @@ const predating = PROJECTS.filter((project) => {
         <ul class="facts-list">
           <li>
             <span class="mono">Releases</span>
-            <span>{stats.totals.releases} projects with a tagged release, refreshed continuously</span>
+            <span>{stats.totals.releases} projects with a tagged release</span>
           </li>
           <li>
             <span class="mono">Active repos</span>
@@ -151,30 +109,37 @@ const predating = PROJECTS.filter((project) => {
         </ul>
       </div>
 
-      <div class="join">
-        <h2>Joining in</h2>
-        <p class="muted">
-          There is no formal membership process. Pick a repository, read its contributing section, and open a pull
-          request - or bring a question, a bug report or a printer to the Discord.
-        </p>
-        <ul class="join__list">
+      <div>
+        <h2>What we mean by open source</h2>
+        <p class="muted">One definition for the code, one for the designs.</p>
+        <ul class="facts-list">
           <li>
-            <a href={LINKS.discord} rel="noopener noreferrer" target="_blank">
-              <strong>Discord</strong>
-              <span class="muted">Talk to the people building this</span>
-            </a>
+            <span class="mono">Software</span>
+            <ul class="bullets">
+              <li>
+                Every repository ships under a licence the OSI has approved: MIT, Apache-2.0,
+                GPL-3.0 and AGPL-3.0.
+              </li>
+              <li>
+                Open source here means the{' '}
+                <a href="https://opensource.org/osd" rel="noopener noreferrer" target="_blank">
+                  Open Source Definition</a
+                >: run it, study it, modify it, redistribute it.
+              </li>
+            </ul>
           </li>
           <li>
-            <a href={LINKS.githubRepos} rel="noopener noreferrer" target="_blank">
-              <strong>GitHub</strong>
-              <span class="muted">Issues, pull requests and source</span>
-            </a>
-          </li>
-          <li>
-            <a href={LINKS.email}>
-              <strong>Email</strong>
-              <span class="muted">{SITE.email}</span>
-            </a>
+            <span class="mono">Hardware</span>
+            <ul class="bullets">
+              <li>Designs go out with the files to build and modify them, and the documentation to understand them.</li>
+              <li>
+                Held to the{' '}
+                <a href="https://www.oshwa.org/definition/" rel="noopener noreferrer" target="_blank">
+                  Open Source Hardware definition</a
+                >{' '}
+                from OSHWA - including making and selling your own.
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
@@ -200,37 +165,12 @@ const predating = PROJECTS.filter((project) => {
     padding-block: 3rem 0;
   }
 
-  .panel {
-    padding: 2rem 2.25rem;
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
-    box-shadow: var(--glass-shadow);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-  }
-
-  .panel__block {
-    display: flex;
-    flex-direction: column;
-    gap: 1.15rem;
-    align-items: flex-start;
-  }
-
-  .panel__block h2 {
-    font-size: 1.4rem;
-  }
-
-  .panel__block p {
-    color: var(--muted);
-  }
-
   /* Organisation figures: the same glass cells that used to sit in the hero. */
   .stats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1rem;
-    margin: 1.5rem 0 0;
+    margin: 0;
     padding: 0;
   }
 
@@ -267,6 +207,14 @@ const predating = PROJECTS.filter((project) => {
     color: var(--muted-2);
   }
 
+  /* A list of beliefs rather than a section: no visible heading, and the three
+     names are the h2s the section used to carry. */
+  .principles {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .principle {
     display: flex;
     flex-direction: column;
@@ -274,7 +222,7 @@ const predating = PROJECTS.filter((project) => {
     padding: 1.4rem 1.5rem;
   }
 
-  .principle h3 {
+  .principle h2 {
     font-size: 1.0625rem;
   }
 
@@ -286,7 +234,7 @@ const predating = PROJECTS.filter((project) => {
 
   .split {
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 3rem;
     align-items: start;
   }
@@ -317,45 +265,28 @@ const predating = PROJECTS.filter((project) => {
     font-size: 0.9375rem;
   }
 
+  /* A fact whose value is a list of short points rather than a line. */
+  .bullets {
+    list-style: disc;
+    margin: 0;
+    padding-inline-start: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .bullets li {
+    display: list-item;
+    padding: 0;
+    border-top: 0;
+  }
+
   .facts-list .mono {
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-size: 0.625rem;
     color: var(--muted-2);
     padding-top: 0.2rem;
-  }
-
-  .join__list {
-    list-style: none;
-    margin: 1.5rem 0 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .join__list a {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    padding: 0.9rem 1rem;
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
-    box-shadow: var(--glass-shadow);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius);
-    font-size: 0.9375rem;
-    transition: border-color 0.18s var(--ease), transform 0.18s var(--ease);
-  }
-
-  .join__list a:hover {
-    border-color: var(--border-strong);
-    transform: translateY(-1px);
-  }
-
-  .join__list span {
-    font-size: 0.8125rem;
   }
 
   @media (max-width: 64rem) {
@@ -368,10 +299,6 @@ const predating = PROJECTS.filter((project) => {
     .split {
       grid-template-columns: minmax(0, 1fr);
       gap: 2rem;
-    }
-
-    .panel {
-      padding: 1.5rem 1.25rem;
     }
 
   }

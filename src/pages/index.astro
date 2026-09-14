@@ -408,6 +408,14 @@ const latestPosts = posts.slice(0, 3);
     padding-block: 3.5rem;
   }
 
+  /* The first section stands where a page head stands on every other page, so it opens
+     with that block's space rather than with the section rhythm: the jump out of the
+     hero then lands its heading the same distance below the header as it does on
+     Projects, Blog or Specs. */
+  .hero + .section {
+    padding-block-start: clamp(2.5rem, 2rem + 3vw, 4rem);
+  }
+
   .section + .section {
     padding-block-start: 1rem;
   }

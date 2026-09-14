@@ -71,10 +71,7 @@ const generated = new Date(stats.generatedAt);
 <style>
   .site-footer {
     margin-top: 5rem;
-    /* The deep bottom is room for the back-to-top control, which floats over this
-       corner: without it the button sits on the last line of the footer, which is
-       where the GitHub source link is. */
-    padding: 3.5rem 0 5rem;
+    padding: 3.5rem 0 2rem;
     border-top: 1px solid var(--border);
     background: transparent;
     font-size: 0.9375rem;
@@ -133,6 +130,15 @@ const generated = new Date(stats.generatedAt);
 
   .site-footer__col a:hover {
     color: var(--ink);
+  }
+
+  /* The back-to-top control floats over this corner, and the GitHub source link ends
+     exactly there. It only needs the room while the button is up, which is while the
+     page is scrolled - so the last line steps aside for it then, and sits flush when
+     the footer is on a page short enough that no button is offered. */
+  :global(html:has([data-back-to-top][data-visible])) .site-footer__bottom {
+    padding-inline-end: 4rem;
+    transition: padding-inline-end 0.2s var(--ease);
   }
 
   .site-footer__bottom {

@@ -17,6 +17,11 @@ const live = repoStats(project.repo);
 // Prefer the newest stable release; fall back to the newest build of any kind
 // only for projects that have never cut one, so the chip is never empty-handed.
 const headline = live?.latestStableRelease ?? live?.latestRelease ?? null;
+/* The card's text is the repository's own description when it has one: this page already
+   shows the repositories' numbers, and a description written on GitHub is the project's
+   account of itself. The catalogue is the fallback - for a repository that carries no
+   description, and for the longer summary, which no repository holds. */
+const blurb = live?.description ?? (detailed ? project.summary : project.blurb);
 ---
 
 {/* The whole card is a single link; the release chip inside it must not be one. */}
@@ -32,7 +37,7 @@ const headline = live?.latestStableRelease ?? live?.latestRelease ?? null;
     }
   </div>
 
-  <p class="project-card__blurb">{detailed ? project.summary : project.blurb}</p>
+  <p class="project-card__blurb">{blurb}</p>
 
   <div class="project-card__meta">
     {

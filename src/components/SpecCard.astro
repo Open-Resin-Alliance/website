@@ -31,17 +31,22 @@ const { title, description, status, syncedAt, sourceRepo, sourceRef } = entry.da
 
   <p class="spec-card__description">{description}</p>
 
-  <div class="spec-card__foot mono">{sourceRepo}@{sourceRef}</div>
+  <div class="spec-card__foot mono">
+    <span class="tag">{sourceRepo}@{sourceRef}</span>
+  </div>
 </article>
 
 <style>
   /* The surface itself is `.card`, the same glass pane as the post and project
-     cards; this only adds what a specification needs inside it. */
+     cards; this only adds what a specification needs inside it.
+     Every card of this kind sits at the top of its page - the specifications index
+     has nothing between the head and the cards - so it takes the treatment the blog
+     gives its pinned row rather than the smaller one cards get inside a section. */
   .spec-card {
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
-    padding: 1.35rem 1.5rem;
+    padding: 1.6rem 1.75rem;
   }
 
   .spec-card__meta {
@@ -64,7 +69,7 @@ const { title, description, status, syncedAt, sourceRepo, sourceRef } = entry.da
   }
 
   .spec-card__title {
-    font-size: 1.1875rem;
+    font-size: clamp(1.4rem, 1.15rem + 1vw, 1.85rem);
     line-height: 1.3;
   }
 
@@ -88,7 +93,11 @@ const { title, description, status, syncedAt, sourceRepo, sourceRef } = entry.da
   }
 
   .spec-card__foot {
-    /* Pushed to the bottom so it lines up across cards of different lengths. */
+    display: flex;
+    flex-wrap: wrap;
+    /* Pushed to the bottom so it lines up across cards of different lengths, and
+       baseline-aligned so the chip sits on the card's text baseline. */
+    align-items: baseline;
     margin-top: auto;
     padding-top: 0.75rem;
     font-size: 0.75rem;

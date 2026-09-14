@@ -1,7 +1,27 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { LINKS, SITE } from '../data/site';
-import { FEATURED_PROJECTS, repoUrl } from '../data/projects';
+import { FEATURED_PROJECTS, INFRA_PROJECTS, repoUrl } from '../data/projects';
+
+/** Where a bug report goes: the composer for the repository the problem is in. */
+const issueUrl = (repo: string) => `${repoUrl(repo)}/issues/new`;
+
+/* The projects that take a report, grouped the way the projects page groups them. The
+   plugins are left out on purpose: they do not carry a tracker of their own, so the
+   card's summary is the honest place to send a printer-specific problem. */
+const issueGroups = [
+  { id: 'core', label: 'Core', projects: FEATURED_PROJECTS },
+  { id: 'tooling', label: 'Organisation and tooling', projects: INFRA_PROJECTS },
+];
+const defaultProject = FEATURED_PROJECTS[0];
+
+/** What a report needs, in the order that saves the most round trips, one line each. */
+const tips = [
+  'Name the project, the version, and whether it is a dev or nightly build.',
+  'Say which printer, which resin, and which file you were using.',
+  'For a bug: the steps that reproduce it, and what you got instead.',
+  'For a slicer issue: the model, or a screenshot of the plate.',
+];
 
 const channels = [
   {
@@ -16,8 +36,8 @@ const channels = [
     title: 'GitHub issues',
     description:
       'Bug reports and feature requests belong on the repository they concern. Each project lists its own issue tracker.',
-    action: 'Open an issue',
-    href: `${repoUrl('DragonFruit')}/issues`,
+    /** This card is the filing control rather than a link to one. */
+    picker: true,
     detail: 'github.com/Open-Resin-Alliance',
   },
   {
@@ -65,72 +85,261 @@ const structuredData = [
               <span class="mono channel__detail">{channel.detail}</span>
             </div>
             <p>{channel.description}</p>
-            <a
-              class="btn btn--ghost btn--sm channel__action"
-              href={channel.href}
-              {...channel.href.startsWith('http') ? { rel: 'noopener noreferrer', target: '_blank' } : {}}
-            >
-              {channel.action}
-            </a>
+            {channel.picker ? (
+              <>
+                <div class="picker" data-issue-picker>
+                  {/* The card's own heading says what this is; the name is for the
+                      control, which has no room for a label of its own. */}
+                  <span class="visually-hidden" id="issue-label">Open an issue for</span>
+
+                  <div class="dropdown" data-issue-dropdown>
+                    <button
+                      class="dropdown__trigger"
+                      type="button"
+                      data-issue-trigger
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                      aria-labelledby="issue-label issue-value"
+                    >
+                      <span class="dropdown__value" id="issue-value" data-issue-value>{defaultProject.name}</span>
+                      <svg class="dropdown__chevron" viewBox="0 0 14 9" width="14" height="9" aria-hidden="true" focusable="false">
+                        <path d="M1 1l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </button>
+
+                    <div class="dropdown__menu" role="listbox" aria-labelledby="issue-label" data-issue-menu hidden>
+                      {
+                        issueGroups.map((group) => (
+                          <div role="group" aria-labelledby={`issue-group-${group.id}`}>
+                            <p class="dropdown__group" id={`issue-group-${group.id}`}>{group.label}</p>
+                            {group.projects.map((project) => (
+                              <div
+                                class="dropdown__option"
+                                role="option"
+                                tabindex="-1"
+                                aria-selected={project.repo === defaultProject.repo ? 'true' : 'false'}
+                                data-issue-option
+                                data-href={issueUrl(project.repo)}
+                              >
+                                {project.name}
+                              </div>
+                            ))}
+                          </div>
+                        ))
+                      }
+                    </div>
+                  </div>
+
+                  <a
+                    class="btn btn--primary btn--sm picker__go"
+                    data-issue-link
+                    href={issueUrl(defaultProject.repo)}
+                    aria-label={`Open an issue in ${defaultProject.name}`}
+                    rel="noopener noreferrer"
+                    target="_blank">Open issue →</a
+                  >
+                </div>
+
+              </>
+            ) : (
+              <a
+                class="btn btn--ghost btn--sm channel__action"
+                href={channel.href}
+                {...channel.href.startsWith('http') ? { rel: 'noopener noreferrer', target: '_blank' } : {}}
+              >
+                {channel.action}
+              </a>
+            )}
           </div>
         ))
       }
     </div>
   </section>
 
-  <section class="shell section">
-    <div class="split">
-      <div>
+  <section class="shell section advice">
+    <div class="section-head">
+      <div class="section-head__text">
         <h2>Before you write</h2>
-        <p class="muted">
-          A few things that make a report or a question much easier to act on:
-        </p>
-        <ul class="bullets">
-          <li>Name the project and the version or release tag you are running, including whether it is a dev or nightly build.</li>
-          <li>Describe the printer, the resin, and the file you were working with.</li>
-          <li>For a bug, include the exact steps that reproduce it and the output you got instead of the output you expected.</li>
-          <li>For a slicer issue, a copy of the model or at least a screenshot of the plate usually saves a round trip.</li>
-        </ul>
-      </div>
-
-      <div class="aside">
-        <h2>Where to file what</h2>
-        <ul class="aside__list">
-          {
-            FEATURED_PROJECTS.map((project) => (
-              <li>
-                <a href={`${repoUrl(project.repo)}/issues`} rel="noopener noreferrer" target="_blank">
-                  <strong>{project.name}</strong>
-                  <span class="muted">{project.blurb}</span>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-        <p class="muted aside__note">
-          Plugins live in their own repositories, so a printer-specific problem is usually best filed against the
-          plugin rather than the slicer itself.
-        </p>
+        <p class="lede">A few things that make a report or a question much easier to act on:</p>
       </div>
     </div>
+
+    <ol class="tips">
+      {
+        tips.map((tip, index) => (
+          <li class="card tip">
+            {/* The list carries the order for anyone not seeing the numbers. */}
+            <span class="tip__num mono" aria-hidden="true">{index + 1}</span>
+            <p class="tip__text">{tip}</p>
+          </li>
+        ))
+      }
+    </ol>
   </section>
 
-  <section class="shell section">
-    <div class="org">
-      <div>
-        <h2 class="mono org__title">Organisation details</h2>
-        <dl class="org__list">
-          <div><dt>Name</dt><dd>{SITE.name} ({SITE.shortName})</dd></div>
-          <div><dt>Established</dt><dd>{SITE.founded}</dd></div>
-          <div><dt>Website</dt><dd>{SITE.url.replace('https://', '')}</dd></div>
-          <div><dt>General email</dt><dd><a href={LINKS.email}>{SITE.email}</a></dd></div>
-          <div><dt>GitHub</dt><dd><a href={LINKS.github} rel="noopener noreferrer" target="_blank">github.com/Open-Resin-Alliance</a></dd></div>
-          <div><dt>Discord</dt><dd><a href={LINKS.discord} rel="noopener noreferrer" target="_blank">discord.gg/beFeTaPH6v</a></dd></div>
-        </dl>
-      </div>
-    </div>
-  </section>
 </BaseLayout>
+
+<script>
+  // A dropdown of the site's own making: a native <select> cannot be styled past the
+  // closed control, and its popup is the one piece of chrome on the page that belongs
+  // to someone else.
+  //
+  // It is shown by a script for the same reason - a control that cannot take anyone
+  // anywhere is worse than the plain list of trackers it stands in for, so with no
+  // script the list stays and the dropdown is never offered.
+  //
+  // Being a listbox, it owes the keyboard what the native control gave for free:
+  // arrows move and wrap, Home and End jump, a letter jumps to the next option that
+  // starts with it, Enter and Space choose, Escape closes, and focus goes back to the
+  // trigger whenever the menu does.
+  const GLOBALS = window as unknown as { __oraIssuePicker?: boolean };
+
+  function parts() {
+    const picker = document.querySelector<HTMLElement>('[data-issue-picker]');
+    const options = [...document.querySelectorAll<HTMLElement>('[data-issue-option]')];
+    return {
+      picker,
+      options,
+      trigger: picker?.querySelector<HTMLButtonElement>('[data-issue-trigger]') ?? null,
+      menu: picker?.querySelector<HTMLElement>('[data-issue-menu]') ?? null,
+      value: picker?.querySelector<HTMLElement>('[data-issue-value]') ?? null,
+      link: picker?.querySelector<HTMLAnchorElement>('[data-issue-link]') ?? null,
+    };
+  }
+
+  function selected(): HTMLElement | undefined {
+    const { options } = parts();
+    return options.find((option) => option.getAttribute('aria-selected') === 'true') ?? options[0];
+  }
+
+  /** Take the option as the answer: the trigger names it, the button follows it. */
+  function choose(option: HTMLElement) {
+    const { options, value, link } = parts();
+    for (const other of options) other.setAttribute('aria-selected', other === option ? 'true' : 'false');
+
+    const name = option.textContent?.trim() ?? 'the project';
+    if (value) value.textContent = name;
+    if (link) {
+      link.href = option.dataset.href ?? '#';
+      // The button stays short - the trigger beside it names the project - but what it
+      // does is said in full for anyone not reading the screen.
+      link.setAttribute('aria-label', `Open an issue in ${name}`);
+    }
+  }
+
+  function close(returnFocus = true) {
+    const { trigger, menu } = parts();
+    if (!trigger || !menu || menu.hidden) return;
+    menu.hidden = true;
+    trigger.setAttribute('aria-expanded', 'false');
+    if (returnFocus) trigger.focus();
+  }
+
+  function open(focusLast = false) {
+    const { trigger, menu } = parts();
+    if (!trigger || !menu) return;
+    menu.hidden = false;
+    trigger.setAttribute('aria-expanded', 'true');
+    const current = focusLast ? parts().options.at(-1) : selected();
+    current?.focus();
+  }
+
+  /** Move the focus a step through the options, wrapping at either end. */
+  function step(from: HTMLElement | undefined, delta: number) {
+    const { options } = parts();
+    if (options.length === 0) return;
+    const at = from ? options.indexOf(from) : -1;
+    const next = options[(at + delta + options.length) % options.length];
+    next?.focus();
+  }
+
+  function jump(letter: string) {
+    const { options } = parts();
+    const from = options.indexOf(document.activeElement as HTMLElement);
+    for (let i = 1; i <= options.length; i += 1) {
+      const option = options[(from + i + options.length) % options.length];
+      if (option?.textContent?.trim().toLowerCase().startsWith(letter)) {
+        option.focus();
+        return;
+      }
+    }
+  }
+
+  function wire() {
+    if (GLOBALS.__oraIssuePicker) return;
+    GLOBALS.__oraIssuePicker = true;
+
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const { picker, trigger, menu, options } = parts();
+      if (!picker || !trigger || !menu) return;
+
+      if (target.closest('[data-issue-trigger]')) {
+        if (menu.hidden) open();
+        else close();
+        return;
+      }
+
+      const option = target.closest<HTMLElement>('[data-issue-option]');
+      if (option && options.includes(option)) {
+        choose(option);
+        close();
+        return;
+      }
+
+      // Anywhere else on the page, and the menu is done.
+      if (!menu.hidden && !target.closest('[data-issue-dropdown]')) close(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      const { menu, trigger, options } = parts();
+      if (!menu || !trigger) return;
+      const focused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+      if (focused === trigger && ['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) {
+        event.preventDefault();
+        open(event.key === 'ArrowUp');
+        return;
+      }
+
+      if (menu.hidden) return;
+
+      switch (event.key) {
+        case 'ArrowDown':
+        case 'ArrowUp':
+          event.preventDefault();
+          step(focused ?? undefined, event.key === 'ArrowDown' ? 1 : -1);
+          return;
+        case 'Home':
+        case 'End':
+          event.preventDefault();
+          (event.key === 'Home' ? options[0] : options.at(-1))?.focus();
+          return;
+        case 'Enter':
+        case ' ':
+          event.preventDefault();
+          if (focused && options.includes(focused)) {
+            choose(focused);
+            close();
+          }
+          return;
+        case 'Escape':
+          event.preventDefault();
+          close();
+          return;
+        case 'Tab':
+          close(false);
+          return;
+        default:
+          if (event.key.length === 1 && /[a-z0-9]/i.test(event.key)) jump(event.key.toLowerCase());
+      }
+    });
+  }
+
+  wire();
+</script>
 
 <style>
   .page-head {
@@ -154,6 +363,16 @@ const structuredData = [
     flex-direction: column;
     gap: 0.75rem;
     padding: 1.4rem 1.5rem;
+  }
+
+  /* The card is glass, and `backdrop-filter` makes it a stacking context of its own: the
+     menu's z-index orders it against the card's children and nothing else, so the cards
+     below - painted later, in document order - covered an open menu. The card is the only
+     level that can out-order a sibling, so it lifts while its picker is open. 5 keeps the
+     menu under the header (50) and the back-to-top button (40). */
+  .channel:has([data-issue-trigger][aria-expanded='true']) {
+    position: relative;
+    z-index: 5;
   }
 
   .channel__head {
@@ -183,154 +402,187 @@ const structuredData = [
     align-self: flex-start;
   }
 
-  .split {
-    display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-    gap: 3rem;
-    align-items: start;
+  /* Centred section, carded points: the numbers hold the left edge of each card so the
+     centred sentences inside them have something to be centred against, which is what a
+     list of centred lines lacks on its own. */
+  .advice .section-head {
+    max-width: min(100%, 34rem);
+    margin-inline: auto;
+    text-align: center;
   }
 
-  .split h2 {
-    font-size: 1.25rem;
-    margin-bottom: 0.85rem;
-  }
-
-  .bullets {
-    list-style: none;
-    margin: 1.25rem 0 0;
-    padding: 0;
+  .tips {
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
-    max-width: var(--measure);
+    gap: 0.75rem;
+    /* Wider than the heading above it: the points are one line each, and a centred line
+       that breaks twice reads as a paragraph with an odd shape. */
+    max-width: min(100%, 40rem);
+    margin: 1.75rem auto 0;
+    padding: 0;
+    list-style: none;
   }
 
-  .bullets li {
-    position: relative;
-    padding-left: 1.15rem;
-    color: var(--muted);
+  .tip {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.05rem 1.25rem;
+  }
+
+  .tip__num {
+    flex: none;
+    font-size: 1.0625rem;
+    font-weight: 650;
+    color: var(--brand-violet-deep);
+  }
+
+  .tip__text {
+    flex: 1 1 auto;
+    margin: 0;
+    text-align: center;
     font-size: 0.9375rem;
     line-height: 1.65;
+    color: var(--muted);
   }
 
-  .bullets li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.6rem;
-    inline-size: 5px;
-    block-size: 5px;
-    border-radius: 999px;
-    background: var(--brand-pink);
+  /* Pink in the dark theme, where the violet is too close to the page. */
+  :global(:root[data-theme='dark']) .tip__num {
+    color: color-mix(in oklab, var(--brand-pink) 68%, var(--ink));
   }
 
-  .aside__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  /* The control and its button, inline at the foot of the card: the card's heading
+     and detail line say the rest. */
+  /* Two tracks, explicitly equal: the control and the button split the card's row
+     down the middle, and `minmax(0, …)` lets each shrink into its half rather than
+     being held open by the width of its own label. */
+  .picker {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: auto;
+  }
+
+  .picker__go {
+    /* Half the row whatever the label wants to be; the text is not allowed to set the
+       width. */
+    inline-size: 100%;
+    min-inline-size: 0;
+    white-space: nowrap;
+  }
+
+  /* The dropdown is the site's pane, sitting under a trigger that is the same pane:
+     the menu is not the operating system's chrome, which is the whole reason for
+     building one. */
+  .dropdown {
+    position: relative;
+  }
+
+  .dropdown__trigger {
     display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .aside__list a {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    padding: 0.8rem 0.95rem;
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
-    box-shadow: var(--glass-shadow);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius);
+    inline-size: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.7rem;
+    font: inherit;
     font-size: 0.9375rem;
-    transition: border-color 0.18s var(--ease), transform 0.18s var(--ease);
+    color: var(--ink);
+    /* Solid, like the field it is: a pane of glass inside a pane of glass leaves the
+       text competing with whatever is behind the card. */
+    background: var(--bg-inset);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: border-color 0.18s var(--ease);
   }
 
-  .aside__list a:hover {
+  .dropdown__trigger:hover,
+  .dropdown__trigger[aria-expanded='true'] {
     border-color: var(--border-strong);
-    transform: translateY(-1px);
   }
 
-  .aside__list span {
+  .dropdown__chevron {
+    flex: none;
+    color: var(--muted);
+    transition: transform 0.18s var(--ease);
+  }
+
+  .dropdown__trigger[aria-expanded='true'] .dropdown__chevron {
+    transform: rotate(180deg);
+  }
+
+  .dropdown__menu {
+    position: absolute;
+    z-index: 20;
+    inset-inline-start: 0;
+    top: calc(100% + 0.4rem);
+    /* Wider than the trigger when it has to be: the group labels and the longest
+       project names need the room, and the menu is allowed to leave the card. */
+    inline-size: max(100%, 15rem);
+    /* As tall as its contents: six projects and two headings are not a list to read
+       through a letterbox. Only a short window can cut it short, and there it scrolls
+       rather than running off the screen. */
+    max-block-size: calc(100svh - 8rem);
+    overflow-y: auto;
+    padding: 0.4rem;
+    /* Opaque as well: the menu hangs over the page below the card, and the page is not
+       a background a list of project names can be read through. */
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  /* The attribute has to win over the display below it. */
+  .dropdown__menu[hidden] {
+    display: none;
+  }
+
+  .dropdown__menu:not([hidden]) {
+    display: block;
+  }
+
+  /* The group headings read as headings: the body face, bold, in the brand's violet -
+     and pink in the dark theme, where the violet is too close to the page to read. The
+     picker is in the selector because the card's own paragraph rule would otherwise
+     colour them grey. */
+  .picker .dropdown__group {
+    padding: 0.5rem 0.45rem 0.4rem;
     font-size: 0.8125rem;
-    line-height: 1.5;
-  }
-
-  .aside__note {
-    margin-top: 1rem;
-    font-size: 0.8125rem;
-    line-height: 1.6;
-  }
-
-  .org {
-    padding: 2rem 2.25rem;
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: var(--glass-blur);
-    backdrop-filter: var(--glass-blur);
-    box-shadow: var(--glass-shadow);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-  }
-
-  .org__title {
-    font-size: 0.6875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--muted-2);
-    margin-bottom: 1.25rem;
-  }
-
-  .org__list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
-    gap: 1rem 2.5rem;
-    margin: 0;
-  }
-
-  .org__list > div {
-    display: grid;
-    grid-template-columns: 8rem 1fr;
-    gap: 1rem;
-    padding-bottom: 0.75rem;
+    font-weight: 650;
+    color: var(--brand-violet-deep);
+    /* A rule under each heading: it says where the group ends without another label. */
     border-bottom: 1px solid var(--border);
+    margin-bottom: 0.3rem;
+  }
+
+  /* Pink in the dark theme, where the violet is too close to the page, and fainter
+     than the brand's own pink: a heading over a list should not be the loudest thing
+     in the menu. */
+  :global(:root[data-theme='dark']) .dropdown__group {
+    color: color-mix(in oklab, var(--brand-pink) 68%, var(--ink));
+  }
+
+  .dropdown__option {
+    padding: 0.45rem 0.45rem;
+    border-radius: var(--radius-sm);
     font-size: 0.9375rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background-color 0.15s var(--ease), color 0.15s var(--ease);
   }
 
-  .org__list dt {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted-2);
-    padding-top: 0.2rem;
+  .dropdown__option:hover,
+  .dropdown__option:focus-visible {
+    color: var(--ink);
+    background: var(--bg-inset);
+    outline: none;
   }
 
-  .org__list dd {
-    margin: 0;
-    overflow-wrap: anywhere;
+  .dropdown__option[aria-selected='true'] {
+    color: var(--accent);
   }
 
-  .org__list a {
-    text-decoration: underline;
-    text-decoration-color: var(--border-strong);
-    text-underline-offset: 2px;
-  }
-
-  .org__list a:hover {
-    text-decoration-color: var(--brand-pink);
-  }
-
-  @media (max-width: 960px) {
-    .split {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 2.5rem;
-    }
-
-    .org {
-      padding: 1.5rem 1.25rem;
-    }
-  }
 </style>
