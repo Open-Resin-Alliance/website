@@ -822,6 +822,15 @@ a.card:hover,
   overflow-wrap: anywhere;
 }
 
+/* Inside a table cell the cell's own policy wins, because `anywhere` breaks a word
+   wherever it likes: a chunk tag is four characters (`HEAD`, `LAYR`, `LTBL`) and the
+   tag column split every one of them at three while the column beside it had room to
+   spare. `break-word` keeps the long identifiers safe - it still breaks one that would
+   overflow its column - without splitting a word that fits. */
+.prose table :is(th, td) code {
+  overflow-wrap: break-word;
+}
+
 .prose pre {
   background: var(--code-bg);
   border: 1px solid var(--border);
