@@ -10,7 +10,7 @@ order: 11
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/11-layer-timing.md"
-sourceRef: "19eae44"
+sourceRef: "0a7e69f"
 syncedAt: "2026-09-15"
 ---
 
