@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-14T12:56:17.814Z",
+  "generatedAt": "2026-09-15T11:50:27.751Z",
   "source": "https://api.github.com/orgs/Open-Resin-Alliance",
   "org": {
     "login": "Open-Resin-Alliance",
@@ -18,8 +18,8 @@
     "forks": 30,
     "stars": 90,
     "openIssues": 218,
-    "openPulls": 17,
-    "commits": 2141,
+    "openPulls": 22,
+    "commits": 2182,
     "contributors": 12,
     "languages": {
       "Rust": 6,
@@ -97,7 +97,7 @@
       "stars": 0,
       "forks": 1,
       "openIssues": 0,
-      "openPulls": 1,
+      "openPulls": 2,
       "commits": 46,
       "watchers": null,
       "isFork": false,
@@ -286,7 +286,7 @@
       "stars": 67,
       "forks": 20,
       "openIssues": 217,
-      "openPulls": 5,
+      "openPulls": 8,
       "commits": 1359,
       "watchers": null,
       "isFork": false,
@@ -297,26 +297,35 @@
       "defaultBranch": "main",
       "createdAt": "2025-11-11T20:44:18Z",
       "updatedAt": "2026-09-10T07:04:04Z",
-      "pushedAt": "2026-09-14T00:17:49Z",
+      "pushedAt": "2026-09-15T07:46:51Z",
       "latestRelease": {
         "repo": "DragonFruit",
-        "tag": "nightly_feat_auto-supports-v1.6",
-        "name": "Feature: Auto Supports V1.6",
-        "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_feat_auto-supports-v1.6",
-        "publishedAt": "2026-09-11T15:58:34Z",
+        "tag": "nightly_sin_models-outside-plate",
+        "name": "Nightly: Sin/models Outside Plate",
+        "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_sin_models-outside-plate",
+        "publishedAt": "2026-09-14T21:15:08Z",
         "prerelease": true,
         "draft": false
       },
       "latestStableRelease": {
         "repo": "DragonFruit",
-        "tag": "v0.1.9",
-        "name": "Stable v0.1.9",
-        "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/v0.1.9",
-        "publishedAt": "2026-07-06T04:55:27Z",
+        "tag": "v0.1.15",
+        "name": "Dev build v0.1.15",
+        "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/v0.1.15",
+        "publishedAt": "2026-08-29T02:19:27Z",
         "prerelease": false,
         "draft": false
       },
       "recentReleases": [
+        {
+          "repo": "DragonFruit",
+          "tag": "nightly_sin_models-outside-plate",
+          "name": "Nightly: Sin/models Outside Plate",
+          "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_sin_models-outside-plate",
+          "publishedAt": "2026-09-14T21:15:08Z",
+          "prerelease": true,
+          "draft": false
+        },
         {
           "repo": "DragonFruit",
           "tag": "nightly_feat_auto-supports-v1.6",
@@ -346,20 +355,11 @@
         },
         {
           "repo": "DragonFruit",
-          "tag": "nightly_sin_86-64-v2",
-          "name": "Nightly: Sin/86 64 V2",
-          "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_sin_86-64-v2",
-          "publishedAt": "2026-08-29T20:16:18Z",
-          "prerelease": true,
-          "draft": false
-        },
-        {
-          "repo": "DragonFruit",
           "tag": "v0.1.15",
           "name": "Dev build v0.1.15",
           "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/v0.1.15",
           "publishedAt": "2026-08-29T02:19:27Z",
-          "prerelease": true,
+          "prerelease": false,
           "draft": false
         }
       ]
@@ -375,8 +375,8 @@
       "stars": 0,
       "forks": 0,
       "openIssues": 0,
-      "openPulls": 0,
-      "commits": 32,
+      "openPulls": 1,
+      "commits": 60,
       "watchers": null,
       "isFork": false,
       "isTemplate": false,
@@ -392,8 +392,8 @@
       ],
       "defaultBranch": "main",
       "createdAt": "2026-07-05T04:45:16Z",
-      "updatedAt": "2026-09-14T00:50:35Z",
-      "pushedAt": "2026-09-14T00:50:31Z",
+      "updatedAt": "2026-09-15T07:02:15Z",
+      "pushedAt": "2026-09-15T07:46:48Z",
       "latestRelease": null,
       "latestStableRelease": null,
       "recentReleases": []
@@ -420,7 +420,7 @@
       "defaultBranch": "main",
       "createdAt": "2023-01-03T16:28:23Z",
       "updatedAt": "2026-08-25T23:31:42Z",
-      "pushedAt": "2026-09-14T04:52:42Z",
+      "pushedAt": "2026-09-15T06:04:55Z",
       "latestRelease": {
         "repo": "Odyssey",
         "tag": "BRANCH_klipper_refactor",
@@ -569,7 +569,7 @@
       "defaultBranch": "main",
       "createdAt": "2023-01-13T11:31:35Z",
       "updatedAt": "2026-07-17T19:01:32Z",
-      "pushedAt": "2026-09-08T23:21:53Z",
+      "pushedAt": "2026-09-15T05:17:11Z",
       "latestRelease": {
         "repo": "Orion",
         "tag": "BRANCH_feat/athena_leveling_wizard",
@@ -737,7 +737,7 @@
       "forks": 0,
       "openIssues": 0,
       "openPulls": 0,
-      "commits": 97,
+      "commits": 110,
       "watchers": null,
       "isFork": false,
       "isTemplate": false,
@@ -746,8 +746,8 @@
       "topics": [],
       "defaultBranch": "main",
       "createdAt": "2025-02-09T23:58:09Z",
-      "updatedAt": "2026-09-14T04:34:04Z",
-      "pushedAt": "2026-09-14T04:34:01Z",
+      "updatedAt": "2026-09-15T07:04:02Z",
+      "pushedAt": "2026-09-15T07:03:58Z",
       "latestRelease": null,
       "latestStableRelease": null,
       "recentReleases": []
@@ -773,6 +773,15 @@
     "website"
   ],
   "recentReleases": [
+    {
+      "repo": "DragonFruit",
+      "tag": "nightly_sin_models-outside-plate",
+      "name": "Nightly: Sin/models Outside Plate",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_sin_models-outside-plate",
+      "publishedAt": "2026-09-14T21:15:08Z",
+      "prerelease": true,
+      "draft": false
+    },
     {
       "repo": "DragonFruit",
       "tag": "nightly_feat_auto-supports-v1.6",
@@ -802,20 +811,11 @@
     },
     {
       "repo": "DragonFruit",
-      "tag": "nightly_sin_86-64-v2",
-      "name": "Nightly: Sin/86 64 V2",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_sin_86-64-v2",
-      "publishedAt": "2026-08-29T20:16:18Z",
-      "prerelease": true,
-      "draft": false
-    },
-    {
-      "repo": "DragonFruit",
       "tag": "v0.1.15",
       "name": "Dev build v0.1.15",
       "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/v0.1.15",
       "publishedAt": "2026-08-29T02:19:27Z",
-      "prerelease": true,
+      "prerelease": false,
       "draft": false
     },
     {
@@ -938,35 +938,89 @@
   "activity": [
     {
       "repo": "DragonFruit",
-      "date": "2026-09-14T07:32:22Z",
-      "actor": "AJRubenstein",
-      "avatar": "https://avatars.githubusercontent.com/u/46571410?",
-      "kind": "pull_request",
-      "title": "opened pull request #666",
-      "url": null
-    },
-    {
-      "repo": "website",
-      "date": "2026-09-14T04:34:01Z",
+      "date": "2026-09-15T07:46:52Z",
       "actor": "PaulGD03",
       "avatar": "https://avatars.githubusercontent.com/u/23582247?",
       "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website",
-      "burst": 6
+      "title": "pushed commits to feat/lumenformat",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
     },
     {
       "repo": "LumenFormat",
-      "date": "2026-09-14T00:50:31Z",
+      "date": "2026-09-15T07:46:49Z",
       "actor": "PaulGD03",
       "avatar": "https://avatars.githubusercontent.com/u/23582247?",
       "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/LumenFormat"
+      "title": "pushed commits to feat/embed-voxl-scene",
+      "url": "https://github.com/Open-Resin-Alliance/LumenFormat",
+      "burst": 2
+    },
+    {
+      "repo": "LumenFormat",
+      "date": "2026-09-15T07:35:57Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "pull_request",
+      "title": "opened pull request #2",
+      "url": null
     },
     {
       "repo": "DragonFruit",
-      "date": "2026-09-13T22:57:23Z",
+      "date": "2026-09-15T07:35:56Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to feat/lumenformat",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-15T07:20:41Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "pull_request",
+      "title": "labeled pull request #668",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-15T07:20:36Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "pull_request",
+      "title": "labeled pull request #668",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-15T07:20:15Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "pull_request",
+      "title": "labeled pull request #669",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-15T07:19:26Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "pull_request",
+      "title": "opened pull request #669",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-15T07:17:48Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "pull_request",
+      "title": "opened pull request #668",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-15T07:17:14Z",
       "actor": "PaulGD03",
       "avatar": "https://avatars.githubusercontent.com/u/23582247?",
       "kind": "push",
@@ -974,188 +1028,133 @@
       "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
     },
     {
-      "repo": "DragonFruit",
-      "date": "2026-09-13T22:57:22Z",
-      "actor": "AJRubenstein",
-      "avatar": "https://avatars.githubusercontent.com/u/46571410?",
+      "repo": "website",
+      "date": "2026-09-15T07:03:59Z",
+      "actor": "github-actions[bot]",
+      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
+      "kind": "push",
+      "title": "pushed commits to main",
+      "url": "https://github.com/Open-Resin-Alliance/website"
+    },
+    {
+      "repo": "LumenFormat",
+      "date": "2026-09-15T07:02:09Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to main",
+      "url": "https://github.com/Open-Resin-Alliance/LumenFormat"
+    },
+    {
+      "repo": "LumenFormat",
+      "date": "2026-09-15T07:02:08Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
       "kind": "pull_request",
-      "title": "merged pull request #633",
+      "title": "merged pull request #1",
       "url": null
     },
     {
-      "repo": "website",
-      "date": "2026-09-13T12:15:37Z",
-      "actor": "github-actions[bot]",
-      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
+      "repo": "LumenFormat",
+      "date": "2026-09-15T06:59:26Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "pull_request",
+      "title": "opened pull request #1",
+      "url": null
+    },
+    {
+      "repo": "LumenFormat",
+      "date": "2026-09-15T06:59:25Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
       "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website"
+      "title": "pushed commits to feat/run-driven-encode",
+      "url": "https://github.com/Open-Resin-Alliance/LumenFormat"
+    },
+    {
+      "repo": "LumenFormat",
+      "date": "2026-09-15T06:58:38Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "create",
+      "title": "created feat/run-driven-encode",
+      "url": "https://github.com/Open-Resin-Alliance/LumenFormat"
     },
     {
       "repo": "DragonFruit",
-      "date": "2026-09-13T04:29:43Z",
-      "actor": "Byful",
-      "avatar": "https://avatars.githubusercontent.com/u/119755386?",
-      "kind": "issue",
-      "title": "opened issue #665",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/issues/665"
+      "date": "2026-09-15T04:34:09Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to feat/voxl-baking",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
     },
     {
       "repo": "website",
-      "date": "2026-09-13T03:32:31Z",
+      "date": "2026-09-15T03:36:50Z",
       "actor": "PaulGD03",
       "avatar": "https://avatars.githubusercontent.com/u/23582247?",
       "kind": "push",
       "title": "pushed commits to main",
       "url": "https://github.com/Open-Resin-Alliance/website",
+      "burst": 4
+    },
+    {
+      "repo": "LumenFormat",
+      "date": "2026-09-15T02:46:46Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to main",
+      "url": "https://github.com/Open-Resin-Alliance/LumenFormat",
       "burst": 2
     },
     {
-      "repo": "LumenFormat",
-      "date": "2026-09-13T02:31:59Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/LumenFormat"
-    },
-    {
       "repo": "website",
-      "date": "2026-09-13T02:23:08Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website"
-    },
-    {
-      "repo": "LumenFormat",
-      "date": "2026-09-13T02:22:18Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/LumenFormat"
-    },
-    {
-      "repo": "website",
-      "date": "2026-09-13T02:13:02Z",
+      "date": "2026-09-15T01:19:49Z",
       "actor": "github-actions[bot]",
       "avatar": "https://avatars.githubusercontent.com/u/41898282?",
       "kind": "push",
       "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website",
-      "burst": 3
+      "url": "https://github.com/Open-Resin-Alliance/website"
     },
     {
       "repo": "LumenFormat",
-      "date": "2026-09-13T01:49:43Z",
+      "date": "2026-09-15T00:51:56Z",
       "actor": "PaulGD03",
       "avatar": "https://avatars.githubusercontent.com/u/23582247?",
       "kind": "push",
       "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/LumenFormat"
+      "url": "https://github.com/Open-Resin-Alliance/LumenFormat",
+      "burst": 2
     },
     {
       "repo": "website",
-      "date": "2026-09-13T01:44:23Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "date": "2026-09-15T00:11:17Z",
+      "actor": "github-actions[bot]",
+      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
       "kind": "push",
       "title": "pushed commits to main",
       "url": "https://github.com/Open-Resin-Alliance/website"
     },
     {
       "repo": "LumenFormat",
-      "date": "2026-09-13T01:44:16Z",
+      "date": "2026-09-15T00:00:24Z",
       "actor": "PaulGD03",
       "avatar": "https://avatars.githubusercontent.com/u/23582247?",
       "kind": "push",
       "title": "pushed commits to main",
       "url": "https://github.com/Open-Resin-Alliance/LumenFormat"
-    },
-    {
-      "repo": "website",
-      "date": "2026-09-13T01:32:45Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website"
-    },
-    {
-      "repo": "LumenFormat",
-      "date": "2026-09-13T01:31:16Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/LumenFormat"
-    },
-    {
-      "repo": "website",
-      "date": "2026-09-13T00:31:48Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website",
-      "burst": 4
     },
     {
       "repo": "DragonFruit",
-      "date": "2026-09-12T23:44:19Z",
-      "actor": "Amyccoon",
-      "avatar": "https://avatars.githubusercontent.com/u/186101799?",
-      "kind": "issue",
-      "title": "opened issue #664",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/issues/664"
-    },
-    {
-      "repo": "website",
-      "date": "2026-09-12T23:38:14Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website",
-      "burst": 4
-    },
-    {
-      "repo": "LumenFormat",
-      "date": "2026-09-12T23:26:49Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/LumenFormat"
-    },
-    {
-      "repo": "website",
-      "date": "2026-09-12T23:17:34Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website"
-    },
-    {
-      "repo": "LumenFormat",
-      "date": "2026-09-12T23:17:17Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/LumenFormat"
-    },
-    {
-      "repo": "website",
-      "date": "2026-09-12T23:10:38Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website"
+      "date": "2026-09-14T21:15:08Z",
+      "actor": "github-actions[bot]",
+      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
+      "kind": "release",
+      "title": "released nightly_sin_models-outside-plate",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_sin_models-outside-plate"
     }
   ],
   "warnings": [],
