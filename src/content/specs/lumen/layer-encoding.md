@@ -10,8 +10,8 @@ order: 8
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/08-layer-encoding.md"
-sourceRef: "d22542b"
-syncedAt: "2026-09-14"
+sourceRef: "de27a78"
+syncedAt: "2026-09-15"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -382,5 +382,5 @@ Where:
 
 **Status:** Experimental. These fields are defined for future use. Odyssey
 firmware that does not implement the cure model must fall back to the
-traditional `normal_exposure_sec` / `bottom_exposure_sec` values in META.
+traditional `normal_exposure_ms` / `bottom_exposure_ms` values in META.
 Encoders may omit `cure_curve` entirely.

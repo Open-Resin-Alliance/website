@@ -10,13 +10,13 @@ order: 4
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/04-chunk-auth.md"
-sourceRef: "d22542b"
-syncedAt: "2026-09-14"
+sourceRef: "de27a78"
+syncedAt: "2026-09-15"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
 
-### 4.4 AUTH - Authentication & Encryption Chunk
+## 4.4 AUTH - Authentication & Encryption Chunk
 
 **Type tag:** `AUTH` (`0x41 0x55 0x54 0x48`). Optional.
 
@@ -35,7 +35,7 @@ metadata needed to derive or unwrap the session key.
 | 20 | N | - | `password_section` | See [§4.4.1](#441-password-section). |
 | 20+N | M | - | `machine_section` | See [§4.4.2](#442-machine-binding-section). |
 
-#### 4.4.1 Password Section
+### 4.4.1 Password Section
 
 | Offset | Size | Type | Field | Description |
 |--------|------|------|-------|-------------|
@@ -56,7 +56,7 @@ version `0x13`, a 32-byte output, no secret key and no associated data (both fie
 empty), and the password encoded as UTF-8. `salt` is the 16-byte value from the
 section; `iterations`, `memory_kib` and `parallelism` are its three cost parameters.
 
-#### 4.4.2 Machine-Binding Section
+### 4.4.2 Machine-Binding Section
 
 Contains one or more recipient entries. Each entry:
 

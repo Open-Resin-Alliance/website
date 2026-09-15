@@ -10,8 +10,8 @@ order: 1
 isIndex: true
 sourceRepo: "LumenFormat"
 sourcePath: "spec/01-overview.md"
-sourceRef: "d22542b"
-syncedAt: "2026-09-14"
+sourceRef: "de27a78"
+syncedAt: "2026-09-15"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -121,7 +121,7 @@ To avoid confusion with other parts of the ORA ecosystem, LUMEN is explicitly
 | Endianness | Little-endian (all multi-byte integers) |
 | Coordinate basis | Right-handed, Z-up |
 | Image orientation | Layer masks are stored as the printer must expose them; readers apply no flip ([§4.1](/specs/lumen/chunks#41-hdr---file-header-chunk)). |
-| Units | Micrometres (`um`), micrometres per minute (`um/min`). Lengths and speeds are integers. |
+| Units | Micrometers (`um`), micrometers per minute (`um/min`), milliseconds (`ms`). Lengths, speeds and durations are integers. |
 | Range notation | `a..b` is half-open `[a, b)`. `for i in 0..N` iterates `i = 0, 1, ..., N-1`. |
 
 Format detection: a `.lumen` file begins with the four ASCII bytes `LUMN`.
