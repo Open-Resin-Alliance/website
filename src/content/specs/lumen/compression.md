@@ -10,7 +10,7 @@ order: 9
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/09-compression.md"
-sourceRef: "de27a78"
+sourceRef: "6a006c9"
 syncedAt: "2026-09-15"
 ---
 
