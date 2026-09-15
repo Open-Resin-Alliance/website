@@ -10,7 +10,7 @@ order: 19
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/19-license.md"
-sourceRef: "5b68a2d"
+sourceRef: "2e8f188"
 syncedAt: "2026-09-15"
 ---
 

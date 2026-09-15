@@ -10,7 +10,7 @@ order: 4
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/04-chunk-auth.md"
-sourceRef: "5b68a2d"
+sourceRef: "2e8f188"
 syncedAt: "2026-09-15"
 ---
 

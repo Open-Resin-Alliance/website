@@ -10,7 +10,7 @@ order: 12
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/12-encryption.md"
-sourceRef: "5b68a2d"
+sourceRef: "2e8f188"
 syncedAt: "2026-09-15"
 ---
 
@@ -24,7 +24,7 @@ syncedAt: "2026-09-15"
 - **AEAD only.** Authenticated encryption prevents undetected tampering.
 - **Compress-then-encrypt.** zstd compression is applied first, then the compressed
   frame is encrypted.
-- **Content-scoped encryption.** The directory, HDR, AUTH, LTBL, and the `LAYR` version
+- **Content-scoped encryption.** The directory, HEAD, AUTH, LTBL, and the `LAYR` version
   field remain plaintext. Everything that carries content or content-derived
   data (the `LAYR` frames, ZDIC, META, PROF, LROV, VOXL) is encrypted. PREV and
   EXTD are optionally encrypted: a file may carry either sealed or in the clear, and a
@@ -76,7 +76,7 @@ another would authenticate exactly as it did before, because nothing in the AAD 
 ciphertext would differ. Binding each frame to the directory position of the chunk it
 belongs to denies that, which is the whole purpose of an index in the AAD. A reader
 therefore computes the index of the chunk it is opening - its position in the chunk
-directory, counted from `0` over all descriptors including `HDR` - and passes it as
+directory, counted from `0` over all descriptors including `HEAD` - and passes it as
 `unit_index`; an implementation that leaves it at `0` accepts files a conforming reader
 rejects.
 
