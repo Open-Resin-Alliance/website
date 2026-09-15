@@ -826,9 +826,16 @@ a.card:hover,
    wherever it likes: a chunk tag is four characters (`HEAD`, `LAYR`, `LTBL`) and the
    tag column split every one of them at three while the column beside it had room to
    spare. `break-word` keeps the long identifiers safe - it still breaks one that would
-   overflow its column - without splitting a word that fits. */
+   overflow its column - without splitting a word that fits.
+
+   An identifier in a cell is one word, and a hyphen is not the place to break it: CSS
+   breaks at a hyphen whatever `overflow-wrap` says, so `sample-multi-sector.lumen`
+   split after `sample-multi-`. Nothing wraps inside a cell's code now; a table too
+   wide for the column scrolls inside itself, which is what a specification's field
+   tables do anyway and what every one of them already does on a narrow screen. */
 .prose table :is(th, td) code {
   overflow-wrap: break-word;
+  white-space: nowrap;
 }
 
 .prose pre {
