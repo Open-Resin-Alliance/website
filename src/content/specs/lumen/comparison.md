@@ -10,7 +10,7 @@ order: 15
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/15-comparison.md"
-sourceRef: "6a006c9"
+sourceRef: "930c6d5"
 syncedAt: "2026-09-15"
 ---
 

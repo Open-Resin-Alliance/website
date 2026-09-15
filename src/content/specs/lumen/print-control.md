@@ -10,7 +10,7 @@ order: 5
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/05-print-control.md"
-sourceRef: "6a006c9"
+sourceRef: "930c6d5"
 syncedAt: "2026-09-15"
 ---
 
@@ -85,10 +85,29 @@ than one is present, readers use the first.
   neither is malformed.
 - `sector_id` is optional. When present, the entry applies only to that sector on the
   matched layer(s); when absent, it applies to every sector.
-- When several entries match a given `(layer, sector)` pair, the **last** matching
-  entry wins. Because an entry without `sector_id` matches every sector, a later
-  sector-specific entry overrides it for that sector only.
+- When several entries match a given `(layer, sector)` pair, the **last** matching entry wins
+  **for each field it carries**. An entry is a sparse set of overrides, not a replacement for
+  the entries before it: one that omits a field leaves the value a matching earlier entry gave
+  that field in place, and only the fields an entry carries are overridden by it. Because an
+  entry without `sector_id` matches every sector, a later sector-specific entry overrides it
+  for that sector only.
 - Layers with no matching entry use META (or SECT) defaults; LROV never removes them.
+
+**Reader support: REQUIRED.** Writing the chunk is the encoder's choice - a slicer may write
+per-layer settings or leave them out, and a file without an `LROV` chunk is complete either
+way. Honoring it is not a choice. A conforming reader MUST apply every entry that matches a
+layer it prints, and a reader that does not implement overrides MUST refuse a file that
+carries an `LROV` chunk rather than print it with META and SECT values alone.
+
+The reason is that this is the one degradation a printer cannot notice. A layer printed at
+META's exposure instead of its override is a print that fails quietly: the file is
+structurally valid, every checksum still passes, and nothing in the output says a chunk was
+ignored. So the rule is the same one [§4.13](/specs/lumen/scene-chunks#413-extd---extension-chunk)
+applies to an unimplemented `critical` extension, and the same principle as
+[§7.2](/specs/lumen/sectors#72-sector-0-convention-and-single-material-degradation): a capability a
+reader lacks makes a file unprintable to it, not printable with approximations. A slicer
+that knows its target cannot honor overrides should not write them; a printer that meets
+them must.
 
 ## 4.7 PREV - Preview Image Chunk
 

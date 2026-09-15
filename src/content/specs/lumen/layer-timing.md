@@ -10,7 +10,7 @@ order: 11
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/11-layer-timing.md"
-sourceRef: "6a006c9"
+sourceRef: "930c6d5"
 syncedAt: "2026-09-15"
 ---
 
@@ -48,7 +48,9 @@ The layer timing pipeline resolves as follows for each layer index `i`:
    taken verbatim from META.
 3. **LROV overrides:** Any matching `layer` or `layer_range` entry in LROV overrides
    the interpolated value for the sectors it targets (`sector_id` absent = all
-   sectors). The last matching entry wins per `(layer, sector)` pair.
+   sectors). The last matching entry wins per `(layer, sector)` pair. A conforming reader
+   MUST apply them: a printer that cannot honor overrides refuses the file rather than
+   print these layers at the wrong exposure ([§4.6](/specs/lumen/print-control#46-lrov---layer-override-chunk)).
 
 This models the existing bottom/normal/transition behavior while allowing arbitrary
 per-layer overrides.

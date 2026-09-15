@@ -10,7 +10,7 @@ order: 13
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/13-versioning.md"
-sourceRef: "6a006c9"
+sourceRef: "930c6d5"
 syncedAt: "2026-09-15"
 ---
 
@@ -38,7 +38,11 @@ sub-version.
 
 ### 10.2 Forward Compatibility Mechanisms
 
-1. **Unknown chunk types:** Skip (chunk descriptor gives byte range).
+1. **Unknown chunk types:** Skip (chunk descriptor gives byte range). This covers chunk
+   types this revision does not define, and chunks a reader has no use for. It does not
+   cover a *defined* chunk whose handling changes what is printed: those are implemented, or
+   the file is refused - `LROV` ([§4.6](/specs/lumen/print-control#46-lrov---layer-override-chunk)),
+   and an unimplemented `critical` extension (item 6 below).
 2. **Unknown chunk flags:** Ignore within known types.
 3. **Unknown JSON keys:** Ignore in META, SECT, LROV payloads.
 4. **New HDR fields:** Parse the layout for the `hdr_version` present. An unrecognized

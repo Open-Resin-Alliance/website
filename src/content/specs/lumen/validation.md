@@ -10,7 +10,7 @@ order: 14
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/14-validation.md"
-sourceRef: "6a006c9"
+sourceRef: "930c6d5"
 syncedAt: "2026-09-15"
 ---
 
@@ -129,7 +129,10 @@ syncedAt: "2026-09-15"
 ### 11.5 Validation Levels
 
 - **Loose** (default for printing): Accept structurally valid files. Skip unknown
-  chunks/fields.
+  chunks and fields - ones this revision does not define, or that the reader has no use
+  for, such as `PREV`, `PROF` or `LHAS`. Skipping never reaches a chunk the reader must act
+  on: an `LROV` chunk it does not implement makes the file unprintable to it, not printable
+  without overrides ([§4.6](/specs/lumen/print-control#46-lrov---layer-override-chunk)).
 - **Strict** (file verification tools): Enforce all semantic validations. Warn on
   non-critical issues, error on critical ones.
 
@@ -152,7 +155,11 @@ The repository carries byte-exact test vectors and an independent validator unde
 valid vector pins the uncompressed structures it contains exactly - the file header,
 `HDR`, `AUTH`, `LTBL`, the `LAYR` header and block table, `LHAS`, every REE stream, the
 chunk directory and the trailer - and each invalid vector fails exactly one named check
-from this section. Compressed payloads are pinned by property rather than by byte,
+from this section. Each valid vector also records the settings a conforming reader must
+resolve for a sample of `(layer, sector)` points, which pins the [§8](/specs/lumen/layer-timing#8-per-layer-settings-model)
+pipeline - base values, bottom and transition blending, absent-field defaults, and the
+`LROV` overrides a reader is required to apply ([§4.6](/specs/lumen/print-control#46-lrov---layer-override-chunk)) -
+rather than only the bytes. Compressed payloads are pinned by property rather than by byte,
 because zstd output is not stable across versions. The encrypted vectors carry their
 test password and recipient key in the manifest.
 

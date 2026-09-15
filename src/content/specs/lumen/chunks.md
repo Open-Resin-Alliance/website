@@ -10,7 +10,7 @@ order: 3
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/03-chunks.md"
-sourceRef: "6a006c9"
+sourceRef: "930c6d5"
 syncedAt: "2026-09-15"
 ---
 
@@ -22,23 +22,31 @@ A LUMEN file is composed of typed chunks. The table below summarizes every
 chunk defined by this specification. Developers can scan this to understand
 the file's capabilities at a glance; detailed binary layouts follow.
 
-| Tag | Name | Required | Encrypted | Purpose |
-|-----|------|----------|-----------|---------|
-| `HDR\0` | Header | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Display dimensions, layer count, encoder identity |
-| `META` | Metadata | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Print parameters as JSON (exposure, lift, motion) |
-| `PROF` | Print Profile | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Named, versioned, reusable profile for Odyssey import |
-| `AUTH` | Authentication | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Encryption metadata, key wrapping, machine binding |
-| `SECT` | Sector Definition | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span>* | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Per-material exposure groups for multi-material printing |
-| `LROV` | Layer Override | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Per-layer or per-range timing overrides |
-| `PREV` | Preview Image | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Optional | PNG preview images, multiple roles supported |
-| `LTBL` | Layer Table | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Per-layer block index and byte offsets for random access |
-| `ZDIC` | Zstd Dictionary | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Trained dictionary shared by all LAYR block frames |
-| `LAYR` | Layer Data | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Layer masks as independent zstd block frames |
-| `LHAS` | Layer Hashes | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | SHA-256 Merkle tree for integrity verification |
-| `VOXL` | Embedded Scene | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Complete VOXL scene file for round-trip re-editing |
-| `EXTD` | Extension | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Per-extension | Vendor-specific or future standard extensions |
+| Tag | Name | Required | Reader support | Encrypted | Purpose |
+|-----|------|----------|----------------|-----------|---------|
+| `HDR\0` | Header | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Required | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Display dimensions, layer count, encoder identity |
+| `META` | Metadata | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Required | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Print parameters as JSON (exposure, lift, motion) |
+| `PROF` | Print Profile | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Optional | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Named, versioned, reusable profile for Odyssey import |
+| `AUTH` | Authentication | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Required when the file is encrypted | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Encryption metadata, key wrapping, machine binding |
+| `SECT` | Sector Definition | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span>* | Required, or decode sector 0 and report the rest ([§7.2](/specs/lumen/sectors#72-sector-0-convention-and-single-material-degradation)) | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Per-material exposure groups for multi-material printing |
+| `LROV` | Layer Override | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | **Required** - refuse a file you cannot honor ([§4.6](/specs/lumen/print-control#46-lrov---layer-override-chunk)) | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Per-layer or per-range timing overrides |
+| `PREV` | Preview Image | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Optional | Optional | PNG preview images, multiple roles supported |
+| `LTBL` | Layer Table | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Required | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Per-layer block index and byte offsets for random access |
+| `ZDIC` | Zstd Dictionary | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Required when present | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Trained dictionary shared by all LAYR block frames |
+| `LAYR` | Layer Data | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Required | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Layer masks as independent zstd block frames |
+| `LHAS` | Layer Hashes | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Optional | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | SHA-256 Merkle tree for integrity verification |
+| `VOXL` | Embedded Scene | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Optional (opaque) | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Complete VOXL scene file for round-trip re-editing |
+| `EXTD` | Extension | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Per-extension: refuse a `critical` one you do not implement | Per-extension | Vendor-specific or future standard extensions |
 
 \* Required when `MULTI_SECTOR` flag is set.
+
+The **Required** column is about presence in a file: what an encoder must write. **Reader
+support** is the separate obligation on the other side, and the two do not line up - a
+chunk may be optional to write and still mandatory to honor. An entry that says *Required*
+means a reader that cannot meet it MUST refuse the file rather than print an approximation
+of it. The chunks that carry the print itself - `HDR`, `META`, `LTBL`, `LAYR` - are joined
+there by `LROV`, because a printer that ignores overrides prints those layers at the wrong
+exposure, and nothing in the file says so afterwards.
 
 ### 4.1 HDR - File Header Chunk
 
@@ -220,6 +228,7 @@ to `0`. The `bottom_*` fields follow the same model.
 1. Start with META values as defaults for all layers (and SECT values per-sector, if multi-sector).
 2. Apply bottom/transition blending: layers in the bottom range use bottom-prefixed values; layers in the transition range interpolate between bottom and normal values ([§8](/specs/lumen/layer-timing#8-per-layer-settings-model) defines the formula and which fields participate).
 3. If `LROV` chunk present, override specific fields for specific layers (last matching entry wins).
+4. **Absent fields.** A field META does not carry, that no `SECT` definition supplies for the sector and that no `LROV` entry overrides, resolves to `0` for a distance, speed or duration - a segment or a pause that is not performed - and to `255` for `light_pwm`. Absent does not mean "whatever the implementation usually does": two readers must resolve the same file to the same numbers, so an encoder that leaves a field out is asking for zero. A field with no meaning to zero is not in this class, and is absent rather than zero when META does not carry it: `chamber_temperature_c` and `vat_temperature_c` are targets the printer uses or does not, and the `cure_curve` is either present or not.
 
 See [§8](/specs/lumen/layer-timing#8-per-layer-settings-model) for the complete layer timing pipeline.
 
