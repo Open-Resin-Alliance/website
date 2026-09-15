@@ -10,7 +10,7 @@ order: 14
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/14-validation.md"
-sourceRef: "2e8f188"
+sourceRef: "751adea"
 syncedAt: "2026-09-15"
 ---
 

@@ -10,7 +10,7 @@ order: 17
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/17-appendix-b-encoder.md"
-sourceRef: "2e8f188"
+sourceRef: "751adea"
 syncedAt: "2026-09-15"
 ---
 
