@@ -10,7 +10,7 @@ order: 8
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/08-layer-encoding.md"
-sourceRef: "751adea"
+sourceRef: "6e50031"
 syncedAt: "2026-09-15"
 ---
 

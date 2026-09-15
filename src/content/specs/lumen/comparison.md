@@ -10,7 +10,7 @@ order: 15
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/15-comparison.md"
-sourceRef: "751adea"
+sourceRef: "6e50031"
 syncedAt: "2026-09-15"
 ---
 
@@ -26,7 +26,7 @@ syncedAt: "2026-09-15"
 | Human-readable params | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> (unzip) | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> (`strings` + decompress) |
 | Layer encoding | Variable-length RLE, XOR-obfuscated | 0x55-magic RLE, checksum | PW0 RLE (4-bit quant) | PNG (deflate) | REE + zstd with dictionary |
 | Compression | RLE only | RLE only | Deflate per-entry | Deflate per PNG | zstd cross-layer with dictionary |
-| Cross-layer compression | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> (shared-dictionary frames, one per `(sector, layer group)`) |
+| Cross-layer compression | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> (shared-dictionary frames, one per sector per layer group) |
 | Encryption | AES-256-CBC (optional, v5enc) | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Optional AEAD (AES-256-GCM / ChaCha20-Poly1305) |
 | Encryption purpose | Vendor file binding (enforced by the printer) | - | - | - | User security (opt-in) |
 | Per-layer overrides | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> (bottom/normal/transition) | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> (LROV, arbitrary overrides of one `(layer, sector)`) |
