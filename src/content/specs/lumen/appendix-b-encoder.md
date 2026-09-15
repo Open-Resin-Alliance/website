@@ -10,7 +10,7 @@ order: 17
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/17-appendix-b-encoder.md"
-sourceRef: "930c6d5"
+sourceRef: "5b68a2d"
 syncedAt: "2026-09-15"
 ---
 
@@ -35,8 +35,8 @@ plugins/lumen/
     lumenFormatDefinition.ts      - SlicingFormatDefinition (layerDataKind: 'raw-mask')
     rust/
       encoder_impl.rs             - FormatEncoder + RleStreamEncoder impl
-      lumen_layout.rs             - Chunk assembly, REE encoding, block framing, zstd compression
-      lumen_metadata.rs           - JSON builders for META, SECT, LROV
+      lumen_layout.rs             - Chunk assembly, REE encoding, per-(sector, layer group) framing, zstd compression
+      lumen_metadata.rs           - JSON builders for META (sector entries included) and LROV
       lumen_crypto.rs             - AUTH chunk, AEAD encrypt/decrypt, key wrapping
       lumen_types.rs              - Consts, LumenPreparedLayer, etc.
 ```
@@ -46,12 +46,12 @@ Key integration points:
 - `requires_raw_mask_layers()` returns `true`, `requires_png_layers()` returns `false`.
 - `create_rle_stream_encoder()` receives `Vec<RleRun>` per layer and converts each
   layer to a REE stream.
-- `finalize_to_bytes()` splits the accumulated layer streams into blocks, trains the
-  zstd dictionary into a `ZDIC` chunk, compresses each block independently, and
-  assembles the complete chunk layout (`ZDIC`, `LTBL`, `LAYR`, `VOXL`, directory,
+- `finalize_to_bytes()` groups each sector's layer streams into layer groups, trains the
+  zstd dictionary into a `ZDIC` chunk, compresses each group into its own `LAYR` chunk, and
+  assembles the complete chunk layout (`ZDIC`, `LROV`, `LTBL`, `LAYR`, `VOXL`, directory,
   trailer).
-- `parallel_encode_fn()` enables parallel RLE→REE conversion via rayon; block
-  compression is likewise independent per block.
+- `parallel_encode_fn()` enables parallel RLE→REE conversion via rayon; frame
+  compression is likewise independent per frame.
 
 ### B.1 Mapping to the existing formats
 

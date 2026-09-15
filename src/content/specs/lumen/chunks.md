@@ -10,7 +10,7 @@ order: 3
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/03-chunks.md"
-sourceRef: "930c6d5"
+sourceRef: "5b68a2d"
 syncedAt: "2026-09-15"
 ---
 
@@ -28,17 +28,14 @@ the file's capabilities at a glance; detailed binary layouts follow.
 | `META` | Metadata | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Required | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Print parameters as JSON (exposure, lift, motion) |
 | `PROF` | Print Profile | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Optional | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Named, versioned, reusable profile for Odyssey import |
 | `AUTH` | Authentication | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Required when the file is encrypted | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Encryption metadata, key wrapping, machine binding |
-| `SECT` | Sector Definition | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span>* | Required, or decode sector 0 and report the rest ([§7.2](/specs/lumen/sectors#72-sector-0-convention-and-single-material-degradation)) | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Per-material exposure groups for multi-material printing |
-| `LROV` | Layer Override | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | **Required** - refuse a file you cannot honor ([§4.6](/specs/lumen/print-control#46-lrov---layer-override-chunk)) | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Per-layer or per-range timing overrides |
+| `LROV` | Layer Override | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | **Required** - refuse a file you cannot honor ([§4.6](/specs/lumen/print-control#46-lrov---layer-override-chunk)) | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Timing overrides for one `(layer, sector)` pair |
 | `PREV` | Preview Image | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Optional | Optional | PNG preview images, multiple roles supported |
-| `LTBL` | Layer Table | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Required | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Per-layer block index and byte offsets for random access |
-| `ZDIC` | Zstd Dictionary | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Required when present | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Trained dictionary shared by all LAYR block frames |
-| `LAYR` | Layer Data | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Required | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Layer masks as independent zstd block frames |
+| `LTBL` | Layer Table | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Required | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Per-`(layer, sector)` chunk index and slice offsets, for random access |
+| `ZDIC` | Zstd Dictionary | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Required when present | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Trained dictionary shared by every LAYR frame |
+| `LAYR` | Layer Data | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Required | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | One sector's layer masks for a group of layers, as one zstd frame |
 | `LHAS` | Layer Hashes | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Optional | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | SHA-256 Merkle tree for integrity verification |
 | `VOXL` | Embedded Scene | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Optional (opaque) | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> | Complete VOXL scene file for round-trip re-editing |
 | `EXTD` | Extension | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | Per-extension: refuse a `critical` one you do not implement | Per-extension | Vendor-specific or future standard extensions |
-
-\* Required when `MULTI_SECTOR` flag is set.
 
 The **Required** column is about presence in a file: what an encoder must write. **Reader
 support** is the separate obligation on the other side, and the two do not line up - a
@@ -160,7 +157,7 @@ Human-readable print parameters as a single JSON object.
   },
 
   // Material library. One entry per distinct material used by this print.
-  // SECT.material_index indexes into this array; sector 0 defaults to index 0.
+  // `META.sectors[].material_index` indexes into this array; sector 0 defaults to index 0.
   "materials": [
     {
       "name": "Standard Grey",
@@ -168,6 +165,20 @@ Human-readable print parameters as a single JSON object.
       "family": "standard",
       "density_g_ml": 1.1,
       "color_rgba": [128, 128, 128, 255]
+    }
+  ],
+
+  // Per-sector base timing and optional identity. One entry per sector >= 1;
+  // sector 0 has no entry and resolves from META alone. Absent fields are
+  // inherited from META field by field, and any timing field may appear here.
+  "sectors": [
+    {
+      "sector_id": 1,                 // required, unique, >= 1
+      "material_index": 1,            // optional, indexes META.materials
+      "color_rgba": [0, 255, 0, 128],  // optional display hint; does not affect exposure
+      "name": "Support",              // optional
+      "normal_exposure_ms": 3000,     // and any other META timing field
+      "bottom_layer_count": 5
     }
   ],
 
@@ -225,17 +236,33 @@ to `0`. The `bottom_*` fields follow the same model.
 
 **Field resolution for readers:**
 
-1. Start with META values as defaults for all layers (and SECT values per-sector, if multi-sector).
-2. Apply bottom/transition blending: layers in the bottom range use bottom-prefixed values; layers in the transition range interpolate between bottom and normal values ([§8](/specs/lumen/layer-timing#8-per-layer-settings-model) defines the formula and which fields participate).
-3. If `LROV` chunk present, override specific fields for specific layers (last matching entry wins).
-4. **Absent fields.** A field META does not carry, that no `SECT` definition supplies for the sector and that no `LROV` entry overrides, resolves to `0` for a distance, speed or duration - a segment or a pause that is not performed - and to `255` for `light_pwm`. Absent does not mean "whatever the implementation usually does": two readers must resolve the same file to the same numbers, so an encoder that leaves a field out is asking for zero. A field with no meaning to zero is not in this class, and is absent rather than zero when META does not carry it: `chamber_temperature_c` and `vat_temperature_c` are targets the printer uses or does not, and the `cure_curve` is either present or not.
+1. Start with META's values as defaults for all layers. For a sector `>= 1`, its entry in `META.sectors` replaces META's value for every field it carries, so a sector resolves field by field; a sector with no entry, sector 0 included, resolves from META alone.
+2. Apply bottom/transition blending over the ranges that sector resolves with: layers in its bottom range use bottom-prefixed values; layers in its transition range interpolate between bottom and normal values ([§8](/specs/lumen/layer-timing#8-per-layer-settings-model) defines the formula and which fields participate).
+3. If the `(layer, sector)` pair's layer table entry carries a non-zero `first_lrov`, apply the fields that `LROV` chunk holds ([§4.6](/specs/lumen/print-control#46-lrov---layer-override-chunk)).
+4. **Absent fields.** A field META does not carry, that the sector's `META.sectors` entry does not supply for the sector and that the pair's `LROV` chunk does not override, resolves to `0` for a distance, speed or duration - a segment or a pause that is not performed - and to `255` for `light_pwm`. Absent does not mean "whatever the implementation usually does": two readers must resolve the same file to the same numbers, so an encoder that leaves a field out is asking for zero. A field with no meaning to zero is not in this class, and is absent rather than zero when META does not carry it: `chamber_temperature_c` and `vat_temperature_c` are targets the printer uses or does not, and the `cure_curve` is either present or not.
 
 See [§8](/specs/lumen/layer-timing#8-per-layer-settings-model) for the complete layer timing pipeline.
 
 **Materials:** `materials` is the authoritative material library for this print.
-`SECT.material_index` indexes it and defaults to `0`. A single-material print carries
+`META.sectors[].material_index` indexes it and defaults to `0`. A single-material print carries
 a one-element array and sector 0 uses element 0. If `materials` is absent, material
 identity is unknown and consumers fall back to their own default.
+
+**Sectors:** `sectors` is optional. An entry carries the base timing for one sector `>= 1` and
+whatever identity that sector has; sector 0 has no entry, and a sector that has no entry
+resolves from META alone with no material of its own - which is the default, since a sector
+carries no material unless `material_index` says it does. Each entry is a JSON object with a
+required `sector_id` (`>= 1`, unique among the entries); a file MUST NOT carry two entries
+with the same `sector_id`. Every timing field is optional and inherited per field, and that
+covers the layer counts like any other timing field: an entry may carry `bottom_layer_count`
+and `transition_layer_count` of its own, and one that does is blended over **its own** bottom
+and transition ranges. Its bottom range can be longer than META's, its transition steps land
+on different layers, and two sectors in one file can disagree about where the bottom range
+ends - which is the point, since a support material and a model resin rarely want the same
+one ([§8](/specs/lumen/layer-timing#8-per-layer-settings-model)). When `material_index` is present
+the referenced `materials` array MUST exist, be non-empty and contain that index. `color_rgba`
+is a display hint that overrides the referenced material's color for this sector; it does not
+affect exposure.
 
 Lengths are integer micrometers, speeds integer micrometers per minute, and durations
 integer milliseconds, so a reader compares them exactly instead of within a tolerance. The
