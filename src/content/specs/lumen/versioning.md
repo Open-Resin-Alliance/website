@@ -10,7 +10,7 @@ order: 16
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/16-versioning.md"
-sourceRef: "f1258df"
+sourceRef: "7d505bf"
 syncedAt: "2026-09-16"
 ---
 
@@ -108,3 +108,12 @@ not removed before v2.
 
 A change that alters what a conforming encoder writes is not a correction: it is additive or
 breaking, and it takes the number that says so.
+
+**Checks are part of the contract.** The list in [§11](/specs/lumen/validation#11-reader-validation-requirements)
+is what a validator enforces, so a revision that adds one can turn a file that used to pass
+into a file that fails. While a revision is a draft that is a correction like any other. Once
+it is published, the class depends on what the old text said: a check for a rule the text
+already stated is a correction, because the file was never conforming to begin with; a check
+for a rule the text left open - a value it never bounded, a field it never constrained - is
+breaking, because the files written under the old text conformed to it as it was, and a
+printer that starts refusing them has stopped printing the same file.

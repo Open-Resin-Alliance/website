@@ -10,7 +10,7 @@ order: 18
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/18-comparison.md"
-sourceRef: "f1258df"
+sourceRef: "7d505bf"
 syncedAt: "2026-09-16"
 ---
 
@@ -34,7 +34,7 @@ syncedAt: "2026-09-16"
 | Embedded source scene | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> (VOXL chunk - round-trip re-editable) |
 | Multi-material | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> (per-sector layer chunks, and per-sector timing and material in META) |
 | Extensibility | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> (must reverse-engineer) | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> (EXTD chunks, vendor IDs) |
-| Max resolution | ~16K (32-bit offsets) | Fixed header limit | Unlimited (ZIP64) | Unlimited | Unlimited (64-bit offsets) |
+| Max resolution | ~16K (32-bit offsets) | Fixed header limit | Unlimited (ZIP64) | Unlimited | 2²⁸ mask pixels (64-bit offsets) |
 | Preview images | 2× RGB15 RLE (fixed size) | 2× PNG in header (fixed size) | 3× PNG in ZIP | 1× PNG in ZIP | 1+N PNG in PREV chunks (flexible) |
 | AA support | Grayscale RLE | Grayscale RLE | 4-bit PW0 | Full 8-bit PNG | Full 8-bit REE + split encoding + zstd |
 | Temperature control | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--no" aria-hidden="true">✗</span><span class="visually-hidden">No</span> | <span class="mark mark--yes" aria-hidden="true">✓</span><span class="visually-hidden">Yes</span> (chamber + vat, Celsius) |
