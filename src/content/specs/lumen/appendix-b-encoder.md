@@ -6,11 +6,11 @@ status: "v1.0, draft"
 maturity: "draft"
 license: "MIT"
 shortName: "LUMEN"
-order: 17
+order: 20
 isIndex: false
 sourceRepo: "LumenFormat"
-sourcePath: "spec/17-appendix-b-encoder.md"
-sourceRef: "7d3b458"
+sourcePath: "spec/20-appendix-b-encoder.md"
+sourceRef: "d4b103b"
 syncedAt: "2026-09-16"
 ---
 

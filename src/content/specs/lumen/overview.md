@@ -10,7 +10,7 @@ order: 1
 isIndex: true
 sourceRepo: "LumenFormat"
 sourcePath: "spec/01-overview.md"
-sourceRef: "7d3b458"
+sourceRef: "d4b103b"
 syncedAt: "2026-09-16"
 ---
 
@@ -123,7 +123,7 @@ To avoid confusion with other parts of the ORA ecosystem, LUMEN is explicitly
 | Magic bytes | `LUMN` (`0x4C 0x55 0x4D 0x4E`) |
 | Endianness | Little-endian (all multi-byte integers) |
 | Coordinate basis | Right-handed, Z-up |
-| Image orientation | Layer masks are stored as the printer must expose them; readers apply no flip ([§4.1](/specs/lumen/chunks#41-head---file-header-chunk)). |
+| Image orientation | Layer masks are stored as the printer must expose them; readers apply no flip ([§4.1](/specs/lumen/head#41-head---file-header-chunk)). |
 | Units | Micrometers (`um`), micrometers per minute (`um/min`) and milliseconds (`ms`); seconds (`s`) only for the Unix timestamp and the estimated print time. Lengths, speeds and durations are whole numbers. |
 | Range notation | `a..b` is half-open `[a, b)`. `for i in 0..N` iterates `i = 0, 1, ..., N-1`. |
 

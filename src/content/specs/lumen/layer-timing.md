@@ -6,11 +6,11 @@ status: "v1.0, draft"
 maturity: "draft"
 license: "MIT"
 shortName: "LUMEN"
-order: 11
+order: 14
 isIndex: false
 sourceRepo: "LumenFormat"
-sourcePath: "spec/11-layer-timing.md"
-sourceRef: "7d3b458"
+sourcePath: "spec/14-layer-timing.md"
+sourceRef: "d4b103b"
 syncedAt: "2026-09-16"
 ---
 
@@ -24,7 +24,7 @@ blended over the ranges its own sector supplies.
 
 1. **Base values** from META. For a sector `>= 1`, its `META.sectors` entry replaces META's
    value for every field that entry carries, so the base is META resolved field by field for
-   that sector ([§4.2](/specs/lumen/chunks#42-meta---metadata-chunk)). A sector with no entry - sector
+   that sector ([§4.2](/specs/lumen/meta#42-meta---metadata-chunk)). A sector with no entry - sector
    0 among them - takes META as it stands.
 2. **Bottom/transition blending:** Layers `0 .. bottom_layer_count-1` use the
    bottom-prefixed values verbatim. For a layer `i` in the transition range
@@ -51,7 +51,7 @@ blended over the ranges its own sector supplies.
    sector, and the pair is then blended over **its own** bottom and transition ranges: its
    bottom range can be longer than META's, its transition steps land on different layers, and
    two sectors in one file can be in different stages on the same layer
-   ([§4.2](/specs/lumen/chunks#42-meta---metadata-chunk)). A reader MUST NOT resolve
+   ([§4.2](/specs/lumen/meta#42-meta---metadata-chunk)). A reader MUST NOT resolve
    the ranges once from META and apply them to every sector.
 
    Interpolatable values are exposure times, lift/retract distances and speeds, and wait

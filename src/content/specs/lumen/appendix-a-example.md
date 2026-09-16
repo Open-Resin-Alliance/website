@@ -6,11 +6,11 @@ status: "v1.0, draft"
 maturity: "draft"
 license: "MIT"
 shortName: "LUMEN"
-order: 16
+order: 19
 isIndex: false
 sourceRepo: "LumenFormat"
-sourcePath: "spec/16-appendix-a-example.md"
-sourceRef: "7d3b458"
+sourcePath: "spec/19-appendix-a-example.md"
+sourceRef: "d4b103b"
 syncedAt: "2026-09-16"
 ---
 
@@ -101,7 +101,7 @@ partition invariant asks ([§7.3](/specs/lumen/sectors#73-sector-mask-invariant)
 belongs to exactly one sector.
 
 **The two resins** are a library in META and an entry in its `sectors` array
-([§4.2](/specs/lumen/chunks#42-meta---metadata-chunk)):
+([§4.2](/specs/lumen/meta#42-meta---metadata-chunk)):
 
 ```jsonc
 "materials": [

@@ -6,11 +6,11 @@ status: "v1.0, draft"
 maturity: "draft"
 license: "MIT"
 shortName: "LUMEN"
-order: 10
+order: 13
 isIndex: false
 sourceRepo: "LumenFormat"
-sourcePath: "spec/10-sectors.md"
-sourceRef: "7d3b458"
+sourcePath: "spec/13-sectors.md"
+sourceRef: "d4b103b"
 syncedAt: "2026-09-16"
 ---
 
@@ -33,7 +33,7 @@ Those two, plus the layer table entry that names both
 stream. There is no in-band sector id and no per-layer framing to parse: a sector's data is
 its own chunk, and the entry that points at it is where a reader learns which sector it is
 looking at. Anything a sector carries beyond that - a name, a colour, a material, and the
-timing it starts from - is declared once in `META.sectors` ([§4.2](/specs/lumen/chunks#42-meta---metadata-chunk)).
+timing it starts from - is declared once in `META.sectors` ([§4.2](/specs/lumen/meta#42-meta---metadata-chunk)).
 
 Use cases:
 

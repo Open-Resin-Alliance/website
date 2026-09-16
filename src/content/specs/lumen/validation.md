@@ -6,11 +6,11 @@ status: "v1.0, draft"
 maturity: "draft"
 license: "MIT"
 shortName: "LUMEN"
-order: 14
+order: 17
 isIndex: false
 sourceRepo: "LumenFormat"
-sourcePath: "spec/14-validation.md"
-sourceRef: "7d3b458"
+sourcePath: "spec/17-validation.md"
+sourceRef: "d4b103b"
 syncedAt: "2026-09-16"
 ---
 
@@ -82,7 +82,7 @@ companion field left to contradict. What replaced them is named in the lists bel
 - [ ] `HEAD.display_width_px × display_height_px > 0` (`head.display_pixels`).
 - [ ] The META payload is a JSON object (`meta.json`).
 - [ ] META JSON contains all required fields (`meta.required_fields`): `meta_version`, `normal_exposure_ms`, `bottom_exposure_ms`, `bottom_layer_count`, `transition_layer_count`, `layer_height_um`, `lift_slow_distance_um`, `lift_slow_speed_um_min`, `retract_fast_distance_um`, `retract_fast_speed_um_min`.
-- [ ] Every `*_ms` field in META, and `estimated_print_time_sec`, is a JSON integer (`meta.time_integer`). A value with a fractional part such as `2500.5` is invalid; the rule covers the timing fields of META's `sectors` entries too, since they are META's fields. See [§4.2](/specs/lumen/chunks#42-meta---metadata-chunk) for the encoders' and readers' obligations.
+- [ ] Every `*_ms` field in META, and `estimated_print_time_sec`, is a JSON integer (`meta.time_integer`). A value with a fractional part such as `2500.5` is invalid; the rule covers the timing fields of META's `sectors` entries too, since they are META's fields. See [§4.2](/specs/lumen/meta#42-meta---metadata-chunk) for the encoders' and readers' obligations.
 - [ ] `META.normal_exposure_ms > 0` and `META.bottom_exposure_ms > 0`, as integer comparisons (`meta.exposure`).
 - [ ] `META.layer_height_um > 0` (`meta.layer_height`).
 - [ ] If `META.materials` is present, it is a non-empty array and every entry has a non-empty `name` (`meta.materials_shape`).
@@ -166,7 +166,7 @@ fractional part is a type violation, not a canonicalization preference, so a loo
 rejects it too. They cover every duration in the timing namespace - META's `sectors`
 entries are META's fields, so `meta.time_integer` covers them - and `meta.time_integer`
 also covers META's `estimated_print_time_sec`, which is whole seconds rather than
-milliseconds ([§4.2](/specs/lumen/chunks#42-meta---metadata-chunk)). Whether a reader
+milliseconds ([§4.2](/specs/lumen/meta#42-meta---metadata-chunk)). Whether a reader
 *additionally* rejects integral floating-point syntax such as `2500.0` is the reader's
 choice, and no file may rely on either answer.
 

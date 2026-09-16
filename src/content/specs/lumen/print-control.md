@@ -6,11 +6,11 @@ status: "v1.0, draft"
 maturity: "draft"
 license: "MIT"
 shortName: "LUMEN"
-order: 5
+order: 8
 isIndex: false
 sourceRepo: "LumenFormat"
-sourcePath: "spec/05-print-control.md"
-sourceRef: "7d3b458"
+sourcePath: "spec/08-print-control.md"
+sourceRef: "d4b103b"
 syncedAt: "2026-09-16"
 ---
 
