@@ -10,8 +10,8 @@ order: 13
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/13-versioning.md"
-sourceRef: "0a7e69f"
-syncedAt: "2026-09-15"
+sourceRef: "e1873df"
+syncedAt: "2026-09-16"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -47,7 +47,7 @@ before that ([§10.3](#103-change-control)).
 1. **Unknown chunk types:** Skip (chunk descriptor gives byte range). This covers chunk
    types this revision does not define, and chunks a reader has no use for. It does not
    cover a *defined* chunk whose handling changes what is printed: those are implemented, or
-   the file is refused - `LROV` ([§4.6](/specs/lumen/print-control#46-lrov---layer-override-chunk)),
+   the file is refused - `LROV` ([§4.5](/specs/lumen/print-control#45-lrov---layer-override-chunk)),
    and an unimplemented `critical` extension (item 6 below).
 2. **Unknown chunk flags:** Ignore within known types.
 3. **Unknown JSON keys:** Ignore in the JSON payloads this specification defines - META,

@@ -10,8 +10,8 @@ order: 9
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/09-compression.md"
-sourceRef: "0a7e69f"
-syncedAt: "2026-09-15"
+sourceRef: "e1873df"
+syncedAt: "2026-09-16"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -50,11 +50,11 @@ compression of REE data.
 
 1. Encode every `(layer, sector)` slice to an REE stream, in layer order within each sector.
 2. Group each sector's layers into contiguous runs, and make one frame - one `LAYR` chunk -
-   per run ([§4.10](/specs/lumen/layer-data#410-layr---layer-data-chunk)). Recommended: 32–64
+   per run ([§4.9](/specs/lumen/layer-data#49-layr---layer-data-chunk)). Recommended: 32–64
    layers per frame.
 3. Sample the first `min(256, total_layers)` layers for a training set.
 4. Train a zstd dictionary with `ZDICT_trainFromBuffer()`.
-5. Store the dictionary in a `ZDIC` chunk ([§4.9](/specs/lumen/layer-data#49-zdic---zstd-dictionary-chunk)).
+5. Store the dictionary in a `ZDIC` chunk ([§4.8](/specs/lumen/layer-data#48-zdic---zstd-dictionary-chunk)).
 6. Compress each frame independently with `ZSTD_compress_usingDict()`.
 
 The dictionary captures statistical patterns in REE data. Because adjacent layers

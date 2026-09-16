@@ -10,8 +10,8 @@ order: 2
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/02-file-structure.md"
-sourceRef: "0a7e69f"
-syncedAt: "2026-09-15"
+sourceRef: "e1873df"
+syncedAt: "2026-09-16"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -91,7 +91,7 @@ Each entry in the Chunk Directory is 32 bytes.
 |--------|------|------|-------|-------------|
 | 0 | 4 | `[u8; 4]` | `chunk_type` | Four ASCII characters. e.g. `HEAD`, `META`. |
 | 4 | 8 | `u64` | `offset` | Absolute byte offset from start of file to chunk payload. `0` = null descriptor (skip). |
-| 12 | 8 | `u64` | `size_uncompressed` | Size of the payload after decompression. `LAYR` is the exception: the container's byte length ([§4.10](/specs/lumen/layer-data#410-layr---layer-data-chunk)). |
+| 12 | 8 | `u64` | `size_uncompressed` | Size of the payload after decompression. `LAYR` is the exception: the container's byte length ([§4.9](/specs/lumen/layer-data#49-layr---layer-data-chunk)). |
 | 20 | 8 | `u64` | `size_compressed` | Size as stored. `0` = the payload is stored as it is, with nothing wrapped around it. |
 | 28 | 4 | `u32` | `flags` | Chunk-specific flags. See per-chunk definitions. |
 
@@ -107,7 +107,7 @@ uncompressed but may still be encrypted (`ZDIC`, `PREV`): their `size_compressed
 non-zero yet there is no zstd layer to undo.
 
 `LAYR` is the one chunk whose `size_uncompressed` is not its decompressed size. Its payload
-is a version field followed by exactly one zstd frame ([§4.10](/specs/lumen/layer-data#410-layr---layer-data-chunk)), and `size_uncompressed` is the
+is a version field followed by exactly one zstd frame ([§4.9](/specs/lumen/layer-data#49-layr---layer-data-chunk)), and `size_uncompressed` is the
 byte length of that container - what an unsealed chunk stores, since the version field is
 never compressed. The frame's output length is not in the descriptor: it is the content size
 the frame declares, and every `LAYR` frame carries one.

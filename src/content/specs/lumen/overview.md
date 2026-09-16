@@ -10,8 +10,8 @@ order: 1
 isIndex: true
 sourceRepo: "LumenFormat"
 sourcePath: "spec/01-overview.md"
-sourceRef: "0a7e69f"
-syncedAt: "2026-09-15"
+sourceRef: "e1873df"
+syncedAt: "2026-09-16"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -97,7 +97,7 @@ To avoid confusion with other parts of the ORA ecosystem, LUMEN is explicitly
 - **Not a scene format.** LUMEN carries resolved print data (layer masks,
   exposure settings, motion parameters). For editable 3D scenes with models,
   supports, and modifiers, see the VOXL format. LUMEN can *embed* a VOXL scene
-  ([§4.12](/specs/lumen/scene-chunks#412-voxl---embedded-scene-chunk)) for round-trip editing, but the format's primary purpose is print
+  ([§4.11](/specs/lumen/scene-chunks#411-voxl---embedded-scene-chunk)) for round-trip editing, but the format's primary purpose is print
   execution.
 
 - **Not a streaming protocol.** LUMEN is a file format, designed for storage

@@ -10,8 +10,8 @@ order: 18
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/18-appendix-c-references.md"
-sourceRef: "0a7e69f"
-syncedAt: "2026-09-15"
+sourceRef: "e1873df"
+syncedAt: "2026-09-16"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -36,7 +36,7 @@ syncedAt: "2026-09-15"
 
 | Reference | Topic |
 |-----------|-------|
-| [`DragonFruit/docs/dev/voxl-format-spec.md`](/specs/voxl) | VOXL native scene container specification (embedded via VOXL chunk, [§4.12](/specs/lumen/scene-chunks#412-voxl---embedded-scene-chunk)) |
+| [`DragonFruit/docs/dev/voxl-format-spec.md`](/specs/voxl) | VOXL native scene container specification (embedded via VOXL chunk, [§4.11](/specs/lumen/scene-chunks#411-voxl---embedded-scene-chunk)) |
 | [`test-vectors/`](https://github.com/Open-Resin-Alliance/LumenFormat/tree/main/test-vectors) | Conformance corpus: byte-exact vectors and an independent validator ([§11.6](/specs/lumen/validation#116-conformance-corpus)) |
 | [`rust/dragonfruit-slicing-engine/src/encoders/mod.rs`](https://github.com/Open-Resin-Alliance/DragonFruit/blob/main/rust/dragonfruit-slicing-engine/src/encoders/mod.rs) | `FormatEncoder` and `RleStreamEncoder` trait contracts |
 | [`rust/dragonfruit-slicing-engine/docs/ARCHITECTURE.md`](https://github.com/Open-Resin-Alliance/DragonFruit/blob/main/rust/dragonfruit-slicing-engine/docs/ARCHITECTURE.md) | Slicing engine architecture overview |

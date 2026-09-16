@@ -10,8 +10,8 @@ order: 16
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/16-appendix-a-example.md"
-sourceRef: "0a7e69f"
-syncedAt: "2026-09-15"
+sourceRef: "e1873df"
+syncedAt: "2026-09-16"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -138,7 +138,7 @@ the rest of the resolved value standing.
 
 Chunks 3 to 5 are one *range* of three layers, and it is three chunks because an
 `LROV` chunk belongs to exactly one `(layer, sector)` - the layer table entry that
-names it is what places it ([§4.6](/specs/lumen/print-control#46-lrov---layer-override-chunk)).
+names it is what places it ([§4.5](/specs/lumen/print-control#45-lrov---layer-override-chunk)).
 A slicer that adjusts a 500-layer range writes 500 small chunks, each a handful of
 bytes of JSON; that is the cost of having no range form in the payload.
 

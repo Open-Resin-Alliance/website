@@ -10,8 +10,8 @@ order: 4
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/04-chunk-auth.md"
-sourceRef: "0a7e69f"
-syncedAt: "2026-09-15"
+sourceRef: "e1873df"
+syncedAt: "2026-09-16"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->

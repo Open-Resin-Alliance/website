@@ -10,8 +10,8 @@ order: 10
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/10-sectors.md"
-sourceRef: "0a7e69f"
-syncedAt: "2026-09-15"
+sourceRef: "e1873df"
+syncedAt: "2026-09-16"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -24,12 +24,12 @@ A **sector** is an exposure group with its own timing parameters and its own mas
 each layer. On a given layer, a sector is a pair:
 
 - an **override set** - that `(layer, sector)`'s `LROV` chunk, or none
-  ([§4.6](/specs/lumen/print-control#46-lrov---layer-override-chunk)), and
+  ([§4.5](/specs/lumen/print-control#45-lrov---layer-override-chunk)), and
 - a **data slice** - that `(layer, sector)`'s byte range inside the `LAYR` chunk for its
-  sector ([§4.10](/specs/lumen/layer-data#410-layr---layer-data-chunk)), or none.
+  sector ([§4.9](/specs/lumen/layer-data#49-layr---layer-data-chunk)), or none.
 
 Those two, plus the layer table entry that names both
-([§4.8](/specs/lumen/layer-data#48-ltbl---layer-table-chunk)), are all a sector is in the layer
+([§4.7](/specs/lumen/layer-data#47-ltbl---layer-table-chunk)), are all a sector is in the layer
 stream. There is no in-band sector id and no per-layer framing to parse: a sector's data is
 its own chunk, and the entry that points at it is where a reader learns which sector it is
 looking at. Anything a sector carries beyond that - a name, a colour, a material, and the

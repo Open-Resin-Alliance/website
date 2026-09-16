@@ -10,8 +10,8 @@ order: 12
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/12-encryption.md"
-sourceRef: "0a7e69f"
-syncedAt: "2026-09-15"
+sourceRef: "e1873df"
+syncedAt: "2026-09-16"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -84,7 +84,7 @@ For every chunk except `LAYR`, the chunk payload is exactly one unit, and the ch
 descriptor's `size_compressed` includes the 28-byte framing overhead.
 
 For `LAYR`, the 4-byte version field stays plaintext and the frame that follows it is the
-sealed unit ([§4.10](/specs/lumen/layer-data#410-layr---layer-data-chunk)). One frame is one unit,
+sealed unit ([§4.9](/specs/lumen/layer-data#49-layr---layer-data-chunk)). One frame is one unit,
 decrypted whole, and no sealed unit spans two frames, so the version can be read before the
 key is used without a decompression pass. The container's `size_compressed` includes the
 28-byte overhead and `size_uncompressed` does not, so the frame's stored length is
