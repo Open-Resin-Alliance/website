@@ -10,7 +10,7 @@ order: 5
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/05-print-control.md"
-sourceRef: "e1873df"
+sourceRef: "7d3b458"
 syncedAt: "2026-09-16"
 ---
 
@@ -45,7 +45,7 @@ that names it and to no other.
   set, and there is no array of entries and no fold rule - a pair has one override set or
   none, so nothing has to decide between two of them.
 - Any field META carries a value for may appear, with META's names and units: integer
-  milliseconds for durations, micrometers for lengths, micrometres per minute for speeds.
+  milliseconds for durations, micrometers for lengths, micrometers per minute for speeds.
   The layer counts may appear too, and they do not move the ramp: the blend uses the counts
   the pair's sector resolves before any override, so an override of `bottom_layer_count` sets
   that field's value for the pairs it is applied to and leaves the ranges where they were
