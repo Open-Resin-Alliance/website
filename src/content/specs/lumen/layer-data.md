@@ -10,7 +10,7 @@ order: 9
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/09-layer-data.md"
-sourceRef: "57452d8"
+sourceRef: "f1258df"
 syncedAt: "2026-09-16"
 ---
 
@@ -68,8 +68,10 @@ they carry.
 - Slices of one `LAYR` chunk do not overlap: no two entries that name the same chunk describe
   intersecting byte ranges.
 - `first_lrov` is `0` or an `LROV` chunk directory index; it is `0` only when that
-  `(layer, sector)` has no overrides, and every `LROV` chunk in the file is named by exactly
-  one entry - no two entries share one, and none is left unreferenced
+  `(layer, sector)` has no overrides, and every `LROV` chunk in the file is named by at
+  least one entry - none is left unreferenced. Several entries may name one chunk: that
+  is how one delta covers a range, or any set of pairs, and it is the entries that are
+  the range, not a field in the payload
   ([§4.5](/specs/lumen/print-control#45-lrov---layer-override-chunk)).
 - A layer whose every entry has `data_size == 0` is the empty layer, all black.
 

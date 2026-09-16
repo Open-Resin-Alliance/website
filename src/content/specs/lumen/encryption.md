@@ -10,7 +10,7 @@ order: 15
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/15-encryption.md"
-sourceRef: "57452d8"
+sourceRef: "f1258df"
 syncedAt: "2026-09-16"
 ---
 

@@ -10,7 +10,7 @@ order: 12
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/12-compression.md"
-sourceRef: "57452d8"
+sourceRef: "f1258df"
 syncedAt: "2026-09-16"
 ---
 
@@ -92,7 +92,7 @@ reader whether a chunk payload carries a zstd frame. The levels are recommendati
 | AUTH | None | Tiny (~few hundred bytes); read before decompressor init. |
 | META | zstd level 3 | Small payload; speed matters. |
 | PROF | zstd level 3 | Reusable profile; small payload. |
-| LROV | zstd level 3 | Small payload; one chunk per overridden `(layer, sector)`. |
+| LROV | zstd level 3 | Small payload; one chunk per distinct delta, however many pairs apply it. |
 | PREV | None | PNG is already compressed. |
 | LTBL | None | Needed for random access; 28 bytes per `(layer, sector)` entry is acceptable. |
 | ZDIC | None | Raw dictionary bytes; read before any LAYR frame decompression. |

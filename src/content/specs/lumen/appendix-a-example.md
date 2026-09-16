@@ -10,7 +10,7 @@ order: 19
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/19-appendix-a-example.md"
-sourceRef: "57452d8"
+sourceRef: "f1258df"
 syncedAt: "2026-09-16"
 ---
 
@@ -45,7 +45,7 @@ Offset    Size    Content
 ~442      ~800    PROF (zstd-compressed, ~2.5 KB uncompressed): reusable print profile for Odyssey import
 ~1,242    ~5,200  PREV (uncompressed PNG): 400×300 preview
 ~6,442    ~16K    ZDIC (uncompressed): zstd dictionary trained on the layer data
-~22,442   2,000   LTBL (uncompressed): 100 entries × 20 bytes
+~22,442   2,800   LTBL (uncompressed): 100 entries × 28 bytes
 ~24,442   ~850K   LAYR (uncompressed container; 2 block frames of 50 layers, ~1.6 MB uncompressed each)
 --        ~45K    VOXL (zstd-compressed, ~80 KB uncompressed): embedded scene for round-trip editing
 --        256     Chunk Directory: 8 × 32 bytes
@@ -67,15 +67,15 @@ below carry the tags they do:
 | Layer | Mask | Tag | Stored |
 |-------|------|-----|--------|
 | 0 | nothing at all: the empty-layer form | - | 0 bytes |
-| 1 | solid | binary REE (`0x00`) | 3 bytes |
-| 2 | solid with a rectangular hole | binary REE (`0x00`) | 36 bytes |
-| 3 | a horizontal ramp: 64 distinct values down each row | split REE (`0x02`) | 6,052 bytes |
-| 4 | a disc with a one-pixel anti-aliased rim | split REE (`0x02`) | 565 bytes |
-| 5 | a checkerboard, the worst case for run-end encoding | binary REE (`0x00`) | 3,028 bytes |
-| 6-11 | bars that grow with the layer, so no two layers are alike | binary REE (`0x00`) | 98 bytes each |
+| 1 | solid | binary REE (`0x00`) | 7 bytes |
+| 2 | solid with a rectangular hole | binary REE (`0x00`) | 40 bytes |
+| 3 | a horizontal ramp: 64 distinct values down each row | split REE (`0x02`) | 6,061 bytes |
+| 4 | a disc with a one-pixel anti-aliased rim | split REE (`0x02`) | 574 bytes |
+| 5 | a checkerboard, the worst case for run-end encoding | binary REE (`0x00`) | 3,033 bytes |
+| 6-11 | bars that grow with the layer, so no two layers are alike | binary REE (`0x00`) | 102 bytes each |
 
-The file is 12 chunks and 3,376 bytes: `HEAD`, `META`, `PROF`, `ZDIC` (a 648-byte
-dictionary, id 845093697), `PREV`, `VOXL`, `LTBL`, `LHAS`, three `LAYR`, `EXTD`.
+The file is 12 chunks and 3,400 bytes: `HEAD`, `META`, `PROF`, `ZDIC` (a 650-byte
+dictionary, id 165639893), `PREV`, `VOXL`, `LTBL`, `LHAS`, three `LAYR`, `EXTD`.
 Layer 3 is the largest slice by far - sixty times the growing bars - which is what an
 anti-aliased ramp costs and what section 6 exists to compress.
 
@@ -131,18 +131,18 @@ the rest of the resolved value standing.
 | Chunk | Applies to | Delta | Why a slicer would write it |
 |-------|-----------|-------|-----------------------------|
 | 2 | layer 3, sector 0 | `normal_exposure_ms` 4000, `lift_slow_distance_um` 7000 | that layer has the largest cross-section in the print, so it peels harder |
-| 3 | layer 6, sector 0 | `normal_exposure_ms` 2000 | the start of a taper towards the top |
-| 4 | layer 7, sector 0 | `normal_exposure_ms` 2000 | the same taper, one layer on |
-| 5 | layer 8, sector 0 | `normal_exposure_ms` 2000 | the same taper, one layer on |
-| 6 | layer 9, sector 1 | `normal_exposure_ms` 5000 | the support tips need more cure than the rest of their sector |
+| 3 | layers 6, 7 and 8, sector 0 | `normal_exposure_ms` 2000 | the taper towards the top, the same on all three |
+| 4 | layer 9, sector 1 | `normal_exposure_ms` 5000 | the support tips need more cure than the rest of their sector |
 
-Chunks 3 to 5 are one *range* of three layers, and it is three chunks because an
-`LROV` chunk belongs to exactly one `(layer, sector)` - the layer table entry that
-names it is what places it ([§4.5](/specs/lumen/print-control#45-lrov---layer-override-chunk)).
-A slicer that adjusts a 500-layer range writes 500 small chunks, each a handful of
-bytes of JSON; that is the cost of having no range form in the payload.
+Chunk 3 is a *range* of three layers, written once: an `LROV` chunk is placed by the
+layer table entries that name it, and any number of them may name one
+([§4.5](/specs/lumen/print-control#45-lrov---layer-override-chunk)). The three entries are
+the range - no field in the payload says where it starts or ends - so a slicer that
+adjusts 500 layers with one delta writes one chunk and points 500 entries at it. A
+slicer that gives every pair a chunk of its own is equally conforming, which is what
+[`lrov-per-pair`](../test-vectors/README.md) pins.
 
-**The file** is 13 chunks and 2,488 bytes: `HEAD`, `META`, five `LROV`, `LTBL`,
+**The file** is 11 chunks and 2,344 bytes: `HEAD`, `META`, three `LROV`, `LTBL`,
 `LHAS`, and four `LAYR` chunks - one per `(sector, layer group)`, two sectors over
 two groups of five layers. There is no `ZDIC`: ten small layers are not enough
 sample data to train a dictionary on, and a writer that cannot train one omits it.
@@ -153,33 +153,35 @@ shows: the model has finished, the supports have not.
 
 | Layer | Sector | `first_layr` | `first_lrov` | `data_offset` | `data_size` |
 |-------|--------|--------------|--------------|---------------|-------------|
-| 0 | 0 | 9 | 0 | 0 | 52 |
-| 0 | 1 | 10 | 0 | 0 | 68 |
-| 1 | 0 | 9 | 0 | 52 | 52 |
-| 1 | 1 | 10 | 0 | 68 | 68 |
-| 2 | 0 | 9 | 0 | 104 | 52 |
-| 2 | 1 | 10 | 0 | 136 | 68 |
-| 3 | 0 | 9 | **2** | 156 | 52 |
-| 3 | 1 | 10 | 0 | 204 | 68 |
-| 4 | 0 | 9 | 0 | 208 | 52 |
-| 4 | 1 | 10 | 0 | 272 | 68 |
-| 5 | 0 | 11 | 0 | 0 | 52 |
-| 5 | 1 | 12 | 0 | 0 | 68 |
-| 6 | 0 | 11 | **3** | 52 | 52 |
-| 6 | 1 | 12 | 0 | 68 | 68 |
-| 7 | 0 | 11 | **4** | 104 | 52 |
-| 7 | 1 | 12 | 0 | 136 | 68 |
-| 8 | 0 | 11 | **5** | 156 | 52 |
-| 8 | 1 | 12 | 0 | 204 | 68 |
-| 9 | 0 | 12 | 0 | 0 | **0** |
-| 9 | 1 | 12 | **6** | 272 | 20 |
+| 0 | 0 | 7 | 0 | 0 | 56 |
+| 0 | 1 | 8 | 0 | 0 | 72 |
+| 1 | 0 | 7 | 0 | 56 | 56 |
+| 1 | 1 | 8 | 0 | 72 | 72 |
+| 2 | 0 | 7 | 0 | 112 | 56 |
+| 2 | 1 | 8 | 0 | 144 | 72 |
+| 3 | 0 | 7 | **2** | 168 | 56 |
+| 3 | 1 | 8 | 0 | 216 | 72 |
+| 4 | 0 | 7 | 0 | 224 | 56 |
+| 4 | 1 | 8 | 0 | 288 | 72 |
+| 5 | 0 | 9 | 0 | 0 | 56 |
+| 5 | 1 | 10 | 0 | 0 | 72 |
+| 6 | 0 | 9 | **3** | 56 | 56 |
+| 6 | 1 | 10 | 0 | 72 | 72 |
+| 7 | 0 | 9 | **3** | 112 | 56 |
+| 7 | 1 | 10 | 0 | 144 | 72 |
+| 8 | 0 | 9 | **3** | 168 | 56 |
+| 8 | 1 | 10 | 0 | 216 | 72 |
+| 9 | 0 | 10 | 0 | 0 | **0** |
+| 9 | 1 | 10 | **4** | 288 | 24 |
 
-Two things to read out of it. The `LAYR` chunk changes at layer 5, because the
-group of five layers ends there - chunks 9 and 10 hold layers 0 to 4 for sectors 0
-and 1, chunks 11 and 12 hold layers 5 to 9 - and that is what makes the chunk index
-and the offset together enough to find one layer's bytes. And layer 9's sector-0
-entry is real but empty: `data_size` 0 means the sector has no bytes on that layer,
-while the entry itself is what keeps sector 0's place in the order.
+Three things to read out of it. The `LAYR` chunk changes at layer 5, because the
+group of five layers ends there - chunks 7 and 8 hold layers 0 to 4 for sectors 0
+and 1, chunks 9 and 10 hold layers 5 to 9 - and that is what makes the chunk index
+and the offset together enough to find one layer's bytes. Layers 6, 7 and 8 name the
+same `first_lrov`, which is the range written once: one chunk, three entries, and
+nothing else in the file says those three layers share a delta. And layer 9's
+sector-0 entry is real but empty: `data_size` 0 means the sector has no bytes on that
+layer, while the entry itself is what keeps sector 0's place in the order.
 
 **What a reader resolves** for every `(layer, sector)` - META, then the sector's own
 entry, then the bottom and transition blend over the counts *that sector* carries or
