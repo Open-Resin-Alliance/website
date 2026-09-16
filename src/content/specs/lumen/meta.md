@@ -10,7 +10,7 @@ order: 5
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/05-meta.md"
-sourceRef: "7d505bf"
+sourceRef: "d3a1abe"
 syncedAt: "2026-09-16"
 ---
 

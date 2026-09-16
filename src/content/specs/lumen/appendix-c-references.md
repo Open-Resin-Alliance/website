@@ -10,7 +10,7 @@ order: 21
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/21-appendix-c-references.md"
-sourceRef: "7d505bf"
+sourceRef: "d3a1abe"
 syncedAt: "2026-09-16"
 ---
 
