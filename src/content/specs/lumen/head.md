@@ -1,6 +1,6 @@
 ---
 spec: "lumen"
-title: "HEAD chunk"
+title: "File header chunk"
 description: "The chunked, zstd-compressed print format for resin printers: layer data as REE streams in independently compressed blocks, JSON metadata in typed chunks, and optional authenticated encryption."
 status: "v1.0, draft"
 maturity: "draft"
@@ -10,7 +10,7 @@ order: 4
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/04-head.md"
-sourceRef: "d4b103b"
+sourceRef: "57452d8"
 syncedAt: "2026-09-16"
 ---
 
