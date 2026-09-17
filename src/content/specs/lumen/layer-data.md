@@ -10,8 +10,8 @@ order: 9
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/09-layer-data.md"
-sourceRef: "d3a1abe"
-syncedAt: "2026-09-16"
+sourceRef: "05c5ef6"
+syncedAt: "2026-09-17"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -236,7 +236,7 @@ verification. This enables:
 | 38 | N | - | `layer_hashes` | `layer_count × hash_size` bytes. `layer_hashes[i]` is the leaf hash `SHA-256(0x00 \|\| d)`, where `d` is layer `i`'s data: the slices its `LTBL` entries describe, concatenated in ascending `sector_id`, each byte range `[data_offset, + data_size)` taken from its `LAYR` chunk's decompressed output. An empty layer stores `SHA-256(0x00)`. |
 
 Because these hashes cover decompressed bytes, they are reproducible only if encoders
-agree on the byte stream; [§5.6](/specs/lumen/layer-encoding#56-canonical-encoding) defines that canonical form.
+agree on the byte stream; [§5.7](/specs/lumen/layer-encoding#57-canonical-encoding) defines that canonical form.
 
 **Merkle tree construction** (domain-separated, RFC 6962 style):
 

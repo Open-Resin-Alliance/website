@@ -10,8 +10,8 @@ order: 1
 isIndex: true
 sourceRepo: "LumenFormat"
 sourcePath: "spec/01-overview.md"
-sourceRef: "d3a1abe"
-syncedAt: "2026-09-16"
+sourceRef: "05c5ef6"
+syncedAt: "2026-09-17"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->

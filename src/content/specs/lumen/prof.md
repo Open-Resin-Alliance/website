@@ -10,8 +10,8 @@ order: 6
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/06-prof.md"
-sourceRef: "d3a1abe"
-syncedAt: "2026-09-16"
+sourceRef: "05c5ef6"
+syncedAt: "2026-09-17"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -117,7 +117,7 @@ first.
     "chamber_temperature_c": 30.0,
     "vat_temperature_c": 28.0,
 
-    // Resin working curve - experimental ([§5.7](/specs/lumen/layer-encoding#57-resin-working-curve-experimental)). If omitted, printer falls back
+    // Resin working curve - experimental ([§5.8](/specs/lumen/layer-encoding#58-resin-working-curve-experimental)). If omitted, printer falls back
     // to traditional exposure-time model.
     "cure_curve": {
       "dp_um": 120,

@@ -10,8 +10,8 @@ order: 4
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/04-head.md"
-sourceRef: "d3a1abe"
-syncedAt: "2026-09-16"
+sourceRef: "05c5ef6"
+syncedAt: "2026-09-17"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -83,7 +83,7 @@ encoder SHOULD write a stable name for itself rather than a per-build or per-use
 
 **Timestamps.** `created_unix_sec` is the wall-clock time the file was written, and an encoder
 writes it. It is an input rather than a derived value, so it is one of the two things left out
-of the byte-reproducibility guarantee of [§5.6](/specs/lumen/layer-encoding#56-canonical-encoding): an
+of the byte-reproducibility guarantee of [§5.7](/specs/lumen/layer-encoding#57-canonical-encoding): an
 encoder given the same scene and the same settings and the same `created_unix_sec` produces the
 same file, and one that stamps the current time produces a file that differs in this field and
 in the trailer CRC. The other exception is sealed output, whose keys and nonces come from a

@@ -10,8 +10,8 @@ order: 10
 isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/10-scene-chunks.md"
-sourceRef: "d3a1abe"
-syncedAt: "2026-09-16"
+sourceRef: "05c5ef6"
+syncedAt: "2026-09-17"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
@@ -106,7 +106,7 @@ same as defining the payload.
 | `ext_type` | Name | Purpose |
 |------------|------|---------|
 | `SIGN` | Signature | Cryptographic signature for file authenticity. |
-| `VLYR` | Variable Layers | Per-layer height values. Reserved for a future core mechanism; not usable in v1 ([§5.7](/specs/lumen/layer-encoding#57-resin-working-curve-experimental)). |
+| `VLYR` | Variable Layers | Per-layer height values. Reserved for a future core mechanism; not usable in v1 ([§5.8](/specs/lumen/layer-encoding#58-resin-working-curve-experimental)). |
 | `CMLT` | Compression ML | Training metadata for the `ZDIC` dictionary (corpus size, training parameters). |
 | `CMAP` | Color Map | Per-sector color channel mapping for multi-color printing. |
 
