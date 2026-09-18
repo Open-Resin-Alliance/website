@@ -11,7 +11,7 @@ isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/14-layer-timing.md"
 sourceRef: "05c5ef6"
-syncedAt: "2026-09-17"
+syncedAt: "2026-09-18"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
