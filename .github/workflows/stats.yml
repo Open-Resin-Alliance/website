@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   refresh:
@@ -34,12 +35,29 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit the snapshot if it changed
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/data/github-stats.json src/data/supporters.json
-          git diff --staged --quiet || git commit -m "data: refresh statistics snapshots"
+          if git diff --staged --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "data: refresh statistics snapshots"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # A push made with the workflow token does not start another workflow, so a refresh
+      # committed the snapshot and left the site serving the old one until something else
+      # deployed: a release announced to the webhook the notes below describe would update
+      # the numbers and never publish them. The deploy is asked for explicitly, the way
+      # sync-specs.yml asks after a specification lands.
+      - name: Deploy
+        if: steps.commit.outputs.changed == 'true'
+        run: gh workflow run deploy.yml --ref ${{ github.event.repository.default_branch }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 # Wiring an organisation webhook to this workflow:
 #  1. Org Settings -> Webhooks -> Add webhook.
