@@ -2,7 +2,7 @@
 import { projectPath, type Project } from '../data/projects';
 import { repoStats } from '../lib/stats';
 import { formatCompact } from '../lib/format';
-import { ISSUES_COLOR, STARS_COLOR, licenseColor } from '../lib/tag-colors';
+import { CRATE_COLOR, ISSUES_COLOR, STARS_COLOR, licenseColor } from '../lib/tag-colors';
 import LanguageTags from './LanguageTags.astro';
 import ReleaseChip from './ReleaseChip.astro';
 
@@ -40,6 +40,13 @@ const blurb = live?.description ?? (detailed ? project.summary : project.blurb);
   <p class="project-card__blurb">{blurb}</p>
 
   <div class="project-card__meta">
+    {
+      project.crate && (
+        <span class="tag mono tag--tinted" style={`--tag:${CRATE_COLOR}`}>
+          crate {project.crate}
+        </span>
+      )
+    }
     {
       project.license && (
         <span

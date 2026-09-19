@@ -53,6 +53,12 @@ const releases = (live?.recentReleases ?? []).filter(
   (release) => !release.tag.toLowerCase().startsWith('nightly'),
 );
 
+/** Where else this project is the same project: its own site, and its crate. */
+const sameAs = [
+  project.website,
+  project.crate && `https://crates.io/crates/${project.crate}`,
+].filter((value): value is string => Boolean(value));
+
 const structuredData = [
   {
     '@type': 'SoftwareSourceCode',
@@ -62,7 +68,7 @@ const structuredData = [
     programmingLanguage: live?.language ?? project.language,
     license: project.license ? `https://spdx.org/licenses/${project.license}.html` : undefined,
     isPartOf: { '@id': 'https://openresin.org/#organization' },
-    ...(project.website ? { sameAs: project.website } : {}),
+    ...(sameAs.length > 0 ? { sameAs } : {}),
   },
 ];
 ---
@@ -90,6 +96,18 @@ const structuredData = [
       </div>
       <div class="page__actions">
         <a class="btn btn--primary" href={repository} rel="noopener noreferrer" target="_blank">View on GitHub</a>
+        {
+          project.crate && (
+            <a
+              class="btn btn--ghost"
+              href={`https://crates.io/crates/${project.crate}`}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Rust crate
+            </a>
+          )
+        }
         {
           project.website && (
             <a class="btn btn--ghost" href={project.website} rel="noopener noreferrer" target="_blank">
@@ -179,6 +197,22 @@ const structuredData = [
           <a href={`${repository}/issues`} rel="noopener noreferrer" target="_blank">Issues &amp; bug reports</a>
           <a href={`${repository}/pulls`} rel="noopener noreferrer" target="_blank">Pull requests</a>
           <a href={`${repository}/releases`} rel="noopener noreferrer" target="_blank">All releases</a>
+          {
+            project.crate && (
+              <>
+                <a
+                  href={`https://crates.io/crates/${project.crate}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Crate on crates.io
+                </a>
+                <a href={`https://docs.rs/${project.crate}`} rel="noopener noreferrer" target="_blank">
+                  Crate documentation
+                </a>
+              </>
+            )
+          }
         </div>
 
         {

@@ -31,6 +31,11 @@ export interface Project {
   image?: string;
   /** Product site, when the repo declares one. */
   website?: string;
+  /**
+   * crates.io package name, when the repository publishes a Rust crate. The project
+   * page links the crate and its documentation, and the card carries it as a chip.
+   */
+  crate?: string;
 }
 
 /**
@@ -100,6 +105,26 @@ export const PROJECTS: Project[] = [
     ],
     image: '/projects/odyssey.webp',
   },
+  {
+    name: 'LumenFormat',
+    repo: 'LumenFormat',
+    blurb: 'The LUMEN print format: specification, conformance corpus and reference crate.',
+    summary:
+      'LUMEN is the Open Resin Alliance\u2019s open print file format for resin (MSLA) 3D printing: run-end encoded layer masks in independently compressed zstd frames, human-inspectable JSON metadata in typed chunks, multi-material sectors, per-layer settings, and optional authenticated encryption. This repository is the specification, plus everything that keeps it honest - the normative text, the byte-exact conformance corpus, and the reference encoder, decoder and validator.',
+    language: 'Rust',
+    license: 'MIT',
+    // The crate is dual-licensed MIT OR Apache-2.0, so a GPL-3.0 consumer such as
+    // Odyssey can link it; the repository and the specification are MIT.
+    crate: 'lumen-format',
+    group: 'featured',
+    capabilities: [
+      'The normative specification in 22 parts: the container, every chunk type, run-end layer encoding, zstd framing and the trained dictionary, the sector model, per-layer timing, authenticated encryption and the validation checks',
+      'A byte-exact conformance corpus - 16 valid and 66 invalid vectors with golden values in a manifest - generated and re-verified by two implementations that share no code',
+      'The reference encoder, decoder and validator in Rust, published as the `lumen-format` crate: DragonFruit maps its own settings into it, and Odyssey reads a print file through it',
+      'A published, immutable revision: v1.0 is tagged, and an implementation names the revision it was written against',
+    ],
+  },
+
   {
     name: 'VoxelShift',
     repo: 'VoxelShift',

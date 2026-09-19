@@ -4,11 +4,12 @@ import { repoStats, stats } from '../lib/stats';
 import { formatDate, formatNumber } from '../lib/format';
 
 /**
- * One row per core project - the four the site treats as its main software.
+ * One row per core project - the featured set, the ones the site treats as its
+ * main software.
  *
  * The DragonFruit plugins and the organisation's own tooling are deliberately
- * not rows here: eight plugin repos reporting two pull requests between them
- * would bury the four projects the numbers are about. They stay on /projects,
+ * not rows here: the plugin repos reporting two pull requests between them
+ * would bury the core projects the numbers are about. They stay on /projects,
  * which the section links to.
  *
  * A project the snapshot does not know about is skipped rather than shown as a

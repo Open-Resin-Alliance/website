@@ -44,9 +44,12 @@ const LICENSE_COLORS: Record<string, string> = {
   Unlicense: '#64748b',
 };
 
-/** Chip colours that are not derived from a name: gold stars, orange issues. */
+/** Chip colours that are not derived from a name: gold stars, orange issues, a crate. */
 export const STARS_COLOR = '#eab308';
 export const ISSUES_COLOR = '#fb923c';
+/* crates.io's own brown, so the chip reads as the registry rather than as another
+   metric badge. */
+export const CRATE_COLOR = '#a16207';
 
 /**
  * Licence chips often carry a suffix the palette does not list, and projects
