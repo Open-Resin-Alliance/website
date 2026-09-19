@@ -37,11 +37,17 @@ jobs:
         with:
           ref: ${{ github.event.repository.default_branch }}
 
+      # Full history and tags, not the depth-1 default: a published specification
+      # revision is a tag, and `stable` in status.json names it, so the sync reads
+      # `v1.0:spec` rather than the working tree. A shallow checkout carries no tag
+      # objects beyond its own tip, which is what made `git ls-tree v1.0:spec` fail
+      # the first time a specification published a revision.
       - name: Checkout LumenFormat
         uses: actions/checkout@v7
         with:
           repository: Open-Resin-Alliance/LumenFormat
           path: LumenFormat
+          fetch-depth: 0
 
       - name: Checkout DragonFruit
         uses: actions/checkout@v7

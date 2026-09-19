@@ -140,10 +140,14 @@ function readStatus(repoDir) {
   }
 }
 
-/** "v1.0, draft", or "v1.0, published 2026-09-12" once there is a date. */
+/** "v1.0, draft", or "v1.0, published 2026-09-19" once there is a date. */
 function statusLine(status, fallback) {
   if (!status) return fallback;
-  return `v${status.version}, ${[status.status, status.published].filter(Boolean).join(' ')}`;
+  // LUMEN's declaration dates itself with `updated` - when the declaration last
+  // changed, which for a published revision is when it was published. `published`
+  // is taken first so a repository that keeps the two apart still gets the right day.
+  const date = status.published ?? status.updated;
+  return `v${status.version}, ${[status.status, date].filter(Boolean).join(' ')}`;
 }
 
 rmSync(OUT_DIR, { recursive: true, force: true });
