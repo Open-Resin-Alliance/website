@@ -31,16 +31,19 @@ There is no test suite. `npm run check` plus a real build is the gate.
 - **Never hand-edit a generated snapshot.** `src/data/github-stats.json` and
   `src/data/supporters.json` come from the scripts and are rewritten by CI. Change the
   script, `src/data/projects.ts` or the pipeline instead.
-- **A specification file opens at `##` - its own top-level sections.** `partHtml()` in
-  `src/lib/specs.ts` demotes every heading one level, since the file's `#` names the part
-  and the document's `h1`: a part reads title, then section, then subsection. Four files
-  used to open at `###`, because chapter 4 runs across `03-chunks.md` and the four parts
-  after it; their sections then had no divider of their own and their sub-headings landed
-  on the browser's `h5` default of 14px, smaller than body text. That was fixed in
-  LumenFormat, by re-levelling those files (`a073886`), not by teaching the renderer to
-  guess a part's top level. `SpecDocument.astro`'s section style is scoped to
-  `.part:not(.part--head)`: the head part is the document's own opening, whose sections
-  are already `h2`, and the style would otherwise land on its subsections.
+- **A specification part reads relative to its own heading levels.** `partHtml()` in
+  `src/lib/specs.ts` takes the shallowest level a part uses as that part's section level, then
+  demotes every heading one level, since the file's `#` names the part and the document's `h1`:
+  a part reads title, then section, then subsection. The convention upstream is that a part
+  opens at `##`, and the source is not uniform about it: `04-head.md`, `05-meta.md` and
+  `06-prof.md` open at `###` in the published v1.0, where the other nineteen parts open at
+  `##` - read literally, their sections render a size down and with no rule above them, which
+  is what a subsection looks like (§4.1 looks like §4.4.1). A published revision is immutable,
+  so the renderer normalizes the levels instead of the text being re-levelled; the upstream fix
+  is the one `a073886` made for four earlier files, and belongs in the next revision rather
+  than in a per-file exception here. `SpecDocument.astro`'s section style is scoped to
+  `.part:not(.part--head)`: the head part is the document's own opening, whose sections are
+  already `h2`, and the style would otherwise land on its subsections.
 - **`Project.repo` is a join key.** It must match the GitHub repository name exactly;
   a typo silently drops the live stats for that project with no error.
 - **Pages render snapshots; the browser may refresh them.** Every page is built from
