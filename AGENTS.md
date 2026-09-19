@@ -31,6 +31,16 @@ There is no test suite. `npm run check` plus a real build is the gate.
 - **Never hand-edit a generated snapshot.** `src/data/github-stats.json` and
   `src/data/supporters.json` come from the scripts and are rewritten by CI. Change the
   script, `src/data/projects.ts` or the pipeline instead.
+- **A specification file opens at `##` - its own top-level sections.** `partHtml()` in
+  `src/lib/specs.ts` demotes every heading one level, since the file's `#` names the part
+  and the document's `h1`: a part reads title, then section, then subsection. Four files
+  used to open at `###`, because chapter 4 runs across `03-chunks.md` and the four parts
+  after it; their sections then had no divider of their own and their sub-headings landed
+  on the browser's `h5` default of 14px, smaller than body text. That was fixed in
+  LumenFormat, by re-levelling those files (`a073886`), not by teaching the renderer to
+  guess a part's top level. `SpecDocument.astro`'s section style is scoped to
+  `.part:not(.part--head)`: the head part is the document's own opening, whose sections
+  are already `h2`, and the style would otherwise land on its subsections.
 - **`Project.repo` is a join key.** It must match the GitHub repository name exactly;
   a typo silently drops the live stats for that project with no error.
 - **Pages render snapshots; the browser may refresh them.** Every page is built from

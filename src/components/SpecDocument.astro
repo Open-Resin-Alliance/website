@@ -77,7 +77,7 @@ const structuredData = [
             it, each announced by its own heading. */}
         {
           pages.map((page) => (
-            <section class="part" id={page.data.isIndex ? undefined : partSlug(page)} data-spec-part>
+            <section class:list={['part', page.data.isIndex && 'part--head']} id={page.data.isIndex ? undefined : partSlug(page)} data-spec-part>
               {!page.data.isIndex && (
                 <header class="part__head">
                   <h2 class="part__title">{page.data.title}</h2>
@@ -487,14 +487,17 @@ const structuredData = [
   }
 
   /* The demoted headings: a part's own top level reads as the section level of the
-     document it now belongs to, which is what the prose styles are written for. */
-  .spec__body :global(.part__body > h3) {
+     document it now belongs to, which is what the prose styles are written for. The
+     head part is left out: its opening is the document's own, so its top level is
+     already h2 - the prose rule - and this one would land a level below that, ruling
+     the subsections of the part that has no name of its own. */
+  .spec__body :global(.part:not(.part--head) > .part__body > h3) {
     font-size: 1.5rem;
     padding-top: 1.25rem;
     border-top: 1px solid var(--border);
   }
 
-  .spec__body :global(.part__body > h4) {
+  .spec__body :global(.part:not(.part--head) > .part__body > h4) {
     font-size: 1.1875rem;
   }
 
