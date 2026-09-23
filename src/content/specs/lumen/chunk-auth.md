@@ -11,7 +11,7 @@ isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/07-chunk-auth.md"
 sourceRef: "v1.0"
-syncedAt: "2026-09-22"
+syncedAt: "2026-09-23"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
