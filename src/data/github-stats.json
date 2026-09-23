@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-22T11:45:22.946Z",
+  "generatedAt": "2026-09-23T11:44:52.025Z",
   "source": "https://api.github.com/orgs/Open-Resin-Alliance",
   "org": {
     "login": "Open-Resin-Alliance",
@@ -15,11 +15,11 @@
   },
   "totals": {
     "repos": 17,
-    "forks": 31,
+    "forks": 32,
     "stars": 93,
     "openIssues": 220,
     "openPulls": 17,
-    "commits": 2237,
+    "commits": 2239,
     "contributors": 12,
     "languages": {
       "Rust": 6,
@@ -284,7 +284,7 @@
       "language": "TypeScript",
       "license": "AGPL-3.0",
       "stars": 69,
-      "forks": 20,
+      "forks": 21,
       "openIssues": 219,
       "openPulls": 5,
       "commits": 1359,
@@ -297,7 +297,7 @@
       "defaultBranch": "main",
       "createdAt": "2025-11-11T20:44:18Z",
       "updatedAt": "2026-09-22T08:42:30Z",
-      "pushedAt": "2026-09-22T09:42:57Z",
+      "pushedAt": "2026-09-23T11:25:39Z",
       "latestRelease": {
         "repo": "DragonFruit",
         "tag": "nightly_feat_supports-simplified",
@@ -763,7 +763,7 @@
       "forks": 0,
       "openIssues": 0,
       "openPulls": 0,
-      "commits": 135,
+      "commits": 137,
       "watchers": null,
       "isFork": false,
       "isTemplate": false,
@@ -772,8 +772,8 @@
       "topics": [],
       "defaultBranch": "main",
       "createdAt": "2025-02-09T23:58:09Z",
-      "updatedAt": "2026-09-21T13:18:14Z",
-      "pushedAt": "2026-09-21T13:18:10Z",
+      "updatedAt": "2026-09-22T12:01:46Z",
+      "pushedAt": "2026-09-22T12:01:42Z",
       "latestRelease": null,
       "latestStableRelease": null,
       "recentReleases": []
@@ -964,6 +964,90 @@
   "activity": [
     {
       "repo": "DragonFruit",
+      "date": "2026-09-23T11:22:26Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "create",
+      "title": "created feat/auto-supports-2.0",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-23T08:11:03Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to dev",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
+      "burst": 2
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-23T07:26:09Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "pull_request",
+      "title": "merged pull request #676",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-23T07:25:39Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "pull_request",
+      "title": "labeled pull request #676",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-23T06:16:38Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to feat/real_ortho",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
+      "burst": 3
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-22T19:28:38Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "pull_request",
+      "title": "opened pull request #676",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-22T19:27:03Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to feat/real_ortho",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-22T18:29:35Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "create",
+      "title": "created feat/real_ortho",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "website",
+      "date": "2026-09-22T12:01:42Z",
+      "actor": "github-actions[bot]",
+      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
+      "kind": "push",
+      "title": "pushed commits to main",
+      "url": "https://github.com/Open-Resin-Alliance/website",
+      "burst": 2
+    },
+    {
+      "repo": "DragonFruit",
       "date": "2026-09-22T09:42:58Z",
       "actor": "PaulGD03",
       "avatar": "https://avatars.githubusercontent.com/u/23582247?",
@@ -1000,12 +1084,13 @@
     },
     {
       "repo": "DragonFruit",
-      "date": "2026-09-22T09:28:46Z",
+      "date": "2026-09-22T09:29:04Z",
       "actor": "PaulGD03",
       "avatar": "https://avatars.githubusercontent.com/u/23582247?",
       "kind": "push",
-      "title": "pushed commits to dev",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+      "title": "pushed commits to feat/lumenformat",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
+      "burst": 2
     },
     {
       "repo": "DragonFruit",
@@ -1045,13 +1130,13 @@
     },
     {
       "repo": "DragonFruit",
-      "date": "2026-09-22T08:45:06Z",
+      "date": "2026-09-22T09:09:19Z",
       "actor": "PaulGD03",
       "avatar": "https://avatars.githubusercontent.com/u/23582247?",
       "kind": "push",
       "title": "pushed commits to feat/supports-simplified",
       "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
-      "burst": 2
+      "burst": 3
     },
     {
       "repo": "DragonFruit",
@@ -1099,89 +1184,6 @@
       "title": "pushed commits to klipper_refactor",
       "url": "https://github.com/Open-Resin-Alliance/Odyssey",
       "burst": 3
-    },
-    {
-      "repo": "Odyssey",
-      "date": "2026-09-21T18:13:17Z",
-      "actor": "ada-phillips",
-      "avatar": "https://avatars.githubusercontent.com/u/14336492?",
-      "kind": "pull_request",
-      "title": "merged pull request #48",
-      "url": null
-    },
-    {
-      "repo": "Odyssey",
-      "date": "2026-09-21T18:11:04Z",
-      "actor": "ada-phillips",
-      "avatar": "https://avatars.githubusercontent.com/u/14336492?",
-      "kind": "push",
-      "title": "pushed commits to klipper_refactor",
-      "url": "https://github.com/Open-Resin-Alliance/Odyssey",
-      "burst": 2
-    },
-    {
-      "repo": "Odyssey",
-      "date": "2026-09-21T16:08:59Z",
-      "actor": "ada-phillips",
-      "avatar": "https://avatars.githubusercontent.com/u/14336492?",
-      "kind": "pull_request",
-      "title": "opened pull request #54",
-      "url": null
-    },
-    {
-      "repo": "Odyssey",
-      "date": "2026-09-21T13:48:33Z",
-      "actor": "ada-phillips",
-      "avatar": "https://avatars.githubusercontent.com/u/14336492?",
-      "kind": "push",
-      "title": "pushed commits to pixel_padding",
-      "url": "https://github.com/Open-Resin-Alliance/Odyssey"
-    },
-    {
-      "repo": "website",
-      "date": "2026-09-21T13:18:10Z",
-      "actor": "github-actions[bot]",
-      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website"
-    },
-    {
-      "repo": "Odyssey",
-      "date": "2026-09-21T13:16:10Z",
-      "actor": "ada-phillips",
-      "avatar": "https://avatars.githubusercontent.com/u/14336492?",
-      "kind": "push",
-      "title": "pushed commits to pixel_padding",
-      "url": "https://github.com/Open-Resin-Alliance/Odyssey"
-    },
-    {
-      "repo": "Odyssey",
-      "date": "2026-09-21T13:16:09Z",
-      "actor": "ada-phillips",
-      "avatar": "https://avatars.githubusercontent.com/u/14336492?",
-      "kind": "pull_request",
-      "title": "merged pull request #46",
-      "url": null
-    },
-    {
-      "repo": "website",
-      "date": "2026-09-21T12:55:57Z",
-      "actor": "github-actions[bot]",
-      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website"
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-21T11:17:22Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to feat/supports-simplified",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
-      "burst": 2
     }
   ],
   "warnings": [],
