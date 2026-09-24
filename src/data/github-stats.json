@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-23T11:44:52.025Z",
+  "generatedAt": "2026-09-24T11:53:15.183Z",
   "source": "https://api.github.com/orgs/Open-Resin-Alliance",
   "org": {
     "login": "Open-Resin-Alliance",
@@ -18,8 +18,8 @@
     "forks": 32,
     "stars": 93,
     "openIssues": 220,
-    "openPulls": 17,
-    "commits": 2239,
+    "openPulls": 19,
+    "commits": 2241,
     "contributors": 12,
     "languages": {
       "Rust": 6,
@@ -286,7 +286,7 @@
       "stars": 69,
       "forks": 21,
       "openIssues": 219,
-      "openPulls": 5,
+      "openPulls": 7,
       "commits": 1359,
       "watchers": null,
       "isFork": false,
@@ -297,13 +297,13 @@
       "defaultBranch": "main",
       "createdAt": "2025-11-11T20:44:18Z",
       "updatedAt": "2026-09-22T08:42:30Z",
-      "pushedAt": "2026-09-23T11:25:39Z",
+      "pushedAt": "2026-09-24T08:30:11Z",
       "latestRelease": {
         "repo": "DragonFruit",
-        "tag": "nightly_feat_supports-simplified",
-        "name": "Feature: Supports Simplified",
-        "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_feat_supports-simplified",
-        "publishedAt": "2026-09-22T09:42:37Z",
+        "tag": "nightly_sin_support-tips-3daa",
+        "name": "Nightly: Sin/support Tips 3daa",
+        "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_sin_support-tips-3daa",
+        "publishedAt": "2026-09-24T08:30:15Z",
         "prerelease": true,
         "draft": false
       },
@@ -317,6 +317,15 @@
         "draft": false
       },
       "recentReleases": [
+        {
+          "repo": "DragonFruit",
+          "tag": "nightly_sin_support-tips-3daa",
+          "name": "Nightly: Sin/support Tips 3daa",
+          "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_sin_support-tips-3daa",
+          "publishedAt": "2026-09-24T08:30:15Z",
+          "prerelease": true,
+          "draft": false
+        },
         {
           "repo": "DragonFruit",
           "tag": "nightly_feat_supports-simplified",
@@ -350,15 +359,6 @@
           "name": "Nightly: Sin/slice Baking Crash",
           "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_sin_slice-baking-crash",
           "publishedAt": "2026-09-10T13:51:35Z",
-          "prerelease": true,
-          "draft": false
-        },
-        {
-          "repo": "DragonFruit",
-          "tag": "nightly_feat_slicing-bench-on-dev",
-          "name": "Feature: Slicing Bench On Dev",
-          "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_feat_slicing-bench-on-dev",
-          "publishedAt": "2026-09-04T23:34:36Z",
           "prerelease": true,
           "draft": false
         }
@@ -763,7 +763,7 @@
       "forks": 0,
       "openIssues": 0,
       "openPulls": 0,
-      "commits": 137,
+      "commits": 139,
       "watchers": null,
       "isFork": false,
       "isTemplate": false,
@@ -772,8 +772,8 @@
       "topics": [],
       "defaultBranch": "main",
       "createdAt": "2025-02-09T23:58:09Z",
-      "updatedAt": "2026-09-22T12:01:46Z",
-      "pushedAt": "2026-09-22T12:01:42Z",
+      "updatedAt": "2026-09-23T12:05:11Z",
+      "pushedAt": "2026-09-23T12:05:08Z",
       "latestRelease": null,
       "latestStableRelease": null,
       "recentReleases": []
@@ -799,6 +799,15 @@
     "website"
   ],
   "recentReleases": [
+    {
+      "repo": "DragonFruit",
+      "tag": "nightly_sin_support-tips-3daa",
+      "name": "Nightly: Sin/support Tips 3daa",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_sin_support-tips-3daa",
+      "publishedAt": "2026-09-24T08:30:15Z",
+      "prerelease": true,
+      "draft": false
+    },
     {
       "repo": "DragonFruit",
       "tag": "nightly_feat_supports-simplified",
@@ -841,15 +850,6 @@
       "name": "Nightly: Sin/slice Baking Crash",
       "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_sin_slice-baking-crash",
       "publishedAt": "2026-09-10T13:51:35Z",
-      "prerelease": true,
-      "draft": false
-    },
-    {
-      "repo": "DragonFruit",
-      "tag": "nightly_feat_slicing-bench-on-dev",
-      "name": "Feature: Slicing Bench On Dev",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_feat_slicing-bench-on-dev",
-      "publishedAt": "2026-09-04T23:34:36Z",
       "prerelease": true,
       "draft": false
     },
@@ -962,6 +962,108 @@
     ]
   },
   "activity": [
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-24T08:30:15Z",
+      "actor": "github-actions[bot]",
+      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
+      "kind": "release",
+      "title": "released nightly_sin_support-tips-3daa",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/nightly_sin_support-tips-3daa"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-24T07:55:29Z",
+      "actor": "SinXIV",
+      "avatar": "https://avatars.githubusercontent.com/u/29101872?",
+      "kind": "push",
+      "title": "pushed commits to sin/support-tips-3daa",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
+      "burst": 2
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-24T07:33:29Z",
+      "actor": "github-actions[bot]",
+      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
+      "kind": "pull_request",
+      "title": "labeled pull request #678",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-24T07:28:24Z",
+      "actor": "SinXIV",
+      "avatar": "https://avatars.githubusercontent.com/u/29101872?",
+      "kind": "pull_request",
+      "title": "opened pull request #678",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-24T07:13:37Z",
+      "actor": "SinXIV",
+      "avatar": "https://avatars.githubusercontent.com/u/29101872?",
+      "kind": "push",
+      "title": "pushed commits to sin/support-tips-3daa",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
+      "burst": 2
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-24T06:54:46Z",
+      "actor": "SinXIV",
+      "avatar": "https://avatars.githubusercontent.com/u/29101872?",
+      "kind": "create",
+      "title": "created sin/support-tips-3daa",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-24T06:14:20Z",
+      "actor": "SinXIV",
+      "avatar": "https://avatars.githubusercontent.com/u/29101872?",
+      "kind": "pull_request",
+      "title": "opened pull request #677",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-24T06:04:31Z",
+      "actor": "SinXIV",
+      "avatar": "https://avatars.githubusercontent.com/u/29101872?",
+      "kind": "push",
+      "title": "pushed commits to sin/autosave-cooldown",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-24T04:46:58Z",
+      "actor": "SinXIV",
+      "avatar": "https://avatars.githubusercontent.com/u/29101872?",
+      "kind": "create",
+      "title": "created sin/autosave-cooldown",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "website",
+      "date": "2026-09-23T12:05:08Z",
+      "actor": "github-actions[bot]",
+      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
+      "kind": "push",
+      "title": "pushed commits to main",
+      "url": "https://github.com/Open-Resin-Alliance/website",
+      "burst": 2
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-23T11:25:39Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to dev",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
     {
       "repo": "DragonFruit",
       "date": "2026-09-23T11:22:26Z",
@@ -1081,109 +1183,6 @@
       "kind": "pull_request",
       "title": "merged pull request #668",
       "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-22T09:29:04Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to feat/lumenformat",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
-      "burst": 2
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-22T09:28:45Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "pull_request",
-      "title": "merged pull request #671",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-22T09:27:13Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to feat/lumenformat",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-22T09:12:01Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "pull_request",
-      "title": "labeled pull request #671",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-22T09:12:01Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "pull_request",
-      "title": "labeled pull request #671",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-22T09:09:19Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to feat/supports-simplified",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
-      "burst": 3
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-22T08:44:37Z",
-      "actor": "AJRubenstein",
-      "avatar": "https://avatars.githubusercontent.com/u/46571410?",
-      "kind": "pull_request",
-      "title": "merged pull request #675",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-22T08:31:17Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to feat/supports-simplified",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-22T05:04:51Z",
-      "actor": "AJRubenstein",
-      "avatar": "https://avatars.githubusercontent.com/u/46571410?",
-      "kind": "pull_request",
-      "title": "opened pull request #675",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-22T04:04:42Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to feat/supports-simplified",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
-      "burst": 2
-    },
-    {
-      "repo": "Odyssey",
-      "date": "2026-09-21T18:31:05Z",
-      "actor": "ada-phillips",
-      "avatar": "https://avatars.githubusercontent.com/u/14336492?",
-      "kind": "push",
-      "title": "pushed commits to klipper_refactor",
-      "url": "https://github.com/Open-Resin-Alliance/Odyssey",
-      "burst": 3
     }
   ],
   "warnings": [],
