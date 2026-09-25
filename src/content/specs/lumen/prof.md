@@ -11,7 +11,7 @@ isIndex: false
 sourceRepo: "LumenFormat"
 sourcePath: "spec/06-prof.md"
 sourceRef: "v1.0"
-syncedAt: "2026-09-24"
+syncedAt: "2026-09-25"
 ---
 
 <!-- Part of the LUMEN Format Specification. Section numbers (`§3.1`) are stable anchors across the parts. -->
