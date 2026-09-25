@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T11:53:15.386Z",
+  "generatedAt": "2026-09-25T11:56:09.041Z",
   "source": "https://api.opencollective.com/graphql/v2",
   "collective": {
     "name": "Open Resin Alliance",
@@ -7,7 +7,7 @@
     "imageUrl": "https://images.opencollective.com/openresinalliance/879f0f1/logo.png",
     "website": null,
     "url": "https://opencollective.com/openresinalliance",
-    "totalFinancialContributors": 12
+    "totalFinancialContributors": 13
   },
   "host": {
     "name": "Open Source Collective",
@@ -17,9 +17,9 @@
     "url": "https://oscollective.org/"
   },
   "totals": {
-    "backers": 12,
-    "contributors": 15,
-    "raised": 571,
+    "backers": 13,
+    "contributors": 16,
+    "raised": 586,
     "currency": "USD"
   },
   "backers": [
@@ -106,6 +106,20 @@
       "frequency": "MONTHLY",
       "frequencyLabel": "Monthly",
       "recurringAmount": 15
+    },
+    {
+      "name": "Runklestiltskin",
+      "slug": "guest-4717e1d9",
+      "type": "INDIVIDUAL",
+      "imageUrl": "https://images.opencollective.com/guest-4717e1d9/avatar.png",
+      "url": "https://opencollective.com/guest-4717e1d9",
+      "since": "2026-09-24T12:24:42.243Z",
+      "amount": 15,
+      "currency": "USD",
+      "recurring": true,
+      "frequency": "MONTHLY",
+      "frequencyLabel": "Monthly",
+      "recurringAmount": 15.5
     },
     {
       "name": "Cunabula",
