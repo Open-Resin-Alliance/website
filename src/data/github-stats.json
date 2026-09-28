@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-27T12:09:08.881Z",
+  "generatedAt": "2026-09-28T14:04:27.526Z",
   "source": "https://api.github.com/orgs/Open-Resin-Alliance",
   "org": {
     "login": "Open-Resin-Alliance",
@@ -19,7 +19,7 @@
     "stars": 94,
     "openIssues": 220,
     "openPulls": 19,
-    "commits": 2247,
+    "commits": 2249,
     "contributors": 12,
     "languages": {
       "Rust": 6,
@@ -297,7 +297,7 @@
       "defaultBranch": "main",
       "createdAt": "2025-11-11T20:44:18Z",
       "updatedAt": "2026-09-26T19:53:49Z",
-      "pushedAt": "2026-09-27T10:11:40Z",
+      "pushedAt": "2026-09-28T08:26:57Z",
       "latestRelease": {
         "repo": "DragonFruit",
         "tag": "nightly_sin_support-tips-3daa",
@@ -595,7 +595,7 @@
       "defaultBranch": "main",
       "createdAt": "2023-01-13T11:31:35Z",
       "updatedAt": "2026-07-17T19:01:32Z",
-      "pushedAt": "2026-09-27T11:23:28Z",
+      "pushedAt": "2026-09-27T18:02:38Z",
       "latestRelease": {
         "repo": "Orion",
         "tag": "BRANCH_feat/athena_leveling_wizard",
@@ -763,7 +763,7 @@
       "forks": 0,
       "openIssues": 0,
       "openPulls": 0,
-      "commits": 145,
+      "commits": 147,
       "watchers": null,
       "isFork": false,
       "isTemplate": false,
@@ -772,8 +772,8 @@
       "topics": [],
       "defaultBranch": "main",
       "createdAt": "2025-02-09T23:58:09Z",
-      "updatedAt": "2026-09-26T11:44:36Z",
-      "pushedAt": "2026-09-26T11:44:32Z",
+      "updatedAt": "2026-09-27T12:24:55Z",
+      "pushedAt": "2026-09-27T12:24:52Z",
       "latestRelease": null,
       "latestStableRelease": null,
       "recentReleases": []
@@ -963,6 +963,54 @@
   },
   "activity": [
     {
+      "repo": "DragonFruit",
+      "date": "2026-09-28T08:26:58Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to feat/auto-supports-2.0",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-28T01:52:14Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "issue",
+      "title": "unlabeled issue #656",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/issues/656"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-27T19:20:55Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to feat/auto-supports-2.0",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
+      "burst": 2
+    },
+    {
+      "repo": "Orion",
+      "date": "2026-09-27T18:02:39Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to feat/athena_leveling_wizard",
+      "url": "https://github.com/Open-Resin-Alliance/Orion",
+      "burst": 2
+    },
+    {
+      "repo": "website",
+      "date": "2026-09-27T12:24:52Z",
+      "actor": "github-actions[bot]",
+      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
+      "kind": "push",
+      "title": "pushed commits to main",
+      "url": "https://github.com/Open-Resin-Alliance/website",
+      "burst": 2
+    },
+    {
       "repo": "Orion",
       "date": "2026-09-27T11:23:29Z",
       "actor": "PaulGD03",
@@ -970,6 +1018,15 @@
       "kind": "push",
       "title": "pushed commits to feat/athena_leveling_wizard",
       "url": "https://github.com/Open-Resin-Alliance/Orion"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-27T10:11:39Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to dev",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
     },
     {
       "repo": "DragonFruit",
@@ -997,6 +1054,15 @@
       "kind": "pull_request",
       "title": "merged pull request #681",
       "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-09-27T10:07:41Z",
+      "actor": "PaulGD03",
+      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
+      "kind": "push",
+      "title": "pushed commits to dev",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
     },
     {
       "repo": "DragonFruit",
@@ -1117,70 +1183,6 @@
       "title": "pushed commits to sin/hollowing-cleanup",
       "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
       "burst": 3
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-25T02:13:10Z",
-      "actor": "SinXIV",
-      "avatar": "https://avatars.githubusercontent.com/u/29101872?",
-      "kind": "create",
-      "title": "created sin/hollowing-cleanup",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-24T23:18:03Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "pull_request",
-      "title": "opened pull request #679",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-24T23:09:36Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to feat/auto-supports-2.0",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
-      "burst": 3
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-24T15:51:00Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "create",
-      "title": "created feat/granular-themes",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
-    },
-    {
-      "repo": "website",
-      "date": "2026-09-24T12:10:04Z",
-      "actor": "github-actions[bot]",
-      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website"
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-09-24T11:58:22Z",
-      "actor": "PaulGD03",
-      "avatar": "https://avatars.githubusercontent.com/u/23582247?",
-      "kind": "push",
-      "title": "pushed commits to feat/auto-supports-2.0",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
-    },
-    {
-      "repo": "website",
-      "date": "2026-09-24T11:53:17Z",
-      "actor": "github-actions[bot]",
-      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
-      "kind": "push",
-      "title": "pushed commits to main",
-      "url": "https://github.com/Open-Resin-Alliance/website"
     }
   ],
   "warnings": [],
