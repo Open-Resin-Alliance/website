@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-02T12:44:06.208Z",
+  "generatedAt": "2026-10-03T11:44:57.653Z",
   "source": "https://api.opencollective.com/graphql/v2",
   "collective": {
     "name": "Open Resin Alliance",
@@ -19,10 +19,24 @@
   "totals": {
     "backers": 13,
     "contributors": 16,
-    "raised": 746,
+    "raised": 966,
     "currency": "USD"
   },
   "backers": [
+    {
+      "name": "Siraya Tech",
+      "slug": "siraya-tech",
+      "type": "INDIVIDUAL",
+      "imageUrl": "https://images.opencollective.com/siraya-tech/6749c80/avatar.png",
+      "url": "https://opencollective.com/siraya-tech",
+      "since": "2026-08-24T04:08:22.208Z",
+      "amount": 400,
+      "currency": "USD",
+      "recurring": true,
+      "frequency": "MONTHLY",
+      "frequencyLabel": "Monthly",
+      "recurringAmount": 200
+    },
     {
       "name": "Atlas 3DSS",
       "slug": "atlas-3dss",
@@ -38,20 +52,6 @@
       "recurringAmount": 110
     },
     {
-      "name": "Siraya Tech",
-      "slug": "siraya-tech",
-      "type": "INDIVIDUAL",
-      "imageUrl": "https://images.opencollective.com/siraya-tech/6749c80/avatar.png",
-      "url": "https://opencollective.com/siraya-tech",
-      "since": "2026-08-24T04:08:22.208Z",
-      "amount": 200,
-      "currency": "USD",
-      "recurring": true,
-      "frequency": "MONTHLY",
-      "frequencyLabel": "Monthly",
-      "recurringAmount": 200
-    },
-    {
       "name": "ben",
       "slug": "guest-29653113",
       "type": "INDIVIDUAL",
@@ -64,6 +64,20 @@
       "frequency": "MONTHLY",
       "frequencyLabel": "Monthly",
       "recurringAmount": 30
+    },
+    {
+      "name": "Concepts 3D",
+      "slug": "concepts3d",
+      "type": "ORGANIZATION",
+      "imageUrl": "https://images.opencollective.com/concepts3d/8ba9504/logo.png",
+      "url": "https://concepts3d.ca",
+      "since": "2026-08-27T22:33:12.638Z",
+      "amount": 30,
+      "currency": "USD",
+      "recurring": true,
+      "frequency": "MONTHLY",
+      "frequencyLabel": "Monthly",
+      "recurringAmount": 15
     },
     {
       "name": "Kryz Slaughter",
@@ -94,20 +108,6 @@
       "recurringAmount": 15
     },
     {
-      "name": "Concepts 3D",
-      "slug": "concepts3d",
-      "type": "ORGANIZATION",
-      "imageUrl": "https://images.opencollective.com/concepts3d/8ba9504/logo.png",
-      "url": "https://concepts3d.ca",
-      "since": "2026-08-27T22:33:12.638Z",
-      "amount": 15,
-      "currency": "USD",
-      "recurring": true,
-      "frequency": "MONTHLY",
-      "frequencyLabel": "Monthly",
-      "recurringAmount": 15
-    },
-    {
       "name": "Runklestiltskin",
       "slug": "guest-4717e1d9",
       "type": "INDIVIDUAL",
@@ -128,7 +128,7 @@
       "imageUrl": "https://images.opencollective.com/cunabula/99ca552/avatar.png",
       "url": "https://opencollective.com/cunabula",
       "since": "2026-08-26T18:30:17.363Z",
-      "amount": 5,
+      "amount": 10,
       "currency": "USD",
       "recurring": true,
       "frequency": "MONTHLY",
