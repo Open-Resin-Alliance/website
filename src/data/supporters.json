@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-08T13:37:42.582Z",
+  "generatedAt": "2026-10-09T13:23:57.039Z",
   "source": "https://api.opencollective.com/graphql/v2",
   "collective": {
     "name": "Open Resin Alliance",
@@ -7,7 +7,7 @@
     "imageUrl": "https://images.opencollective.com/openresinalliance/879f0f1/logo.png",
     "website": null,
     "url": "https://opencollective.com/openresinalliance",
-    "totalFinancialContributors": 14
+    "totalFinancialContributors": 15
   },
   "host": {
     "name": "Open Source Collective",
@@ -17,9 +17,9 @@
     "url": "https://oscollective.org/"
   },
   "totals": {
-    "backers": 14,
-    "contributors": 17,
-    "raised": 981,
+    "backers": 15,
+    "contributors": 18,
+    "raised": 1281,
     "currency": "USD"
   },
   "backers": [
@@ -162,6 +162,20 @@
       "frequency": "MONTHLY",
       "frequencyLabel": "Monthly",
       "recurringAmount": 5
+    },
+    {
+      "name": "KCast",
+      "slug": "incognito-511b471d",
+      "type": "INDIVIDUAL",
+      "imageUrl": "https://images.opencollective.com/incognito-511b471d/8298e6d/avatar.png",
+      "url": "https://opencollective.com/incognito-511b471d",
+      "since": "2026-10-08T21:55:32.775Z",
+      "amount": 300,
+      "currency": "USD",
+      "recurring": false,
+      "frequency": "ONE_TIME",
+      "frequencyLabel": "One-time",
+      "recurringAmount": null
     },
     {
       "name": "Gobbledygook Games",
