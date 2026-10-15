@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T12:00:27.018Z",
+  "generatedAt": "2026-10-15T11:37:15.759Z",
   "source": "https://api.opencollective.com/graphql/v2",
   "collective": {
     "name": "Open Resin Alliance",
@@ -19,7 +19,7 @@
   "totals": {
     "backers": 15,
     "contributors": 19,
-    "raised": 1286,
+    "raised": 1986,
     "currency": "USD"
   },
   "backers": [
@@ -58,7 +58,7 @@
       "imageUrl": "https://images.opencollective.com/guest-29653113/avatar.png",
       "url": "https://opencollective.com/guest-29653113",
       "since": "2026-08-29T08:46:13.818Z",
-      "amount": 60,
+      "amount": 160,
       "currency": "USD",
       "recurring": true,
       "frequency": "MONTHLY",
@@ -170,7 +170,7 @@
       "imageUrl": "https://images.opencollective.com/incognito-511b471d/8298e6d/avatar.png",
       "url": "https://opencollective.com/incognito-511b471d",
       "since": "2026-10-08T21:55:32.775Z",
-      "amount": 300,
+      "amount": 900,
       "currency": "USD",
       "recurring": false,
       "frequency": "ONE_TIME",
