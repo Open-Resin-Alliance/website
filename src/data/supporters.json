@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-17T10:51:08.248Z",
+  "generatedAt": "2026-10-18T11:15:33.353Z",
   "source": "https://api.opencollective.com/graphql/v2",
   "collective": {
     "name": "Open Resin Alliance",
@@ -7,7 +7,7 @@
     "imageUrl": "https://images.opencollective.com/openresinalliance/879f0f1/logo.png",
     "website": null,
     "url": "https://opencollective.com/openresinalliance",
-    "totalFinancialContributors": 15
+    "totalFinancialContributors": 16
   },
   "host": {
     "name": "Open Source Collective",
@@ -17,9 +17,9 @@
     "url": "https://oscollective.org/"
   },
   "totals": {
-    "backers": 15,
-    "contributors": 19,
-    "raised": 1986,
+    "backers": 16,
+    "contributors": 20,
+    "raised": 1991,
     "currency": "USD"
   },
   "backers": [
@@ -162,6 +162,20 @@
       "frequency": "MONTHLY",
       "frequencyLabel": "Monthly",
       "recurringAmount": 5
+    },
+    {
+      "name": "MachineMenace",
+      "slug": "machinemenace",
+      "type": "INDIVIDUAL",
+      "imageUrl": "https://images.opencollective.com/machinemenace/avatar.png",
+      "url": "https://opencollective.com/machinemenace",
+      "since": "2026-10-17T21:33:40.397Z",
+      "amount": 5,
+      "currency": "USD",
+      "recurring": true,
+      "frequency": "MONTHLY",
+      "frequencyLabel": "Monthly",
+      "recurringAmount": 5.5
     },
     {
       "name": "KCast",
