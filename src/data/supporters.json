@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-24T11:09:56.471Z",
+  "generatedAt": "2026-10-25T11:39:33.564Z",
   "source": "https://api.opencollective.com/graphql/v2",
   "collective": {
     "name": "Open Resin Alliance",
@@ -19,7 +19,7 @@
   "totals": {
     "backers": 16,
     "contributors": 20,
-    "raised": 1991,
+    "raised": 2006,
     "currency": "USD"
   },
   "backers": [
@@ -114,7 +114,7 @@
       "imageUrl": "https://images.opencollective.com/guest-4717e1d9/avatar.png",
       "url": "https://opencollective.com/guest-4717e1d9",
       "since": "2026-09-24T12:24:42.243Z",
-      "amount": 15,
+      "amount": 30,
       "currency": "USD",
       "recurring": true,
       "frequency": "MONTHLY",
