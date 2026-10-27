@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-26T13:12:31.683Z",
+  "generatedAt": "2026-10-27T12:19:59.801Z",
   "source": "https://api.opencollective.com/graphql/v2",
   "collective": {
     "name": "Open Resin Alliance",
@@ -19,7 +19,7 @@
   "totals": {
     "backers": 16,
     "contributors": 20,
-    "raised": 2106,
+    "raised": 2136,
     "currency": "USD"
   },
   "backers": [
@@ -66,27 +66,13 @@
       "recurringAmount": 30
     },
     {
-      "name": "Concepts 3D",
-      "slug": "concepts3d",
-      "type": "ORGANIZATION",
-      "imageUrl": "https://images.opencollective.com/concepts3d/8ba9504/logo.png",
-      "url": "https://concepts3d.ca",
-      "since": "2026-08-27T22:33:12.638Z",
-      "amount": 30,
-      "currency": "USD",
-      "recurring": true,
-      "frequency": "MONTHLY",
-      "frequencyLabel": "Monthly",
-      "recurringAmount": 15
-    },
-    {
       "name": "Kryz Slaughter",
       "slug": "kryz-slaughter",
       "type": "INDIVIDUAL",
       "imageUrl": "https://images.opencollective.com/kryz-slaughter/c64838c/avatar.png",
       "url": "https://opencollective.com/kryz-slaughter",
       "since": "2026-08-27T16:34:16.451Z",
-      "amount": 30,
+      "amount": 45,
       "currency": "USD",
       "recurring": true,
       "frequency": "MONTHLY",
@@ -100,6 +86,20 @@
       "imageUrl": "https://images.opencollective.com/rob-skinner/9066456/avatar.png",
       "url": "https://opencollective.com/rob-skinner",
       "since": "2026-08-27T10:26:21.333Z",
+      "amount": 45,
+      "currency": "USD",
+      "recurring": true,
+      "frequency": "MONTHLY",
+      "frequencyLabel": "Monthly",
+      "recurringAmount": 15
+    },
+    {
+      "name": "Concepts 3D",
+      "slug": "concepts3d",
+      "type": "ORGANIZATION",
+      "imageUrl": "https://images.opencollective.com/concepts3d/8ba9504/logo.png",
+      "url": "https://concepts3d.ca",
+      "since": "2026-08-27T22:33:12.638Z",
       "amount": 30,
       "currency": "USD",
       "recurring": true,
