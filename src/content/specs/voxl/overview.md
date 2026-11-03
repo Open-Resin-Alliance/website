@@ -8,8 +8,8 @@ order: 1
 isIndex: true
 sourceRepo: "DragonFruit"
 sourcePath: "docs/dev/voxl-format-spec.md"
-sourceRef: "09a4162"
-syncedAt: "2026-11-02"
+sourceRef: "188df82"
+syncedAt: "2026-11-03"
 ---
 
 VOXL is DragonFruit’s native scene container. This page captures the core contract engineers should rely on in code and tests.
