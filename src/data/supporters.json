@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-05T14:44:06.048Z",
+  "generatedAt": "2026-11-06T14:22:37.592Z",
   "source": "https://api.opencollective.com/graphql/v2",
   "collective": {
     "name": "Open Resin Alliance",
@@ -19,7 +19,7 @@
   "totals": {
     "backers": 16,
     "contributors": 20,
-    "raised": 2386,
+    "raised": 2401,
     "currency": "USD"
   },
   "backers": [
@@ -122,6 +122,20 @@
       "recurringAmount": 15.5
     },
     {
+      "name": "Viznoman",
+      "slug": "viznoman",
+      "type": "INDIVIDUAL",
+      "imageUrl": "https://images.opencollective.com/viznoman/11202c6/avatar.png",
+      "url": "https://opencollective.com/viznoman",
+      "since": "2026-10-07T06:40:58.245Z",
+      "amount": 30,
+      "currency": "USD",
+      "recurring": true,
+      "frequency": "MONTHLY",
+      "frequencyLabel": "Monthly",
+      "recurringAmount": 15
+    },
+    {
       "name": "Cunabula",
       "slug": "cunabula",
       "type": "INDIVIDUAL",
@@ -134,20 +148,6 @@
       "frequency": "MONTHLY",
       "frequencyLabel": "Monthly",
       "recurringAmount": 5.75
-    },
-    {
-      "name": "Viznoman",
-      "slug": "viznoman",
-      "type": "INDIVIDUAL",
-      "imageUrl": "https://images.opencollective.com/viznoman/11202c6/avatar.png",
-      "url": "https://opencollective.com/viznoman",
-      "since": "2026-10-07T06:40:58.245Z",
-      "amount": 15,
-      "currency": "USD",
-      "recurring": true,
-      "frequency": "MONTHLY",
-      "frequencyLabel": "Monthly",
-      "recurringAmount": 15
     },
     {
       "name": "Tom",
