@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-12T15:21:31.098Z",
+  "generatedAt": "2026-11-13T14:40:22.683Z",
   "source": "https://api.opencollective.com/graphql/v2",
   "collective": {
     "name": "Open Resin Alliance",
@@ -7,7 +7,7 @@
     "imageUrl": "https://images.opencollective.com/openresinalliance/879f0f1/logo.png",
     "website": null,
     "url": "https://opencollective.com/openresinalliance",
-    "totalFinancialContributors": 16
+    "totalFinancialContributors": 18
   },
   "host": {
     "name": "Open Source Collective",
@@ -17,9 +17,9 @@
     "url": "https://oscollective.org/"
   },
   "totals": {
-    "backers": 16,
-    "contributors": 20,
-    "raised": 2406,
+    "backers": 18,
+    "contributors": 22,
+    "raised": 2433,
     "currency": "USD"
   },
   "backers": [
@@ -150,6 +150,20 @@
       "recurringAmount": 5.75
     },
     {
+      "name": "Emerald",
+      "slug": "incognito-ee2e5f56",
+      "type": "INDIVIDUAL",
+      "imageUrl": "https://images.opencollective.com/incognito-ee2e5f56/5f0abe5/avatar.png",
+      "url": "https://opencollective.com/incognito-ee2e5f56",
+      "since": "2026-11-13T14:19:19.246Z",
+      "amount": 15,
+      "currency": "USD",
+      "recurring": true,
+      "frequency": "MONTHLY",
+      "frequencyLabel": "Monthly",
+      "recurringAmount": 16.5
+    },
+    {
       "name": "Tom",
       "slug": "tomb94",
       "type": "INDIVIDUAL",
@@ -162,6 +176,20 @@
       "frequency": "MONTHLY",
       "frequencyLabel": "Monthly",
       "recurringAmount": 5
+    },
+    {
+      "name": "Sump Sea Foundry",
+      "slug": "sump-sea-foundry",
+      "type": "INDIVIDUAL",
+      "imageUrl": "https://images.opencollective.com/sump-sea-foundry/ddff1a0/avatar.png",
+      "url": "https://opencollective.com/sump-sea-foundry",
+      "since": "2026-11-13T14:13:40.526Z",
+      "amount": 12,
+      "currency": "USD",
+      "recurring": true,
+      "frequency": "MONTHLY",
+      "frequencyLabel": "Monthly",
+      "recurringAmount": 13.2
     },
     {
       "name": "MachineMenace",
