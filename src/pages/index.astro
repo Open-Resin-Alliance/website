@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PostCard from '../components/PostCard.astro';
-import StatsTable from '../components/StatsTable.astro';
 
 import DiscordIcon from '../components/DiscordIcon.astro';
 import { getCollection } from 'astro:content';
@@ -62,7 +61,7 @@ const latestPosts = posts.slice(0, 3);
       <a class="btn btn--ghost btn--sm" href="/projects">All <span data-live="repos">{stats.totals.repos}</span> repositories</a>
     </div>
 
-    <div class="grid grid--3">
+    <div class="grid grid--4">
       {FEATURED_PROJECTS.map((project) => <ProjectCard project={project} />)}
     </div>
 
@@ -78,22 +77,6 @@ const latestPosts = posts.slice(0, 3);
         }
       </ul>
     </div>
-  </section>
-
-  <section class="shell section">
-    <div class="section-head">
-      <div class="section-head__text">
-        <p class="eyebrow">By the numbers</p>
-        <h2>Built in the open</h2>
-        <p class="lede">
-          Open issues, pull requests and commits for our core projects, read from the GitHub API. Counts are refreshed
-          on every deploy and nightly; the stars and push dates on the cards above refresh live in your browser.
-        </p>
-      </div>
-      <a class="btn btn--ghost btn--sm" href="/projects">All projects</a>
-    </div>
-
-    <StatsTable />
   </section>
 
   <section class="shell section">

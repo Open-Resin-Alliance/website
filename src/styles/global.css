@@ -66,6 +66,7 @@
   --focus: var(--brand-violet);
   /* A table column of answers reads at a glance as marks rather than words. */
   --yes: #15803d;
+  --warn: #b45309;
   --no: #b91c1c;
   --shadow-sm: 0 1px 2px rgb(24 24 27 / 0.06);
   --shadow: 0 1px 2px rgb(24 24 27 / 0.05), 0 8px 24px -12px rgb(24 24 27 / 0.14);
@@ -96,6 +97,7 @@
   --accent-hover: var(--brand-pink);
   --focus: var(--brand-pink);
   --yes: #4ade80;
+  --warn: #fbbf24;
   --no: #f87171;
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
   --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -16px rgb(0 0 0 / 0.7);
@@ -793,25 +795,148 @@ a.card:hover,
 
 .prose table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 0.9375rem;
-  display: block;
+  font-variant-numeric: tabular-nums;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+}
+
+.prose .table-scroll {
+  max-width: var(--measure);
   overflow-x: auto;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+}
+
+.prose .table-scroll > table {
+  width: 100%;
+  min-width: 40rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  overflow: visible;
+  table-layout: fixed;
+}
+
+.prose .table-scroll > table col.col-spec {
+  width: 21%;
+}
+
+.prose .table-scroll > table col.col-printer {
+  width: 26.33%;
 }
 
 .prose th,
 .prose td {
   text-align: left;
-  padding: 0.5rem 0.85rem;
+  padding: 0.7rem 0.95rem;
   border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.45;
+  color: var(--ink);
 }
 
-.prose th {
+.prose :is(th, td) + :is(th, td) {
+  border-left: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
+}
+
+.prose thead th {
   font-size: 0.75rem;
   font-family: var(--font-mono);
-  letter-spacing: 0.06em;
+  font-weight: 560;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--muted);
+  background: color-mix(in oklab, var(--bg-inset) 85%, transparent);
+  border-bottom: 1px solid var(--border-strong);
+  padding-block: 0.8rem;
+}
+
+.prose thead th strong {
+  color: var(--accent);
+}
+
+.prose tbody tr {
+  transition: background-color 0.15s var(--ease);
+}
+
+.prose tbody tr:hover {
+  background: color-mix(in oklab, var(--brand-violet) 6%, var(--bg-inset));
+}
+
+:root[data-theme="dark"] .prose tbody tr:hover {
+  background: color-mix(in oklab, var(--brand-pink) 8%, var(--bg-inset));
+}
+
+.prose tbody tr:last-child td,
+.prose tbody tr:last-child th {
+  border-bottom: 0;
+}
+
+.prose tbody td:first-child,
+.prose tbody th[scope="row"] {
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.prose .col-highlight {
+  background: color-mix(in oklab, var(--accent) 5%, transparent);
+}
+
+.prose thead th.col-highlight {
+  background: color-mix(in oklab, var(--accent) 11%, var(--bg-inset));
+  box-shadow: inset 0 2px 0 var(--accent);
+}
+
+.prose tr.table-section-start th,
+.prose tr.table-section-start td {
+  border-top: 1px solid var(--border-strong);
+}
+
+.prose .table-sub {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.prose tfoot th,
+.prose tfoot td {
+  border-top: 1px solid var(--border-strong);
+  border-bottom: 0;
+  background: color-mix(in oklab, var(--bg-inset) 75%, transparent);
+  color: var(--ink);
+  font-weight: 600;
+  padding-block: 0.8rem;
+}
+
+.prose tfoot th[scope="row"] {
+  font-size: 0.875rem;
+  color: var(--ink);
+}
+
+@media (max-width: 960px) {
+  .prose > table {
+    display: block;
+    overflow-x: auto;
+  }
 }
 
 /* A specification is full of long identifiers, paths and URLs that carry no
@@ -878,7 +1003,27 @@ a.card:hover,
   color: var(--yes);
 }
 
+.mark--warn {
+  color: var(--warn);
+}
+
 .mark--no {
+  color: var(--no);
+}
+
+.crown,
+.flag-warn {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: -0.15em;
+  margin-inline-end: 0.4rem;
+}
+
+.crown {
+  color: var(--warn);
+}
+
+.flag-warn {
   color: var(--no);
 }
 

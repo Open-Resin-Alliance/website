@@ -1,0 +1,393 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { LINKS } from '../data/site';
+import {
+  OPENNESS_BANDS,
+  OPENNESS_CRITERIA,
+  OPENNESS_MAX_PER_CRITERION,
+  OPENNESS_MAX_TOTAL,
+  OPENNESS_VERSION,
+  SCORED_PRINTERS,
+  formatScore,
+  scoreBand,
+  totalOpennessScore,
+} from '../data/openness';
+
+const rankedPrinters = [...SCORED_PRINTERS].sort(
+  (a, b) => totalOpennessScore(b) - totalOpennessScore(a) || a.name.localeCompare(b.name),
+);
+
+const structuredData = [
+  {
+    '@type': 'WebPage',
+    name: 'ORA Openness Score - Open Resin Alliance',
+    url: 'https://openresin.org/openness',
+    description:
+      'The Open Resin Alliance rubric for scoring resin 3D printer openness across hardware, OS, slicers, local control, consumables, and hackability.',
+    isPartOf: { '@id': 'https://openresin.org/#website' },
+  },
+];
+---
+
+<BaseLayout
+  title="ORA Openness Score"
+  description="A standardized 10-point rubric for measuring resin 3D printer openness across platform, slicers, local control, consumables, and hackability."
+  socialMeta={`${OPENNESS_VERSION} · ${OPENNESS_CRITERIA.length} criteria · ${SCORED_PRINTERS.length} printers`}
+  structuredData={structuredData}
+>
+  <section class="shell page-head">
+    <p class="eyebrow">Standard · {OPENNESS_VERSION}</p>
+    <h1>ORA Openness Score</h1>
+    <p class="lede">
+      A standardized {OPENNESS_MAX_TOTAL}-point rubric for measuring how open, serviceable, and developer-friendly a
+      resin 3D printer is. Scores measure openness rather than print quality: a closed appliance can still make clean
+      parts, and an open-leaning machine still loses points wherever proprietary locks remain.
+    </p>
+    <div class="page-head__meta mono">
+      <span>{OPENNESS_VERSION}</span>
+      <span class="page-head__sep" aria-hidden="true">/</span>
+      <span>{OPENNESS_CRITERIA.length} criteria &times; {OPENNESS_MAX_PER_CRITERION} pts</span>
+      <span class="page-head__sep" aria-hidden="true">/</span>
+      <span>{SCORED_PRINTERS.length} printers scored</span>
+    </div>
+  </section>
+
+  <section class="shell section">
+    <div class="section-head">
+      <div class="section-head__text">
+        <h2>Evaluated printers</h2>
+        <p class="lede">
+          Every score below is computed directly from the five criteria in {OPENNESS_VERSION}, based on hands-on
+          inspection rather than marketing brochures.
+        </p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <div class="table-scroll openness-table">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Printer</th>
+              {OPENNESS_CRITERIA.map((criterion) => (
+                <th scope="col">{criterion.name}</th>
+              ))}
+              <th scope="col"><strong>Total</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              rankedPrinters.map((printer) => {
+                const total = totalOpennessScore(printer);
+                const band = scoreBand(total);
+                return (
+                  <tr>
+                    <th scope="row">
+                      {printer.reviewPath ? (
+                        <a class="printer-link" href={printer.reviewPath}>
+                          {printer.vendor} {printer.name}
+                        </a>
+                      ) : (
+                        `${printer.vendor} ${printer.name}`
+                      )}
+                      <span class="table-sub">Evaluated {printer.evaluatedAt}</span>
+                    </th>
+                    {OPENNESS_CRITERIA.map((criterion) => {
+                      const pts = printer.scores[criterion.key];
+                      const cellTone = pts >= 1.5 ? 'yes' : pts >= 0.5 ? 'warn' : 'no';
+                      return (
+                        <td>
+                          <span class:list={['mark', `mark--${cellTone}`]}>
+                            {formatScore(pts)} / {OPENNESS_MAX_PER_CRITERION}
+                          </span>
+                          <span class="table-sub">{printer.notes[criterion.key]}</span>
+                        </td>
+                      );
+                    })}
+                    <td>
+                      <span class:list={['mark', `mark--${band.tone}`, 'openness-total']}>
+                        {formatScore(total)} / {OPENNESS_MAX_TOTAL}
+                      </span>{' '}
+                      <span class="muted">· {band.label}</span>
+                    </td>
+                  </tr>
+                );
+              })
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell section">
+    <div class="section-head">
+      <div class="section-head__text">
+        <h2>The five criteria</h2>
+        <p class="lede">
+          Each pillar carries equal weight ({OPENNESS_MAX_PER_CRITERION} points, scored in 0.5-point increments) for a
+          maximum of {OPENNESS_MAX_TOTAL} points.
+        </p>
+      </div>
+    </div>
+
+    <ol class="criteria-list">
+      {
+        OPENNESS_CRITERIA.map((criterion, index) => (
+          <li class="card criterion" id={criterion.key}>
+            <div class="criterion__head">
+              <span class="criterion__index mono">{String(index + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{criterion.name}</h3>
+                <p class="criterion__summary">{criterion.summary}</p>
+              </div>
+              <span class="tag mono">0 – {OPENNESS_MAX_PER_CRITERION} pts</span>
+            </div>
+
+            <dl class="rubric">
+              {criterion.levels.map((level) => (
+                <div class="rubric__row">
+                  <dt class="mono">{level.score}</dt>
+                  <dd>{level.meaning}</dd>
+                </div>
+              ))}
+            </dl>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="shell section">
+    <div class="split">
+      <div class="card note-card">
+        <h2>Ratings &amp; score bands</h2>
+        <ul class="bands">
+          {
+            OPENNESS_BANDS.map((band) => (
+              <li>
+                <span class="bands__score">
+                  <span class:list={['mark', `mark--${band.tone}`, 'mono']}>{band.range}</span>
+                  <strong class="bands__label">{band.label}</strong>
+                </span>
+                <span>{band.description}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="card note-card">
+        <h2>Corrections &amp; updates</h2>
+        <p class="muted">
+          Printers change through firmware updates, SDK releases, and new tank options. If a manufacturer opens an API,
+          publishes documentation, or ships replaceable-film tanks, we will happily re-evaluate the machine and update
+          its score.
+        </p>
+        <p class="muted">
+          Spotted an inaccuracy or want to propose a printer for evaluation? Open an issue on the{' '}
+          <a class="link" href={`${LINKS.github}/website`} rel="noopener noreferrer" target="_blank">website repository</a>{' '}
+          or bring it to the{' '}
+          <a class="link" href={LINKS.discord} rel="noopener noreferrer" target="_blank">Open Resin Alliance Discord</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    padding-block: clamp(2.5rem, 2rem + 3vw, 4rem) 0;
+  }
+
+  .page-head .lede {
+    max-width: var(--measure);
+  }
+
+  .page-head__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    color: var(--muted-2);
+  }
+
+  .page-head__sep {
+    color: var(--border-strong);
+  }
+
+  .section {
+    padding-block: 3rem 0;
+  }
+
+  .openness-table {
+    max-width: none;
+  }
+
+  .openness-table > table {
+    min-width: 58rem;
+    table-layout: auto;
+  }
+
+  .printer-link {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .printer-link:hover {
+    color: var(--accent);
+  }
+
+  .openness-total {
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+
+  .criteria-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+
+  .criterion {
+    padding: 1.5rem 1.65rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+
+  .criterion__head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.75rem 1rem;
+    align-items: start;
+  }
+
+  .criterion__index {
+    font-size: 0.75rem;
+    color: var(--accent);
+    padding-top: 0.25rem;
+  }
+
+  .criterion__head h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .criterion__summary {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    max-width: var(--measure);
+  }
+
+  .rubric {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rubric__row {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding: 0.55rem 0;
+    border-top: 1px solid var(--border);
+    font-size: 0.9375rem;
+    align-items: baseline;
+  }
+
+  .rubric__row dt {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .rubric__row dd {
+    margin: 0;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    align-items: stretch;
+  }
+
+  .note-card {
+    padding: 1.5rem 1.65rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .note-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .note-card p {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+
+  .bands {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bands li {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: 0.85rem;
+    padding: 0.65rem 0;
+    border-top: 1px solid var(--border);
+    font-size: 0.9375rem;
+    color: var(--muted);
+    line-height: 1.55;
+    align-items: baseline;
+  }
+
+  .bands__score {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .bands__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .bands li:first-child {
+    border-top: 0;
+    padding-top: 0.15rem;
+  }
+
+  @media (max-width: 820px) {
+    .split {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .criterion__head {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .criterion__head .tag {
+      grid-column: 2;
+      justify-self: start;
+    }
+  }
+</style>
