@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { getProject } from '../data/projects';
+import { resolvePostAuthors } from '../lib/authors';
 import { formatDayMonth, isoDate } from '../lib/format';
 
 interface Props {
@@ -40,24 +41,51 @@ for (const post of [...posts].sort((a, b) => b.data.pubDate.getTime() - a.data.p
           <>
             <h3 class="timeline__month mono">{month}</h3>
             <ol class="timeline__list">
-              {entries.map((post) => (
-                <li class="timeline__item">
-                  <a class="timeline__link" href={`/blog/${post.id}`}>
-                    <time class="timeline__date mono" datetime={isoDate(post.data.pubDate)}>
-                      {formatDayMonth(post.data.pubDate)}
-                    </time>
-                    <span class="timeline__content">
-                      <span class="timeline__title">{post.data.title}</span>
-                      <span class="timeline__description">{post.data.description}</span>
-                      <span class="timeline__tags mono">
-                        <span class="timeline__category">{CATEGORY_LABEL[post.data.category] ?? post.data.category}</span>
-                        {post.data.project && <span>&middot; {getProject(post.data.project)?.name ?? post.data.project}</span>}
-                        {post.data.version && <span>&middot; {post.data.version}</span>}
+              {entries.map((post) => {
+                const authors = resolvePostAuthors(post.data.author);
+                return (
+                  <li class="timeline__item">
+                    <a class="timeline__link" href={`/blog/${post.id}`}>
+                      <time class="timeline__date mono" datetime={isoDate(post.data.pubDate)}>
+                        {formatDayMonth(post.data.pubDate)}
+                      </time>
+                      <span class="timeline__content">
+                        <span class="timeline__title">{post.data.title}</span>
+                        <span class="timeline__description">{post.data.description}</span>
+                        <span class="timeline__tags mono">
+                          <span class="timeline__category">{CATEGORY_LABEL[post.data.category] ?? post.data.category}</span>
+                          {post.data.project && <span>&middot; {getProject(post.data.project)?.name ?? post.data.project}</span>}
+                          {post.data.version && <span>&middot; {post.data.version}</span>}
+                        </span>
                       </span>
-                    </span>
-                  </a>
-                </li>
-              ))}
+                      {authors.length > 0 && (
+                        <span class="timeline__authors">
+                          {authors.map((author) => (
+                            <span class="timeline__author">
+                              {author.avatarUrl ? (
+                                <img
+                                  class="timeline__avatar"
+                                  src={author.avatarUrl}
+                                  alt=""
+                                  width="28"
+                                  height="28"
+                                  loading="lazy"
+                                  decoding="async"
+                                />
+                              ) : (
+                                <span class="timeline__avatar timeline__avatar--fallback mono" aria-hidden="true">
+                                  {author.initials}
+                                </span>
+                              )}
+                              <span class="timeline__author-name">{author.name}</span>
+                            </span>
+                          ))}
+                        </span>
+                      )}
+                    </a>
+                  </li>
+                );
+              })}
             </ol>
           </>
         ))}
@@ -126,8 +154,9 @@ for (const post of [...posts].sort((a, b) => b.data.pubDate.getTime() - a.data.p
 
   .timeline__link {
     display: grid;
-    grid-template-columns: 4.5rem 1fr;
-    gap: 2rem;
+    grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+    gap: 0.75rem 2rem;
+    align-items: start;
     padding: 0.85rem 0.75rem 0.85rem 0;
     border-radius: var(--radius-sm);
     transition: background-color 0.16s var(--ease);
@@ -200,6 +229,70 @@ for (const post of [...posts].sort((a, b) => b.data.pubDate.getTime() - a.data.p
     letter-spacing: 0.1em;
   }
 
+  .timeline__authors {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+    align-self: center;
+    justify-self: end;
+    flex-shrink: 0;
+  }
+
+  .timeline__author {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .timeline__avatar {
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 1px solid var(--border-strong);
+    background: var(--bg-inset);
+    flex-shrink: 0;
+  }
+
+  .timeline__avatar--fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .timeline__author-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted);
+    transition: color 0.16s var(--ease);
+  }
+
+  .timeline__link:hover .timeline__author-name {
+    color: var(--ink);
+  }
+
+  @media (max-width: 820px) {
+    .timeline__link {
+      grid-template-columns: 4.5rem minmax(0, 1fr);
+    }
+
+    .timeline__authors {
+      grid-column: 2;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-self: start;
+      gap: 0.5rem 1rem;
+      margin-top: 0.25rem;
+    }
+  }
+
   @media (max-width: 700px) {
     .timeline__month {
       padding-left: 0;
@@ -220,6 +313,10 @@ for (const post of [...posts].sort((a, b) => b.data.pubDate.getTime() - a.data.p
     .timeline__date {
       text-align: left;
       padding-top: 0;
+    }
+
+    .timeline__authors {
+      grid-column: 1;
     }
   }
 </style>

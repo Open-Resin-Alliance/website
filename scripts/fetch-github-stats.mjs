@@ -260,14 +260,24 @@ async function collect(previous) {
     .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))
     .slice(0, 12);
 
-  // Contributors, deduplicated across the flagship repos.
+  // Contributors, deduplicated across the flagship repos (drives totals.contributors).
   const contributorLists = await Promise.all(
     CONTRIBUTOR_REPOS.map((name) =>
       apiOptional(`/repos/${ORG}/${name}/contributors?per_page=100`, []).then((list) =>
-        list.filter((entry) => entry.type !== 'Bot' && !entry.login?.endsWith('[bot]')),
+        list
+          .filter((entry) => entry.type !== 'Bot' && !entry.login?.endsWith('[bot]'))
+          .map((entry) => ({ ...entry, _repo: name })),
       ),
     ),
   );
+  // Website repo contributors as well, so blog authors who contribute to the site
+  // can be verified and have their GitHub avatars synced at build time.
+  const websiteContributors = await apiOptional(`/repos/${ORG}/website/contributors?per_page=100`, []).then((list) =>
+    list
+      .filter((entry) => entry.type !== 'Bot' && !entry.login?.endsWith('[bot]'))
+      .map((entry) => ({ ...entry, _repo: 'website' })),
+  );
+
   const contributors = new Map();
   for (const list of contributorLists) {
     for (const entry of list) {
@@ -277,6 +287,36 @@ async function collect(previous) {
     }
   }
   const contributorTop = [...contributors.values()].sort((a, b) => b.contributions - a.contributions);
+
+  // Full verified contributor index across flagship repos + website (not truncated to top 8).
+  const verifiedContributorMap = new Map();
+  for (const list of [...contributorLists, websiteContributors]) {
+    for (const entry of list) {
+      const existing = verifiedContributorMap.get(entry.login) ?? {
+        login: entry.login,
+        url: entry.html_url,
+        avatarUrl: entry.avatar_url,
+        repos: [],
+      };
+      if (!existing.repos.includes(entry._repo)) existing.repos.push(entry._repo);
+      verifiedContributorMap.set(entry.login, existing);
+    }
+  }
+  const verifiedContributors = [...verifiedContributorMap.values()]
+    .map((entry) => ({ ...entry, repos: entry.repos.sort() }))
+    .sort((a, b) => a.login.localeCompare(b.login, 'en', { sensitivity: 'base' }));
+
+  // Public members of the organisation, used to verify ORA membership and supply
+  // avatars for blog authors in src/data/authors.ts.
+  const rawMembers = await apiOptional(`/orgs/${ORG}/public_members?per_page=100`, []);
+  const orgMembers = rawMembers
+    .filter((entry) => entry.type !== 'Bot' && !entry.login?.endsWith('[bot]'))
+    .map((entry) => ({
+      login: entry.login,
+      url: entry.html_url,
+      avatarUrl: entry.avatar_url,
+    }))
+    .sort((a, b) => a.login.localeCompare(b.login, 'en', { sensitivity: 'base' }));
 
   // Org activity feed - the closest thing GitHub gives us to a webhook stream. The
   // mapping lives in src/lib/activity.js because the browser refresh re-renders the
@@ -324,6 +364,8 @@ async function collect(previous) {
     repoOrder: own.map((repo) => repo.name),
     recentReleases,
     contributors: { total: contributorTop.length, top: contributorTop.slice(0, 8) },
+    orgMembers,
+    verifiedContributors,
     activity,
     warnings: [...warnings],
     count: own.length,
@@ -345,6 +387,7 @@ function printSummary(snapshot) {
   console.log(`totals   ${totals.stars} stars, ${totals.forks} forks, ${totals.openIssues} open issues, ${totals.openPulls ?? 'n/a'} open PRs, ${totals.commits ?? 'n/a'} commits, ${totals.contributors} contributors`);
   console.log(`active   ${totals.activeRepos} repos pushed in the last 90 days`);
   console.log(`activity ${activity.length} events, latest ${activity[0]?.date ?? 'n/a'} (${activity[0]?.repo ?? 'n/a'})`);
+  console.log(`members  ${snapshot.orgMembers?.length ?? 0} public org members, ${snapshot.verifiedContributors?.length ?? 0} verified contributors (flagship + website)`);
   const stable = Object.values(snapshot.repos)
     .filter((r) => r.latestStableRelease)
     .map((r) => `${r.name}@${r.latestStableRelease.tag}`)
@@ -406,6 +449,13 @@ if (previous?.repos) {
   if (!snapshot.activity.length && previous.activity?.length) snapshot.activity = previous.activity;
   if (!snapshot.contributors.top.length && previous.contributors?.top?.length) {
     snapshot.contributors = previous.contributors;
+    if (previous.totals?.contributors) snapshot.totals.contributors = previous.totals.contributors;
+  }
+  if (!snapshot.orgMembers.length && previous.orgMembers?.length) {
+    snapshot.orgMembers = previous.orgMembers;
+  }
+  if (!snapshot.verifiedContributors.length && previous.verifiedContributors?.length) {
+    snapshot.verifiedContributors = previous.verifiedContributors;
   }
 }
 

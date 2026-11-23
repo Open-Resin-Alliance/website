@@ -17,6 +17,10 @@ no CMS, no database, no rebuild configuration.
 title: DragonFruit v0.1.16 is out
 description: One or two sentences used on the timeline card, the meta description and the RSS feed.
 pubDate: 2026-09-20
+author:                    # optional; object or array of authors (github links profile & avatar)
+  name: Paul Skapczyk
+  github: PaulGD03
+  bio: Bio shown in the author card at the bottom of the post.
 category: release          # release | project | community | engineering
 tags: [dragonfruit, release]
 project: DragonFruit        # repository name, links the post to a project page
@@ -55,7 +59,7 @@ Two build-time pipelines write JSON snapshots that the pages read:
 
 | Script | Source | Output |
 |---|---|---|
-| `scripts/fetch-github-stats.mjs` | public GitHub API for the `Open-Resin-Alliance` org - repositories, releases, activity feed, contributors, and open issue / pull request / commit counts | `src/data/github-stats.json` |
+| `scripts/fetch-github-stats.mjs` | public GitHub API for the `Open-Resin-Alliance` org - repositories, releases, activity feed, contributors, public org members, and open issue / pull request / commit counts | `src/data/github-stats.json` |
 | `scripts/fetch-open-collective.mjs` | public Open Collective GraphQL API for `openresinalliance` - backers, amounts, recurring vs one-time, fiscal host | `src/data/supporters.json` |
 
 ```

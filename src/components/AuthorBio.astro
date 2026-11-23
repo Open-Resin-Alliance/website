@@ -1,0 +1,166 @@
+---
+import type { ResolvedAuthor } from '../lib/authors';
+
+interface Props {
+  authors: ResolvedAuthor[];
+}
+
+const { authors } = Astro.props;
+---
+
+{
+  authors.length > 0 && (
+    <section class="author-cards" aria-label={authors.length === 1 ? 'About the author' : 'About the authors'}>
+      <div class="author-cards__list">
+        {authors.map((author) => (
+          <div class="card author-card" id={`author-${author.slug}`}>
+            {author.avatarUrl ? (
+              <img
+                class="author-card__avatar"
+                src={author.avatarUrl}
+                alt={author.name}
+                width="76"
+                height="76"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <span class="author-card__avatar author-card__avatar--fallback mono" aria-hidden="true">
+                {author.initials}
+              </span>
+            )}
+
+            <div class="author-card__body">
+              <div class="author-card__head">
+                <h2 class="author-card__name">{author.name}</h2>
+                {author.github && author.githubUrl && (
+                  <>
+                    <span class="author-card__sep mono" aria-hidden="true">/</span>
+                    <a
+                      class="author-card__link mono"
+                      href={author.githubUrl}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">
+                        <path
+                          fill="currentColor"
+                          d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2a4.6 4.6 0 0 1 1.2 3.2c0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"
+                        />
+                      </svg>
+                      <span>@{author.github}</span>
+                    </a>
+                  </>
+                )}
+                {author.url && (
+                  <>
+                    <span class="author-card__sep mono" aria-hidden="true">/</span>
+                    <a class="author-card__link mono" href={author.url} rel="noopener noreferrer" target="_blank">
+                      {author.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                    </a>
+                  </>
+                )}
+              </div>
+
+              {author.bio && <p class="author-card__bio">{author.bio}</p>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .author-cards {
+    max-width: var(--measure);
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .author-cards__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .author-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1.15rem 1.25rem;
+    align-items: center;
+    padding: 1.35rem 1.5rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .author-card__avatar {
+    inline-size: 4.75rem;
+    block-size: 4.75rem;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 1px solid var(--border-strong);
+    background: var(--bg-inset);
+  }
+
+  .author-card__avatar--fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .author-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+
+  .author-card__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.6rem;
+  }
+
+  .author-card__name {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .author-card__sep {
+    color: var(--border-strong);
+    font-size: 0.75rem;
+  }
+
+  .author-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    transition: color 0.15s var(--ease);
+  }
+
+  .author-card__link:hover {
+    color: var(--accent);
+  }
+
+  .author-card__bio {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  @media (max-width: 480px) {
+    .author-card {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+      padding: 1.15rem 1.2rem;
+    }
+  }
+</style>

@@ -69,6 +69,19 @@ export interface Contributor {
   avatarUrl: string;
 }
 
+export interface OrgMember {
+  login: string;
+  url: string;
+  avatarUrl: string;
+}
+
+export interface VerifiedContributor {
+  login: string;
+  url: string;
+  avatarUrl: string;
+  repos: string[];
+}
+
 export interface StatsSnapshot {
   generatedAt: string;
   source: string;
@@ -101,6 +114,10 @@ export interface StatsSnapshot {
   repoOrder: string[];
   recentReleases: Release[];
   contributors: { total: number; top: Contributor[] };
+  /** Public members of the Open-Resin-Alliance GitHub organisation. */
+  orgMembers?: OrgMember[];
+  /** Non-bot contributors across flagship projects and the website repository. */
+  verifiedContributors?: VerifiedContributor[];
   activity: ActivityEntry[];
   warnings: string[];
   count: number;
@@ -110,6 +127,21 @@ export const stats = snapshot as unknown as StatsSnapshot;
 
 export function repoStats(repo: string): RepoStats | undefined {
   return stats.repos[repo];
+}
+
+/** Look up a public member of the GitHub org by login (case-insensitive). */
+export function orgMember(login: string): OrgMember | undefined {
+  const key = login.toLowerCase();
+  return (stats.orgMembers ?? []).find((member) => member.login.toLowerCase() === key);
+}
+
+/** Look up a verified contributor across flagship repos and the website repo (case-insensitive). */
+export function verifiedContributor(login: string): VerifiedContributor | undefined {
+  const key = login.toLowerCase();
+  const fromFull = (stats.verifiedContributors ?? []).find((entry) => entry.login.toLowerCase() === key);
+  if (fromFull) return fromFull;
+  const fromTop = stats.contributors.top.find((entry) => entry.login.toLowerCase() === key);
+  return fromTop ? { login: fromTop.login, url: fromTop.url, avatarUrl: fromTop.avatarUrl, repos: [] } : undefined;
 }
 
 /** Most recent release of any kind, across the whole organisation. */

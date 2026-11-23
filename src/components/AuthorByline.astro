@@ -1,0 +1,100 @@
+---
+import type { ResolvedAuthor } from '../lib/authors';
+
+interface Props {
+  authors: ResolvedAuthor[];
+}
+
+const { authors } = Astro.props;
+---
+
+{
+  authors.length > 0 && (
+    <div class="byline" aria-label={authors.length === 1 ? 'Author' : 'Authors'}>
+      {authors.map((author) => (
+        <a class="byline__person" href={`#author-${author.slug}`}>
+          {author.avatarUrl ? (
+            <img
+              class="byline__avatar"
+              src={author.avatarUrl}
+              alt=""
+              width="36"
+              height="36"
+              loading="eager"
+              decoding="async"
+            />
+          ) : (
+            <span class="byline__avatar byline__avatar--fallback mono" aria-hidden="true">
+              {author.initials}
+            </span>
+          )}
+          <span class="byline__text">
+            <span class="byline__name">{author.name}</span>
+            <span class="byline__label">Author of this post</span>
+          </span>
+        </a>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .byline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .byline__person {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--ink);
+    transition: color 0.15s var(--ease);
+  }
+
+  .byline__person:hover .byline__name {
+    color: var(--accent);
+  }
+
+  .byline__avatar {
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 1px solid var(--border-strong);
+    background: var(--bg-inset);
+    flex-shrink: 0;
+  }
+
+  .byline__avatar--fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .byline__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.08rem;
+  }
+
+  .byline__name {
+    font-size: 0.9375rem;
+    font-weight: 560;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    transition: color 0.15s var(--ease);
+  }
+
+  .byline__label {
+    font-size: 0.75rem;
+    line-height: 1.25;
+    color: var(--muted-2);
+  }
+</style>

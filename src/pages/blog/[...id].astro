@@ -1,9 +1,12 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import AuthorByline from '../../components/AuthorByline.astro';
+import AuthorBio from '../../components/AuthorBio.astro';
 import PostCard from '../../components/PostCard.astro';
 import ReleaseChip from '../../components/ReleaseChip.astro';
 import { getProject, projectPath, repoUrl } from '../../data/projects';
+import { resolvePostAuthors } from '../../lib/authors';
 import { repoStats } from '../../lib/stats';
 import { formatDateLong, isoDate } from '../../lib/format';
 
@@ -17,8 +20,9 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
-const { title, description, pubDate, updatedDate, category, tags, project, version } = post.data;
+const { title, description, pubDate, updatedDate, category, tags, author, project, version } = post.data;
 
+const authors = resolvePostAuthors(author);
 const relatedProject = project ? getProject(project) : undefined;
 const relatedStats = project ? repoStats(project) : undefined;
 const relatedRelease =
@@ -34,6 +38,14 @@ const relatedPosts = (await getCollection('blog', ({ data, id }) => !data.draft 
 
 const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 
+const structuredAuthors = authors.map((person) => ({
+  '@type': 'Person',
+  name: person.name,
+  ...(person.url ?? person.githubUrl ? { url: person.url ?? person.githubUrl } : {}),
+  ...(person.githubUrl ? { sameAs: [person.githubUrl] } : {}),
+  ...(person.orgVerified ? { affiliation: { '@id': 'https://openresin.org/#organization' } } : {}),
+}));
+
 const structuredData = [
   {
     '@type': 'BlogPosting',
@@ -41,7 +53,12 @@ const structuredData = [
     description,
     datePublished: isoDate(pubDate),
     ...(updatedDate ? { dateModified: isoDate(updatedDate) } : {}),
-    author: { '@id': 'https://openresin.org/#organization' },
+    author:
+      structuredAuthors.length === 0
+        ? { '@id': 'https://openresin.org/#organization' }
+        : structuredAuthors.length === 1
+          ? structuredAuthors[0]
+          : structuredAuthors,
     publisher: { '@id': 'https://openresin.org/#organization' },
     mainEntityOfPage: `https://openresin.org/blog/${post.id}`,
     url: `https://openresin.org/blog/${post.id}`,
@@ -86,6 +103,7 @@ const structuredData = [
 
       <h1>{title}</h1>
       <p class="lede">{description}</p>
+      <AuthorByline authors={authors} />
 
       {
         (relatedProject || relatedRelease) && (
@@ -109,8 +127,11 @@ const structuredData = [
     </header>
 
     <div class="post__grid">
-      <div class="post__body prose">
-        <Content />
+      <div class="post__main">
+        <div class="post__body prose">
+          <Content />
+        </div>
+        <AuthorBio authors={authors} />
       </div>
 
       {
@@ -255,6 +276,7 @@ const structuredData = [
     padding-top: 2.5rem;
   }
 
+  .post__main,
   .post__body {
     min-width: 0;
   }

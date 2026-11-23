@@ -2,6 +2,18 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
+const authorSchema = z.object({
+  name: z.string().max(80),
+  /** GitHub username - linked to their profile and avatar. */
+  github: z.string().max(40).optional(),
+  /** Bio shown in the author card at the bottom of the post. */
+  bio: z.string().max(500).optional(),
+  /** Optional personal website or profile link. */
+  url: z.url().optional(),
+  /** Optional local avatar path under /public, overriding the GitHub avatar. */
+  avatar: z.string().optional(),
+});
+
 /**
  * Blog posts live as Markdown files in src/content/blog/.
  * Adding a post is one file plus a git push - no build configuration, no CMS.
@@ -16,6 +28,8 @@ const blog = defineCollection({
     updatedDate: z.coerce.date().optional(),
     category: z.enum(['release', 'project', 'community', 'engineering']).default('project'),
     tags: z.array(z.string()).default([]),
+    /** Author (or list of authors) declared inline in post frontmatter. Omit for collective org posts. */
+    author: z.union([authorSchema, z.array(authorSchema).min(1)]).optional(),
     /** Repository name from src/data/projects.ts, when the post is about one project. */
     project: z.string().optional(),
     /** Release tag, when the post announces one. */
