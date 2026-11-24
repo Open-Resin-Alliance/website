@@ -50,7 +50,7 @@ To contextualise where the Form Studio 1 lands, we compared it against two machi
       <tr>
         <th scope="row">XY pixel pitch</th>
         <td><span class="crown" title="Category winner" aria-label="Category winner"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true" focusable="false"><path fill="currentColor" d="M2 12.5h12v1.25H2V12.5Zm.5-1.5L1.25 4.75l3.5 2.5L8 3l3.25 4.25 3.5-2.5L13.5 11h-11Z"/></svg></span><span class="mark mark--yes">14 × 19 µm</span></td>
-        <td class="col-highlight">30 × 30 µm</td>
+        <td class="col-highlight">35 × 35 µm</td>
         <td>19 × 24 µm</td>
       </tr>
       <tr>
@@ -155,7 +155,7 @@ PreForm ships with its full feature set out of the box - there are no hidden fea
 
 ## Print results and resolution
 
-On paper, the Form Studio 1 has the lowest pixel resolution of the three machines - 30 × 30 µm compared to 19 × 24 µm on the ELEGOO Saturn 4 Ultra (12K) and 14 × 19 µm on the Concepts3D Athena II 16K. Under a microscope you can spot that difference slightly, but in practice the prints still look clean and crisp with zero problematic artifacts.
+On paper, the Form Studio 1 has the lowest pixel resolution of the three machines - 35 × 35 µm compared to 19 × 24 µm on the ELEGOO Saturn 4 Ultra (12K) and 14 × 19 µm on the Concepts3D Athena II 16K. Under a microscope you can spot that difference slightly, but in practice the prints still look clean and crisp with zero problematic artifacts.
 
 While we did test the machine with Formlabs' Alpha Model resin, our direct comparative prints across all three machines were all run using Siraya Tech Fast Grey. Because those results depend on our own calibration profiles, we treat them as practical developer insights rather than absolute objective benchmarks.
 
