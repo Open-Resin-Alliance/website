@@ -10,6 +10,8 @@ const authorSchema = z.object({
   bio: z.string().max(500).optional(),
   /** Optional personal website or profile link. */
   url: z.url().optional(),
+  /** Optional contact email address shown on the author card. */
+  email: z.email().optional(),
   /** Optional local avatar path under /public, overriding the GitHub avatar. */
   avatar: z.string().optional(),
 });

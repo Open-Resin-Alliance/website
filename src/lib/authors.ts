@@ -5,6 +5,7 @@ export interface AuthorInput {
   github?: string;
   bio?: string;
   url?: string;
+  email?: string;
   avatar?: string;
 }
 

@@ -5,6 +5,7 @@ pubDate: 2026-11-23
 author:
   name: Paul Skapczyk
   github: PaulGD03
+  email: paul@openresin.org
   bio: Administrator at the Open Resin Alliance and lead developer on DragonFruit. Working on open-source resin slicing, printer interoperability, and local-first workflows, and regularly testing hardware across commercial and open ecosystems.
 category: community
 tags: [review, hardware, formlabs, dragonfruit, open-source, slicing]
