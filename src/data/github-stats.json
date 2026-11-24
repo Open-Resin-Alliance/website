@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T20:52:43.411Z",
+  "generatedAt": "2026-11-24T17:52:33.263Z",
   "source": "https://api.github.com/orgs/Open-Resin-Alliance",
   "org": {
     "login": "Open-Resin-Alliance",
@@ -17,9 +17,9 @@
     "repos": 18,
     "forks": 55,
     "stars": 120,
-    "openIssues": 186,
-    "openPulls": 34,
-    "commits": 5211,
+    "openIssues": 185,
+    "openPulls": 35,
+    "commits": 5216,
     "contributors": 20,
     "languages": {
       "Rust": 7,
@@ -124,7 +124,7 @@
       "stars": 0,
       "forks": 4,
       "openIssues": 0,
-      "openPulls": 1,
+      "openPulls": 2,
       "commits": 100,
       "watchers": null,
       "isFork": false,
@@ -312,7 +312,7 @@
       "license": "AGPL-3.0",
       "stars": 94,
       "forks": 37,
-      "openIssues": 184,
+      "openIssues": 183,
       "openPulls": 23,
       "commits": 4078,
       "watchers": null,
@@ -324,7 +324,7 @@
       "defaultBranch": "main",
       "createdAt": "2025-11-11T20:44:18Z",
       "updatedAt": "2026-11-23T16:51:57Z",
-      "pushedAt": "2026-11-23T19:29:01Z",
+      "pushedAt": "2026-11-24T10:23:55Z",
       "latestRelease": {
         "repo": "DragonFruit",
         "tag": "preview_feat_prusa",
@@ -355,15 +355,6 @@
         },
         {
           "repo": "DragonFruit",
-          "tag": "preview_feat_startup-diagnostics-preview-devtools",
-          "name": "Feature: Startup Diagnostics Preview Devtools",
-          "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/preview_feat_startup-diagnostics-preview-devtools",
-          "publishedAt": "2026-11-22T01:34:08Z",
-          "prerelease": true,
-          "draft": false
-        },
-        {
-          "repo": "DragonFruit",
           "tag": "v0.3.2",
           "name": "Dev build v0.3.2",
           "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/v0.3.2",
@@ -386,6 +377,15 @@
           "name": "Preview: Aaron/support Halo",
           "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/preview_aaron_support-halo",
           "publishedAt": "2026-11-11T08:51:12Z",
+          "prerelease": true,
+          "draft": false
+        },
+        {
+          "repo": "DragonFruit",
+          "tag": "preview_sin_PLS",
+          "name": "Preview: Sin/PLS",
+          "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/preview_sin_PLS",
+          "publishedAt": "2026-11-09T21:15:29Z",
           "prerelease": true,
           "draft": false
         }
@@ -790,7 +790,7 @@
       "forks": 0,
       "openIssues": 0,
       "openPulls": 0,
-      "commits": 262,
+      "commits": 267,
       "watchers": null,
       "isFork": false,
       "isTemplate": false,
@@ -800,7 +800,7 @@
       "defaultBranch": "main",
       "createdAt": "2025-02-09T23:58:09Z",
       "updatedAt": "2026-11-12T16:21:36Z",
-      "pushedAt": "2026-11-23T18:42:52Z",
+      "pushedAt": "2026-11-24T15:05:54Z",
       "latestRelease": null,
       "latestStableRelease": null,
       "recentReleases": []
@@ -838,15 +838,6 @@
     },
     {
       "repo": "DragonFruit",
-      "tag": "preview_feat_startup-diagnostics-preview-devtools",
-      "name": "Feature: Startup Diagnostics Preview Devtools",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/preview_feat_startup-diagnostics-preview-devtools",
-      "publishedAt": "2026-11-22T01:34:08Z",
-      "prerelease": true,
-      "draft": false
-    },
-    {
-      "repo": "DragonFruit",
       "tag": "v0.3.2",
       "name": "Dev build v0.3.2",
       "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/v0.3.2",
@@ -869,6 +860,15 @@
       "name": "Preview: Aaron/support Halo",
       "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/preview_aaron_support-halo",
       "publishedAt": "2026-11-11T08:51:12Z",
+      "prerelease": true,
+      "draft": false
+    },
+    {
+      "repo": "DragonFruit",
+      "tag": "preview_sin_PLS",
+      "name": "Preview: Sin/PLS",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/preview_sin_PLS",
+      "publishedAt": "2026-11-09T21:15:29Z",
       "prerelease": true,
       "draft": false
     },
@@ -1172,219 +1172,221 @@
   "activity": [
     {
       "repo": "DragonFruit",
-      "date": "2026-11-23T20:15:54Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "issue",
-      "title": "labeled issue #1057",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/issues/1057"
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T20:15:53Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "issue",
-      "title": "labeled issue #1057",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/issues/1057"
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T20:15:53Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "issue",
-      "title": "opened issue #1057",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/issues/1057"
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:28:58Z",
-      "actor": "SinXIV",
-      "avatar": "https://avatars.githubusercontent.com/u/29101872?",
+      "date": "2026-11-24T08:24:25Z",
+      "actor": "MichielBruijn",
+      "avatar": "https://avatars.githubusercontent.com/u/52048667?",
       "kind": "pull_request",
-      "title": "merged pull request #1005",
+      "title": "merged pull request #1046",
       "url": null
     },
     {
       "repo": "DragonFruit",
-      "date": "2026-11-23T19:23:14Z",
+      "date": "2026-11-24T08:13:38Z",
       "actor": "Jo-Con-El",
       "avatar": "https://avatars.githubusercontent.com/u/607909?",
       "kind": "pull_request",
-      "title": "labeled pull request #1046",
+      "title": "labeled pull request #1070",
       "url": null
     },
     {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:17:20Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "merged pull request #1056",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:15:59Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "labeled pull request #1056",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:15:59Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "labeled pull request #1056",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:15:59Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "labeled pull request #1056",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:15:29Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "labeled pull request #1056",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:15:29Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "labeled pull request #1056",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:15:29Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "labeled pull request #1056",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:11:00Z",
-      "actor": "LuisTNH",
-      "avatar": "https://avatars.githubusercontent.com/u/93011336?",
-      "kind": "pull_request",
-      "title": "merged pull request #1006",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:08:42Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "labeled pull request #1006",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:08:42Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "labeled pull request #1006",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:00:24Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "opened pull request #1056",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T19:00:01Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "create",
-      "title": "created ender/kitchen-sink",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T18:52:01Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "merged pull request #990",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T18:42:56Z",
-      "actor": "LuisTNH",
-      "avatar": "https://avatars.githubusercontent.com/u/93011336?",
-      "kind": "pull_request",
-      "title": "merged pull request #951",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T18:41:16Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "labeled pull request #951",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T18:29:33Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "merged pull request #1051",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T17:54:07Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "merged pull request #1052",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T13:56:32Z",
-      "actor": "github-actions[bot]",
-      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
-      "kind": "release",
-      "title": "released preview_feat_prusa",
-      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/releases/tag/preview_feat_prusa"
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-23T13:30:28Z",
+      "repo": "website",
+      "date": "2026-11-24T02:20:58Z",
       "actor": "PaulGD03",
       "avatar": "https://avatars.githubusercontent.com/u/23582247?",
       "kind": "push",
-      "title": "pushed commits to feat/prusa",
+      "title": "pushed commits to main",
+      "url": "https://github.com/Open-Resin-Alliance/website"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T01:38:24Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "opened pull request #1070",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T01:38:07Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "create",
+      "title": "created feat/native-mesh-store",
       "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T01:21:16Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "opened pull request #1069",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T01:21:05Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "create",
+      "title": "created fix/smoothing-refine-under-brush",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:50:38Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "push",
+      "title": "pushed commits to dev",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:50:36Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "merged pull request #1068",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:39:50Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "issue",
+      "title": "closed issue #940",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit/issues/940"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:39:41Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "labeled pull request #1068",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:39:41Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "labeled pull request #1068",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:18:45Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "opened pull request #1068",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:18:29Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "create",
+      "title": "created fix/scrub-preview-plate-supports",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:17:26Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "push",
+      "title": "pushed commits to dev",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:17:22Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "merged pull request #1066",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:17:21Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "merged pull request #1064",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:17:19Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "merged pull request #1063",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:06:51Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "push",
+      "title": "pushed commits to feat/plate-origin-in-file",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
+      "burst": 3
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-24T00:06:44Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "merged pull request #1062",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-23T23:54:02Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "push",
+      "title": "pushed commits to refactor/plate-frames",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit",
+      "burst": 2
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-23T23:52:04Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "labeled pull request #1066",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-23T23:51:17Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "labeled pull request #1064",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-23T23:50:56Z",
+      "actor": "Jo-Con-El",
+      "avatar": "https://avatars.githubusercontent.com/u/607909?",
+      "kind": "pull_request",
+      "title": "labeled pull request #1063",
+      "url": null
     }
   ],
   "warnings": [],
