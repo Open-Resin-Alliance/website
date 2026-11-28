@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T16:45:42.134Z",
+  "generatedAt": "2026-11-28T15:38:03.637Z",
   "source": "https://api.github.com/orgs/Open-Resin-Alliance",
   "org": {
     "login": "Open-Resin-Alliance",
@@ -15,11 +15,11 @@
   },
   "totals": {
     "repos": 18,
-    "forks": 58,
+    "forks": 59,
     "stars": 121,
     "openIssues": 186,
-    "openPulls": 33,
-    "commits": 5226,
+    "openPulls": 37,
+    "commits": 5228,
     "contributors": 20,
     "languages": {
       "Rust": 7,
@@ -81,7 +81,7 @@
       "defaultBranch": "main",
       "createdAt": "2026-03-21T18:01:58Z",
       "updatedAt": "2026-11-10T21:51:21Z",
-      "pushedAt": "2026-11-10T19:45:59Z",
+      "pushedAt": "2026-11-28T05:00:50Z",
       "latestRelease": null,
       "latestStableRelease": null,
       "recentReleases": []
@@ -135,7 +135,7 @@
       "defaultBranch": "main",
       "createdAt": "2026-03-19T12:57:02Z",
       "updatedAt": "2026-09-28T22:15:16Z",
-      "pushedAt": "2026-11-09T22:45:49Z",
+      "pushedAt": "2026-11-28T05:00:54Z",
       "latestRelease": null,
       "latestStableRelease": null,
       "recentReleases": []
@@ -162,7 +162,7 @@
       "defaultBranch": "main",
       "createdAt": "2026-03-24T21:22:57Z",
       "updatedAt": "2026-10-18T21:22:34Z",
-      "pushedAt": "2026-11-09T22:47:26Z",
+      "pushedAt": "2026-11-28T05:00:48Z",
       "latestRelease": null,
       "latestStableRelease": null,
       "recentReleases": []
@@ -310,10 +310,10 @@
       "homepage": "https://dragonfruit-slicer.com",
       "language": "TypeScript",
       "license": "AGPL-3.0",
-      "stars": 95,
-      "forks": 37,
+      "stars": 96,
+      "forks": 38,
       "openIssues": 184,
-      "openPulls": 23,
+      "openPulls": 27,
       "commits": 4078,
       "watchers": null,
       "isFork": false,
@@ -323,8 +323,8 @@
       "topics": [],
       "defaultBranch": "main",
       "createdAt": "2025-11-11T20:44:18Z",
-      "updatedAt": "2026-11-25T19:52:07Z",
-      "pushedAt": "2026-11-27T08:43:36Z",
+      "updatedAt": "2026-11-28T01:27:50Z",
+      "pushedAt": "2026-11-28T09:12:46Z",
       "latestRelease": {
         "repo": "DragonFruit",
         "tag": "preview_sin_compact-mesh",
@@ -473,7 +473,7 @@
       "defaultBranch": "main",
       "createdAt": "2023-01-03T16:28:23Z",
       "updatedAt": "2026-11-10T17:25:43Z",
-      "pushedAt": "2026-11-26T17:51:47Z",
+      "pushedAt": "2026-11-27T19:01:48Z",
       "latestRelease": {
         "repo": "Odyssey",
         "tag": "BRANCH_klipper_refactor",
@@ -602,7 +602,7 @@
       "homepage": "https://openresin.org",
       "language": "Dart",
       "license": "Apache-2.0",
-      "stars": 12,
+      "stars": 11,
       "forks": 3,
       "openIssues": 1,
       "openPulls": 2,
@@ -621,7 +621,7 @@
       ],
       "defaultBranch": "main",
       "createdAt": "2023-01-13T11:31:35Z",
-      "updatedAt": "2026-11-19T02:37:32Z",
+      "updatedAt": "2026-11-28T11:43:48Z",
       "pushedAt": "2026-10-20T20:20:16Z",
       "latestRelease": {
         "repo": "Orion",
@@ -790,7 +790,7 @@
       "forks": 0,
       "openIssues": 0,
       "openPulls": 0,
-      "commits": 273,
+      "commits": 275,
       "watchers": null,
       "isFork": false,
       "isTemplate": false,
@@ -800,7 +800,7 @@
       "defaultBranch": "main",
       "createdAt": "2025-02-09T23:58:09Z",
       "updatedAt": "2026-11-12T16:21:36Z",
-      "pushedAt": "2026-11-26T17:16:47Z",
+      "pushedAt": "2026-11-27T16:57:39Z",
       "latestRelease": null,
       "latestStableRelease": null,
       "recentReleases": []
@@ -1172,6 +1172,60 @@
   "activity": [
     {
       "repo": "DragonFruit",
+      "date": "2026-11-28T03:14:41Z",
+      "actor": "AILIFE4798",
+      "avatar": "https://avatars.githubusercontent.com/u/342240940?",
+      "kind": "pull_request",
+      "title": "opened pull request #1093",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-27T22:58:35Z",
+      "actor": "AILIFE4798",
+      "avatar": "https://avatars.githubusercontent.com/u/342240940?",
+      "kind": "pull_request",
+      "title": "opened pull request #1092",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-27T22:58:27Z",
+      "actor": "AILIFE4798",
+      "avatar": "https://avatars.githubusercontent.com/u/342240940?",
+      "kind": "pull_request",
+      "title": "opened pull request #1091",
+      "url": null
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-27T22:58:24Z",
+      "actor": "AILIFE4798",
+      "avatar": "https://avatars.githubusercontent.com/u/342240940?",
+      "kind": "pull_request",
+      "title": "opened pull request #1090",
+      "url": null
+    },
+    {
+      "repo": "website",
+      "date": "2026-11-27T16:57:39Z",
+      "actor": "github-actions[bot]",
+      "avatar": "https://avatars.githubusercontent.com/u/41898282?",
+      "kind": "push",
+      "title": "pushed commits to main",
+      "url": "https://github.com/Open-Resin-Alliance/website"
+    },
+    {
+      "repo": "DragonFruit",
+      "date": "2026-11-27T08:35:40Z",
+      "actor": "SinXIV",
+      "avatar": "https://avatars.githubusercontent.com/u/29101872?",
+      "kind": "push",
+      "title": "pushed commits to sin/slicing-opt",
+      "url": "https://github.com/Open-Resin-Alliance/DragonFruit"
+    },
+    {
+      "repo": "DragonFruit",
       "date": "2026-11-27T08:26:04Z",
       "actor": "Jo-Con-El",
       "avatar": "https://avatars.githubusercontent.com/u/607909?",
@@ -1324,67 +1378,13 @@
       "url": null
     },
     {
-      "repo": "DragonFruit",
-      "date": "2026-11-26T14:42:33Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "labeled pull request #1086",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-26T14:42:33Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "labeled pull request #1086",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-26T14:42:33Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "labeled pull request #1086",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-26T14:42:33Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "opened pull request #1086",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-26T14:41:00Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "merged pull request #1082",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-26T14:36:45Z",
-      "actor": "Jo-Con-El",
-      "avatar": "https://avatars.githubusercontent.com/u/607909?",
-      "kind": "pull_request",
-      "title": "merged pull request #1085",
-      "url": null
-    },
-    {
-      "repo": "DragonFruit",
-      "date": "2026-11-26T14:00:52Z",
-      "actor": "AJRubenstein",
-      "avatar": "https://avatars.githubusercontent.com/u/46571410?",
-      "kind": "pull_request",
-      "title": "merged pull request #1083",
-      "url": null
+      "repo": "Odyssey",
+      "date": "2026-11-26T17:51:48Z",
+      "actor": "ada-phillips",
+      "avatar": "https://avatars.githubusercontent.com/u/14336492?",
+      "kind": "push",
+      "title": "pushed commits to klipperudstestbranch",
+      "url": "https://github.com/Open-Resin-Alliance/Odyssey"
     }
   ],
   "warnings": [],
